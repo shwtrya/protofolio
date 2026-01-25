@@ -160,7 +160,7 @@ const SkillsRadarChart: React.FC = () => {
       className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700"
     >
       <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-        Skills Overview
+        Skills Radar Chart
       </h3>
 
       <div className="grid lg:grid-cols-2 gap-8 items-center">
