@@ -31,6 +31,26 @@ export interface VisitorStats {
 
 let lastTrackTime = 0;
 const TRACK_DEBOUNCE = 5000;
+const PAGE_VIEW_WINDOW_MS = 60000;
+const VISITOR_TRACKED_KEY = 'visitor_tracked_once';
+const VISITOR_TRACKED_TIME_KEY = 'visitor_tracked_time';
+
+const getSessionStorageItem = (key: string) => {
+  try {
+    return sessionStorage.getItem(key);
+  } catch (error) {
+    console.warn(`Unable to read sessionStorage key "${key}":`, error);
+    return null;
+  }
+};
+
+const setSessionStorageItem = (key: string, value: string) => {
+  try {
+    sessionStorage.setItem(key, value);
+  } catch (error) {
+    console.warn(`Unable to write sessionStorage key "${key}":`, error);
+  }
+};
 
 export const trackVisitor = async () => {
   if (!supabase) {
@@ -40,12 +60,19 @@ export const trackVisitor = async () => {
 
   try {
     const now = Date.now();
+    const trackedOnce = getSessionStorageItem(VISITOR_TRACKED_KEY);
+
+    if (trackedOnce) {
+      return;
+    }
 
     if (now - lastTrackTime < TRACK_DEBOUNCE) {
       return;
     }
 
     lastTrackTime = now;
+    setSessionStorageItem(VISITOR_TRACKED_KEY, '1');
+    setSessionStorageItem(VISITOR_TRACKED_TIME_KEY, now.toString());
 
     const identifier = await getOrCreateVisitorIdentifier();
     const userAgent = navigator.userAgent;
@@ -59,7 +86,7 @@ export const trackVisitor = async () => {
 
     if (existingVisitor) {
       const timeSinceLastVisit = now - new Date(existingVisitor.last_visit).getTime();
-      const shouldIncrementPageView = timeSinceLastVisit > 30000;
+      const shouldIncrementPageView = timeSinceLastVisit > PAGE_VIEW_WINDOW_MS;
 
       await supabase
         .from('visitors')
@@ -82,10 +109,10 @@ export const trackVisitor = async () => {
     }
 
     const currentPath = window.location.pathname;
-    const lastTrackedPath = sessionStorage.getItem('last_tracked_path');
-    const lastTrackedTime = parseInt(sessionStorage.getItem('last_tracked_time') || '0');
+    const lastTrackedPath = getSessionStorageItem('last_tracked_path');
+    const lastTrackedTime = Number(getSessionStorageItem('last_tracked_time') || '0');
 
-    if (currentPath !== lastTrackedPath || (now - lastTrackedTime) > 30000) {
+    if (currentPath !== lastTrackedPath || (now - lastTrackedTime) > PAGE_VIEW_WINDOW_MS) {
       await supabase
         .from('page_views')
         .insert({
@@ -93,8 +120,8 @@ export const trackVisitor = async () => {
           page_url: currentPath
         });
 
-      sessionStorage.setItem('last_tracked_path', currentPath);
-      sessionStorage.setItem('last_tracked_time', now.toString());
+      setSessionStorageItem('last_tracked_path', currentPath);
+      setSessionStorageItem('last_tracked_time', now.toString());
     }
 
   } catch (error) {
