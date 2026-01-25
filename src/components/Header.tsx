@@ -4,13 +4,8 @@ import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import { useActiveSection } from '../hooks/useActiveSection';
-
-interface NavItem {
-  name: string;
-  href: string;
-  route: string;
-  id: string;
-}
+import { navigationItems } from '../data/navigation';
+import { scrollToSection } from '../utils/scrollToSection';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -18,26 +13,8 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const activeSection = useActiveSection();
 
-  const navItems: NavItem[] = React.useMemo(() => [
-    { name: 'Home', href: '#home', route: '/', id: 'home' },
-    { name: 'About', href: '#about', route: '/about', id: 'about' },
-    { name: 'Experience', href: '#experience', route: '/experience', id: 'experience' },
-    { name: 'Projects', href: '#projects', route: '/projects', id: 'projects' },
-    { name: 'Education', href: '#education', route: '/education', id: 'education' },
-    { name: 'Contact', href: '#contact', route: '/contact', id: 'contact' },
-  ], []);
-
-  const scrollToSection = React.useCallback((href: string, route: string) => {
-    if (location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        element?.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
-    } else {
-      const element = document.querySelector(href);
-      element?.scrollIntoView({ behavior: 'smooth' });
-    }
+  const scrollHandler = React.useCallback((href: string) => {
+    scrollToSection(href, location.pathname, navigate);
     setIsMenuOpen(false);
   }, [location.pathname, navigate]);
 
@@ -72,10 +49,10 @@ export const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
+            {navigationItems.map((item) => (
               <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href, item.route)}
+                key={item.id}
+                onClick={() => scrollHandler(item.href)}
                 className={`px-3 py-2 text-sm font-medium transition-colors relative ${
                   (location.pathname === '/' && activeSection === item.id) ||
                   (location.pathname === item.route && item.route !== '/')
@@ -83,7 +60,7 @@ export const Header: React.FC = () => {
                     : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
                 }`}
               >
-                {item.name}
+                {item.label}
                 {((location.pathname === '/' && activeSection === item.id) ||
                   (location.pathname === item.route && item.route !== '/')) && (
                   <motion.div
@@ -133,24 +110,24 @@ export const Header: React.FC = () => {
             >
               {/* Container dengan padding yang ketat */}
               <div className="px-0 py-1">
-                {navItems.map((item, index) => (
-                  <div key={item.name} className="border-0">
+                {navigationItems.map((item, index) => (
+                  <div key={item.id} className="border-0">
                     <button
-                      onClick={() => scrollToSection(item.href, item.route)}
+                      onClick={() => scrollHandler(item.href)}
                       className={`w-full text-left px-6 py-4 text-base font-medium transition-all border-0 ${
                         (location.pathname === '/' && activeSection === item.id) ||
                         (location.pathname === item.route && item.route !== '/')
                           ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                       } ${index === 0 ? 'rounded-t-lg' : ''} ${
-                        index === navItems.length - 1 ? 'rounded-b-lg' : ''
+                        index === navigationItems.length - 1 ? 'rounded-b-lg' : ''
                       }`}
                     >
-                      {item.name}
+                      {item.label}
                     </button>
                     
                     {/* Separator yang tidak bikin rongga */}
-                    {index < navItems.length - 1 && (
+                    {index < navigationItems.length - 1 && (
                       <div className="mx-6 h-px bg-gray-100 dark:bg-gray-800" />
                     )}
                   </div>
