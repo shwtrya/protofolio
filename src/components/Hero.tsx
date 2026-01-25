@@ -16,6 +16,17 @@ const Hero = () => {
     'IoT Developer',
     'Network Specialist'
   ], 100, 50, 2000);
+
+  const handleSocialClick = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        const currentClicks = parseInt(localStorage.getItem('social_clicks') || '0', 10);
+        localStorage.setItem('social_clicks', (currentClicks + 1).toString());
+      }
+    } catch (error) {
+      console.warn('Failed to record social click.', error);
+    }
+  };
   
   const navigationFlow = [
     { path: '/about', label: 'About Me', icon: User, description: 'Learn about me' },
@@ -148,6 +159,7 @@ const Hero = () => {
           >
             <motion.a
               href="https://github.com/CyXd404"
+              onClick={handleSocialClick}
               whileHover={{ scale: 1.1, y: -2 }}
               className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label="Visit GitHub profile"
@@ -158,6 +170,7 @@ const Hero = () => {
             </motion.a>
             <motion.a
               href="https://www.linkedin.com/in/shawava-tritya"
+              onClick={handleSocialClick}
               whileHover={{ scale: 1.1, y: -2 }}
               className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label="Visit LinkedIn profile"
@@ -168,6 +181,7 @@ const Hero = () => {
             </motion.a>
             <motion.a
               href="mailto:shawavatritya@gmail.com"
+              onClick={handleSocialClick}
               whileHover={{ scale: 1.1, y: -2 }}
               className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label="Send email"

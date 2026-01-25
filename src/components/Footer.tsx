@@ -5,6 +5,17 @@ import { Github, Linkedin, Mail, Heart } from 'lucide-react';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const handleSocialClick = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        const currentClicks = parseInt(localStorage.getItem('social_clicks') || '0', 10);
+        localStorage.setItem('social_clicks', (currentClicks + 1).toString());
+      }
+    } catch (error) {
+      console.warn('Failed to record social click.', error);
+    }
+  };
+
   return (
     <footer className="bg-gray-900 dark:bg-black text-white py-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,6 +91,7 @@ const Footer = () => {
             <div className="flex md:justify-end space-x-4">
               <motion.a
                 href="https://github.com/CyXd404"
+                onClick={handleSocialClick}
                 whileHover={{ scale: 1.1, y: -2 }}
                 className="text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
                 target="_blank"
@@ -90,6 +102,7 @@ const Footer = () => {
               </motion.a>
               <motion.a
                 href="https://www.linkedin.com/in/shawava-tritya"
+                onClick={handleSocialClick}
                 whileHover={{ scale: 1.1, y: -2 }}
                 className="text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 focus:outline-none focus-visible:text-blue-400 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
                 target="_blank"
@@ -100,6 +113,7 @@ const Footer = () => {
               </motion.a>
               <motion.a
                 href="mailto:shawavatritya@gmail.com"
+                onClick={handleSocialClick}
                 whileHover={{ scale: 1.1, y: -2 }}
                 className="text-gray-400 dark:text-gray-300 hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors duration-300 focus:outline-none focus-visible:text-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
                 aria-label="Send email"
