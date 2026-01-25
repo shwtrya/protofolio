@@ -1,9 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { navigationItems } from '../data/navigation';
+import { scrollToSection } from '../utils/scrollToSection';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSocialClick = () => {
     try {
@@ -15,6 +20,12 @@ const Footer = () => {
       console.warn('Failed to record social click.', error);
     }
   };
+
+  const footerNavItems = navigationItems.filter((item) => item.id !== 'home');
+
+  const handleFooterNavClick = React.useCallback((href: string) => {
+    scrollToSection(href, location.pathname, navigate);
+  }, [location.pathname, navigate]);
 
   return (
     <footer className="bg-gray-900 dark:bg-black text-white py-12 transition-colors duration-300">
@@ -46,36 +57,16 @@ const Footer = () => {
           >
             <h4 className="text-lg font-semibold mb-4">Navigasi Cepat</h4>
             <div className="space-y-2">
-              <a
-                href="/about"
-                className="block text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-              >
-                Tentang
-              </a>
-              <a
-                href="/experience"
-                className="block text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-              >
-                Pengalaman
-              </a>
-              <a
-                href="/projects"
-                className="block text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-              >
-                Proyek
-              </a>
-              <a
-                href="/education"
-                className="block text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-              >
-                Pendidikan
-              </a>
-              <a
-                href="/contact"
-                className="block text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-              >
-                Kontak
-              </a>
+              {footerNavItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleFooterNavClick(item.href)}
+                  className="block w-full text-left text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
+                >
+                  {item.footerLabel}
+                </button>
+              ))}
             </div>
           </motion.div>
 
