@@ -37,7 +37,7 @@ const Hero = () => {
   ];
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden pt-20 transition-colors duration-300">
+    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden pt-16 sm:pt-20 transition-colors duration-300">
       <h1 className="sr-only">Shawava Tritya - Portfolio Pelajar SMK Teknik Komputer dan Jaringan</h1>
       {/* Background decoration */}
       <div className="absolute inset-0">
@@ -86,8 +86,8 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mb-8 sm:mb-12"
           >
-            <h2 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 px-4">Jelajahi perjalanan saya:</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 max-w-5xl mx-auto px-4">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3 sm:mb-5 px-4">Jelajahi perjalanan saya:</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3 md:gap-4 max-w-5xl mx-auto px-4">
               {navigationFlow.map((item, index) => (
                 <motion.div
                   key={item.path}
@@ -97,17 +97,17 @@ const Hero = () => {
                 >
                   <Link
                     to={item.path}
-                    className="group block p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-500 transition-all duration-300 h-full transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    className="group block min-h-[140px] sm:min-h-[160px] p-3 sm:p-3.5 md:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-500 transition-all duration-300 h-full transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     aria-label={`Navigate to ${item.label}: ${item.description}`}
                   >
                     <div className="flex flex-col items-center text-center space-y-2">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-900/30 group-hover:bg-blue-100 dark:group-hover:bg-blue-800/50 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
                         <item.icon size={20} className="text-blue-600 dark:text-blue-400 sm:w-6 sm:h-6" />
                       </div>
-                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300" role="heading" aria-level="3">
+                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 line-clamp-1" role="heading" aria-level="3">
                         {item.label}
                       </h3>
-                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-300 line-clamp-2">
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-300 line-clamp-2 max-w-[180px] sm:max-w-none">
                         {item.description}
                       </p>
                       <ArrowRight size={14} className="text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300 sm:w-4 sm:h-4" />
@@ -127,7 +127,7 @@ const Hero = () => {
           >
             <Link
               to="/projects"
-              className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-lg text-center min-w-[140px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="w-full sm:w-auto min-h-[44px] bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-lg text-center min-w-[140px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               View My Work
             </Link>
@@ -136,7 +136,7 @@ const Hero = () => {
               onClick={() => setIsResumeModalOpen(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-full sm:w-auto bg-emerald-600 text-white px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-emerald-700 transition-all duration-300 hover:shadow-lg text-center min-w-[140px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 flex items-center justify-center space-x-2"
+              className="w-full sm:w-auto min-h-[44px] bg-emerald-600 text-white px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-emerald-700 transition-all duration-300 hover:shadow-lg text-center min-w-[140px] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 flex items-center justify-center space-x-2"
             >
               <FileText size={18} />
               <span>View Resume</span>
@@ -144,7 +144,7 @@ const Hero = () => {
             
             <Link
               to="/contact"
-              className="w-full sm:w-auto border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 hover:scale-105 text-center min-w-[140px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="w-full sm:w-auto min-h-[44px] border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 sm:px-6 py-3 rounded-lg text-sm sm:text-base font-semibold hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 hover:scale-105 text-center min-w-[140px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               Get in Touch
             </Link>
@@ -161,7 +161,7 @@ const Hero = () => {
               href="https://github.com/CyXd404"
               onClick={handleSocialClick}
               whileHover={{ scale: 1.1, y: -2 }}
-              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="min-h-[44px] min-w-[44px] p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label="Visit GitHub profile"
               target="_blank"
               rel="noopener noreferrer"
@@ -172,7 +172,7 @@ const Hero = () => {
               href="https://www.linkedin.com/in/shawava-tritya"
               onClick={handleSocialClick}
               whileHover={{ scale: 1.1, y: -2 }}
-              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="min-h-[44px] min-w-[44px] p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label="Visit LinkedIn profile"
               target="_blank"
               rel="noopener noreferrer"
@@ -183,7 +183,7 @@ const Hero = () => {
               href="mailto:shawavatritya@gmail.com"
               onClick={handleSocialClick}
               whileHover={{ scale: 1.1, y: -2 }}
-              className="p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="min-h-[44px] min-w-[44px] p-3 sm:p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-lg text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label="Send email"
             >
               <Mail size={20} className="sm:w-6 sm:h-6" />

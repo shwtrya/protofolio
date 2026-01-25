@@ -232,7 +232,7 @@ END:VCARD`;
   return (
     <section
       id="contact"
-      className="py-20 bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
+      className="py-14 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-800 transition-colors duration-300"
     >
       <div className="container-responsive">
         <motion.div
@@ -240,7 +240,7 @@ END:VCARD`;
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-14"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Hubungi Saya
@@ -250,7 +250,7 @@ END:VCARD`;
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
           {/* LEFT SIDE */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -277,7 +277,7 @@ END:VCARD`;
                     key={info.title}
                     href={info.link}
                     whileHover={{ x: 5, scale: 1.02 }}
-                    className="flex items-center space-x-4 p-4 sm:p-5 bg-white dark:bg-gray-900 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 border border-gray-100 dark:border-gray-700"
+                    className="flex items-center min-h-[56px] space-x-4 p-3.5 sm:p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 border border-gray-100 dark:border-gray-700"
                     {...(info.link.startsWith('http') && {
                       target: '_blank',
                       rel: 'noopener noreferrer'
@@ -290,7 +290,7 @@ END:VCARD`;
                       <h4 className="text-sm sm:text-base text-gray-900 dark:text-white font-semibold">
                         {info.title}
                       </h4>
-                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 max-w-[220px] sm:max-w-none line-clamp-2">
                         {info.value}
                       </p>
                     </div>
@@ -301,7 +301,7 @@ END:VCARD`;
                   onClick={downloadVCard}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full flex items-center justify-center space-x-3 p-4 sm:p-5 bg-gradient-to-r from-blue-600 to-emerald-600 dark:from-blue-500 dark:to-emerald-500 text-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 mt-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  className="w-full min-h-[44px] flex items-center justify-center space-x-3 p-3.5 sm:p-4 bg-gradient-to-r from-blue-600 to-emerald-600 dark:from-blue-500 dark:to-emerald-500 text-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 mt-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 >
                   <Download className="w-5 h-5" />
                   <span className="font-semibold text-sm sm:text-base">Download Contact Card (vCard)</span>
@@ -332,7 +332,7 @@ END:VCARD`;
           >
             <form
               onSubmit={handleSubmit}
-              className="bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-xl shadow-lg space-y-6 border border-gray-100 dark:border-gray-700"
+              className="bg-white dark:bg-gray-900 p-5 sm:p-6 md:p-8 rounded-xl shadow-lg space-y-6 border border-gray-100 dark:border-gray-700"
             >
               {/* HONEYPOT FIELD (TERSEMBUNYI) */}
               <input
@@ -393,7 +393,7 @@ END:VCARD`;
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label
                     htmlFor="name"
@@ -422,7 +422,7 @@ END:VCARD`;
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-Sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Nama Anda"
                   />
                 </div>
@@ -455,7 +455,7 @@ END:VCARD`;
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="email.anda@example.com"
                   />
                 </div>
@@ -489,7 +489,7 @@ END:VCARD`;
                   onChange={handleChange}
                   required
                   disabled={isSubmitting}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Tentang apa ini?"
                 />
               </div>
@@ -522,7 +522,7 @@ END:VCARD`;
                   required
                   rows={5}
                   disabled={isSubmitting}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-300 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Ceritakan tentang proyek Anda..."
                 />
               </div>
@@ -532,7 +532,7 @@ END:VCARD`;
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={isSubmitting || !canSubmit()}
-                className={`w-full py-2 sm:py-3 px-6 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 flex items-center justify-center space-x-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                className={`w-full min-h-[44px] py-2.5 sm:py-3 px-6 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 flex items-center justify-center space-x-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
                   canSubmit() && !isSubmitting
                     ? 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 hover:scale-102'
                     : 'bg-gray-400 dark:bg-gray-600 text-gray-200 cursor-not-allowed opacity-60'

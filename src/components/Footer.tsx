@@ -28,9 +28,9 @@ const Footer = () => {
   }, [location.pathname, navigate]);
 
   return (
-    <footer className="bg-gray-900 dark:bg-black text-white py-12 transition-colors duration-300">
+    <footer className="bg-gray-900 dark:bg-black text-white py-10 sm:py-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+        <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-8">
           {/* Brand & Description */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -41,7 +41,7 @@ const Footer = () => {
             <h3 className="text-2xl font-bold mb-4">
               Shawava<span className="text-blue-400 dark:text-blue-300">Tritya</span>
             </h3>
-            <p className="text-gray-400 dark:text-gray-300 leading-relaxed">
+            <p className="text-gray-400 dark:text-gray-300 leading-relaxed max-w-sm sm:max-w-none line-clamp-3">
               Pelajar SMK Teknik Komputer dan Jaringan yang passionate dalam bidang teknologi, 
               Arduino, IoT, dan pengolahan data dengan fokus pada kualitas dan ketelitian.
             </p>
@@ -62,7 +62,7 @@ const Footer = () => {
                   key={item.id}
                   type="button"
                   onClick={() => handleFooterNavClick(item.href)}
-                  className="block w-full text-left text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
+                  className="flex min-h-[44px] w-full items-center text-left text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
                 >
                   {item.footerLabel}
                 </button>
@@ -84,7 +84,7 @@ const Footer = () => {
                 href="https://github.com/CyXd404"
                 onClick={handleSocialClick}
                 whileHover={{ scale: 1.1, y: -2 }}
-                className="text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
+                className="min-h-[44px] min-w-[44px] text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded flex items-center justify-center"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit GitHub profile"
@@ -95,7 +95,7 @@ const Footer = () => {
                 href="https://www.linkedin.com/in/shawava-tritya"
                 onClick={handleSocialClick}
                 whileHover={{ scale: 1.1, y: -2 }}
-                className="text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 focus:outline-none focus-visible:text-blue-400 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
+                className="min-h-[44px] min-w-[44px] text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 focus:outline-none focus-visible:text-blue-400 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded flex items-center justify-center"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit LinkedIn profile"
@@ -106,7 +106,7 @@ const Footer = () => {
                 href="mailto:shawavatritya@gmail.com"
                 onClick={handleSocialClick}
                 whileHover={{ scale: 1.1, y: -2 }}
-                className="text-gray-400 dark:text-gray-300 hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors duration-300 focus:outline-none focus-visible:text-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
+                className="min-h-[44px] min-w-[44px] text-gray-400 dark:text-gray-300 hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors duration-300 focus:outline-none focus-visible:text-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded flex items-center justify-center"
                 aria-label="Send email"
               >
                 <Mail size={24} />

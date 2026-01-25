@@ -306,7 +306,7 @@ const AnalyticsDashboard: React.FC = () => {
         <button
           type="button"
           onClick={fetchAnalytics}
-          className="rounded-md bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-700"
+          className="min-h-[44px] rounded-md bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-700"
         >
           Coba lagi
         </button>
@@ -322,7 +322,7 @@ const AnalyticsDashboard: React.FC = () => {
       transition={{ duration: 0.8 }}
       className="space-y-6"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {metrics.map((metric, index) => (
           <motion.div
             key={metric.id}
@@ -331,7 +331,7 @@ const AnalyticsDashboard: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             onClick={() => setActiveMetric(metric.id)}
-            className={`cursor-pointer p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+            className={`cursor-pointer min-h-[140px] p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
               activeMetric === metric.id
                 ? 'border-blue-500'
                 : 'border-gray-200 dark:border-gray-700'
@@ -347,7 +347,7 @@ const AnalyticsDashboard: React.FC = () => {
                 {metric.change}
               </span>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 line-clamp-1 max-w-[140px] sm:max-w-none">
               {metric.label}
             </p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -363,7 +363,7 @@ const AnalyticsDashboard: React.FC = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+          className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-5 border border-gray-200 dark:border-gray-700"
         >
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
             <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
@@ -379,7 +379,7 @@ const AnalyticsDashboard: React.FC = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-5 border border-gray-200 dark:border-gray-700"
         >
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
             <Globe className="w-5 h-5 mr-2 text-blue-600" />
@@ -399,7 +399,7 @@ const AnalyticsDashboard: React.FC = () => {
                   <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                     {index + 1}
                   </span>
-                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[150px]">
+                  <span className="text-sm text-gray-700 dark:text-gray-300 max-w-[160px] sm:max-w-[220px] line-clamp-1">
                     {page.path || '/'}
                   </span>
                 </div>
