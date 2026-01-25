@@ -95,7 +95,7 @@ const AnalyticsDashboard: React.FC = () => {
 
       const { data: visitors, error: visitorsError } = await supabase
         .from('visitors')
-        .select('*')
+        .select('created_at, first_visit, last_visit, page_views')
         .order('created_at', { ascending: false })
         .limit(100);
       if (visitorsError) {
@@ -137,11 +137,42 @@ const AnalyticsDashboard: React.FC = () => {
         return { date, visitors: count };
       });
 
+      const visitorsData = visitors ?? [];
+      const sessionDurations = visitorsData
+        .map(visitor => {
+          const firstVisit = visitor.first_visit ?? visitor.created_at;
+          const lastVisit = visitor.last_visit ?? visitor.created_at;
+          if (!firstVisit || !lastVisit) {
+            return null;
+          }
+
+          const startTime = new Date(firstVisit).getTime();
+          const endTime = new Date(lastVisit).getTime();
+          if (!Number.isFinite(startTime) || !Number.isFinite(endTime)) {
+            return null;
+          }
+
+          const durationSeconds = Math.max(0, Math.round((endTime - startTime) / 1000));
+          return durationSeconds;
+        })
+        .filter((duration): duration is number => duration !== null);
+
+      const totalDuration = sessionDurations.reduce((total, duration) => total + duration, 0);
+      const avgSessionDuration = sessionDurations.length
+        ? Math.round(totalDuration / sessionDurations.length)
+        : 0;
+
+      const totalSessions = visitorsData.length;
+      const bounceSessions = visitorsData.filter(visitor => Number(visitor.page_views) === 1).length;
+      const bounceRate = totalSessions
+        ? Math.round((bounceSessions / totalSessions) * 100)
+        : 0;
+
       setAnalytics({
         totalVisitors: Number(resolvedStats.total_visitors) || 0,
         totalPageViews: Number(resolvedStats.total_page_views) || 0,
-        avgSessionDuration: 145,
-        bounceRate: 32,
+        avgSessionDuration,
+        bounceRate,
         topPages,
         visitorTrend
       });
