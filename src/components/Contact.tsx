@@ -16,6 +16,7 @@ const Contact: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [lastSubmitTime, setLastSubmitTime] = useState<number>(() => {
     return parseInt(localStorage.getItem('lastSubmitTime') || '0');
   });
@@ -43,7 +44,7 @@ const Contact: React.FC = () => {
     setFormData({ ...formData, [fieldName]: e.target.value });
 
     // Set typing indicator
-    setIsTyping({ ...isTyping, [fieldName]: true });
+    setIsTyping((prev) => ({ ...prev, [fieldName]: true }));
 
     // Clear previous timeout
     if (typingTimeout[fieldName]) {
@@ -52,10 +53,38 @@ const Contact: React.FC = () => {
 
     // Set new timeout to remove typing indicator after 1 second
     const timeout = setTimeout(() => {
-      setIsTyping({ ...isTyping, [fieldName]: false });
+      setIsTyping((prev) => ({ ...prev, [fieldName]: false }));
     }, 1000);
 
-    setTypingTimeout({ ...typingTimeout, [fieldName]: timeout });
+    setTypingTimeout((prev) => ({ ...prev, [fieldName]: timeout }));
+  };
+
+  const getHourlySubmissionState = (now: number, persistReset: boolean) => {
+    const hourlySubmissions = parseInt(
+      localStorage.getItem('hourlySubmissions') || '0'
+    );
+    const lastHourReset = parseInt(
+      localStorage.getItem('lastHourReset') || '0'
+    );
+    const shouldReset = now - lastHourReset > 3600000;
+
+    if (shouldReset && persistReset) {
+      localStorage.setItem('hourlySubmissions', '0');
+      localStorage.setItem('lastHourReset', now.toString());
+    }
+
+    return {
+      hourlySubmissions: shouldReset ? 0 : hourlySubmissions,
+      lastHourReset: shouldReset && persistReset ? now : lastHourReset
+    };
+  };
+
+  const getRemainingCooldownSeconds = (now: number) => {
+    const timeSinceLastSubmit = now - lastSubmitTime;
+    const remaining = Math.ceil(
+      (COOLDOWN_TIME - timeSinceLastSubmit) / 1000
+    );
+    return remaining > 0 ? remaining : 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,6 +93,7 @@ const Contact: React.FC = () => {
     // Jika bot isi honeypot → langsung tolak
     if (formData.honeypot.trim() !== '') {
       setSubmitStatus('error');
+      setSubmitError('Pengiriman ditolak karena terdeteksi aktivitas mencurigakan.');
       return;
     }
 
@@ -73,27 +103,33 @@ const Contact: React.FC = () => {
     // Cek cooldown
     if (timeSinceLastSubmit < COOLDOWN_TIME) {
       setSubmitStatus('error');
+      setSubmitError(
+        `Cooldown masih aktif. Coba lagi dalam ${getRemainingCooldownSeconds(now)} detik.`
+      );
       return;
     }
 
-    const hourlySubmissions = parseInt(
-      localStorage.getItem('hourlySubmissions') || '0'
-    );
-    const lastHourReset = parseInt(
-      localStorage.getItem('lastHourReset') || '0'
+    // Reset per jam
+    const { hourlySubmissions, lastHourReset } = getHourlySubmissionState(
+      now,
+      true
     );
 
-    // Reset per jam
-    if (now - lastHourReset > 3600000) {
-      localStorage.setItem('hourlySubissions', '0');
-      localStorage.setItem('lastHourReset', now.toString());
-    } else if (hourlySubmissions >= MAX_SUBMISSIONS_PER_HOUR) {
+    if (hourlySubmissions >= MAX_SUBMISSIONS_PER_HOUR) {
+      const minutesUntilReset = Math.max(
+        1,
+        Math.ceil((3600000 - (now - lastHourReset)) / 60000)
+      );
       setSubmitStatus('error');
+      setSubmitError(
+        `Batas ${MAX_SUBMISSIONS_PER_HOUR} pesan per jam tercapai. Coba lagi dalam ${minutesUntilReset} menit.`
+      );
       return;
     }
 
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setSubmitError(null);
 
     try {
       const response = await fetch('/.netlify/functions/sendEmail', {
@@ -102,7 +138,9 @@ const Contact: React.FC = () => {
         body: JSON.stringify(formData)
       });
 
-      if (!response.ok) throw new Error('Pengiriman gagal');
+      if (!response.ok) {
+        throw new Error('Pengiriman gagal. Silakan coba lagi.');
+      }
 
       setLastSubmitTime(now);
       localStorage.setItem(
@@ -110,6 +148,7 @@ const Contact: React.FC = () => {
         (hourlySubmissions + 1).toString()
       );
       setSubmitStatus('success');
+      setSubmitError(null);
       setFormData({
         name: '',
         email: '',
@@ -117,8 +156,14 @@ const Contact: React.FC = () => {
         message: '',
         honeypot: ''
       });
-    } catch {
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Terjadi kesalahan saat mengirim pesan.';
+      console.error('Contact form submission failed:', error);
       setSubmitStatus('error');
+      setSubmitError(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -127,9 +172,7 @@ const Contact: React.FC = () => {
   const canSubmit = () => {
     const now = Date.now();
     const timeSinceLastSubmit = now - lastSubmitTime;
-    const hourlySubmissions = parseInt(
-      localStorage.getItem('hourlySubmissions') || '0'
-    );
+    const { hourlySubmissions } = getHourlySubmissionState(now, false);
     return (
       timeSinceLastSubmit >= COOLDOWN_TIME &&
       hourlySubmissions < MAX_SUBMISSIONS_PER_HOUR
@@ -137,12 +180,7 @@ const Contact: React.FC = () => {
   };
 
   const getRemainingCooldown = () => {
-    const now = Date.now();
-    const timeSinceLastSubmit = now - lastSubmitTime;
-    const remaining = Math.ceil(
-      (COOLDOWN_TIME - timeSinceLastSubmit) / 1000
-    );
-    return remaining > 0 ? remaining : 0;
+    return getRemainingCooldownSeconds(Date.now());
   };
 
   const downloadVCard = () => {
@@ -335,7 +373,8 @@ END:VCARD`;
                       Gagal mengirim!
                     </p>
                     <p className="text-red-700 dark:text-red-400 text-xs mt-1">
-                      Pastikan semua data benar atau coba beberapa saat lagi.
+                      {submitError ||
+                        'Pastikan semua data benar atau coba beberapa saat lagi.'}
                     </p>
                   </div>
                 </motion.div>
