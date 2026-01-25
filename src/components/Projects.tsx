@@ -8,6 +8,14 @@ const Projects = () => {
   const [isCaseStudyOpen, setIsCaseStudyOpen] = useState(false);
 
   const openCaseStudy = (project: any) => {
+    try {
+      if (typeof window !== 'undefined') {
+        const currentViews = parseInt(localStorage.getItem('project_views') || '0', 10);
+        localStorage.setItem('project_views', (currentViews + 1).toString());
+      }
+    } catch (error) {
+      console.warn('Failed to record project view.', error);
+    }
     setSelectedProject(project);
     setIsCaseStudyOpen(true);
   };
