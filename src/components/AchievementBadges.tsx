@@ -41,11 +41,7 @@ const AchievementBadges: React.FC = () => {
   }, []);
 
   const initializeAchievements = () => {
-    const stored = localStorage.getItem('portfolio_achievements');
-    if (stored) {
-      setAchievements(JSON.parse(stored));
-    } else {
-      const initialAchievements: Achievement[] = [
+    const initialAchievements: Achievement[] = [
         {
           id: 'first-visit',
           title: 'Welcome Explorer',
@@ -114,9 +110,38 @@ const AchievementBadges: React.FC = () => {
         }
       ];
 
-      setAchievements(initialAchievements);
-      localStorage.setItem('portfolio_achievements', JSON.stringify(initialAchievements));
+    const stored = localStorage.getItem('portfolio_achievements');
+    if (stored) {
+      try {
+        const storedAchievements = JSON.parse(stored) as Partial<Achievement>[];
+
+        // Merge stored progress/unlocked flags into the current achievement definitions.
+        const merged = initialAchievements.map((a) => {
+          const s = storedAchievements.find((x: any) => x?.id === a.id);
+          if (!s) return a;
+          return {
+            ...a,
+            unlocked: Boolean((s as any).unlocked),
+            progress: Number((s as any).progress ?? a.progress) || 0
+          };
+        });
+
+        setAchievements(merged);
+        return;
+      } catch (e) {
+        console.warn('Invalid stored achievements, resetting…', e);
+      }
     }
+
+    setAchievements(initialAchievements);
+    // Store achievements WITHOUT non-serializable fields (e.g., icon components).
+    localStorage.setItem(
+      'portfolio_achievements',
+      JSON.stringify(initialAchievements.map(({
+        icon,
+        ...rest
+      }) => rest))
+    );
   };
 
   const trackUserProgress = () => {
@@ -167,7 +192,7 @@ const AchievementBadges: React.FC = () => {
         return { ...achievement, progress: newProgress, unlocked };
       });
 
-      localStorage.setItem('portfolio_achievements', JSON.stringify(updated));
+      localStorage.setItem('portfolio_achievements', JSON.stringify(updated.map(({ icon, ...rest }) => rest)));
       return updated;
     });
   };
