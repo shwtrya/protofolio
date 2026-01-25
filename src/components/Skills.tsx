@@ -81,14 +81,14 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-800/50 transition-colors duration-300">
+    <section id="skills" className="py-10 sm:py-12 md:py-16 bg-gray-50 dark:bg-gray-800/50 transition-colors duration-300">
       <div className="container-responsive">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-8 sm:mb-12 md:mb-16"
+          className="text-center mb-6 sm:mb-8 md:mb-12"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
             Skills Overview
@@ -98,7 +98,7 @@ const Skills = () => {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 px-4 md:px-0">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6 px-4 md:px-0">
           {skillCategories.map((category, index) => {
             const colors = getColorClasses(category.color);
             const CategoryIcon = category.icon;
@@ -110,13 +110,13 @@ const Skills = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                className={`${colors.bg} ${colors.border} border-2 rounded-2xl p-4 sm:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}
+                className={`${colors.bg} ${colors.border} min-h-[240px] border-2 rounded-2xl p-4 sm:p-5 hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}
               >
                 <div className="flex items-center mb-4 sm:mb-6">
                   <div className={`${colors.icon} w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mr-3 sm:mr-4`}>
                     <CategoryIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <h3 className={`text-base sm:text-lg md:text-xl font-bold ${colors.text}`}>
+                  <h3 className={`text-base sm:text-lg md:text-xl font-bold ${colors.text} line-clamp-1`}>
                     {category.title}
                   </h3>
                 </div>
@@ -135,7 +135,7 @@ const Skills = () => {
                         <div className="flex items-center justify-between mb-1.5 sm:mb-2">
                           <div className="flex items-center">
                             <SkillIcon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${colors.text} mr-1.5 sm:mr-2`} />
-                            <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 max-w-[180px] sm:max-w-none line-clamp-1">
                               {skill.name}
                             </span>
                           </div>
@@ -168,14 +168,14 @@ const Skills = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-8 sm:mt-12 text-center"
+          className="mt-6 sm:mt-10 text-center"
         >
-          <div className="inline-block bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-900/20 dark:to-emerald-900/20 rounded-2xl p-4 sm:p-6 md:p-8 border border-blue-100 dark:border-blue-800">
+          <div className="inline-block bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-900/20 dark:to-emerald-900/20 rounded-2xl p-4 sm:p-5 md:p-7 border border-blue-100 dark:border-blue-800">
             <Cloud className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-blue-600 dark:text-blue-400 mx-auto mb-2 sm:mb-3 md:mb-4" />
             <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2">
               Terus Berkembang
             </h4>
-            <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto line-clamp-2">
               Saya selalu antusias mempelajari teknologi dan tools baru untuk meningkatkan kemampuan teknis
             </p>
           </div>
