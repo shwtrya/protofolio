@@ -69,6 +69,10 @@ function App() {
     return () => window.removeEventListener('error', handleModuleError);
   }, []);
 
+  useEffect(() => {
+    trackVisitor();
+  }, []);
+
   return (
     
       <ThemeProvider key={appKey}>
@@ -103,10 +107,6 @@ function App() {
 }
 
 function HomePage() {
-  useEffect(() => {
-    trackVisitor();
-  }, []);
-
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
       <Hero />

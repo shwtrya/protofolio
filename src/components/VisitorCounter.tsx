@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Eye, TrendingUp } from 'lucide-react';
-import { supabase, getVisitorStats, trackVisitor, type VisitorStats } from '../lib/supabase';
+import { supabase, getVisitorStats, type VisitorStats } from '../lib/supabase';
 
 const VisitorCounter = () => {
   const [stats, setStats] = useState<VisitorStats>({
@@ -15,7 +15,6 @@ const VisitorCounter = () => {
   useEffect(() => {
     const initializeTracking = async () => {
       try {
-        await trackVisitor();
         const initialStats = await getVisitorStats();
         setStats(initialStats);
       } catch (error) {
