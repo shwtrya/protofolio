@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastProvider } from './components/ToastNotification';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { trackVisitor } from './lib/supabase';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -102,6 +103,10 @@ function App() {
 }
 
 function HomePage() {
+  useEffect(() => {
+    trackVisitor();
+  }, []);
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
       <Hero />
