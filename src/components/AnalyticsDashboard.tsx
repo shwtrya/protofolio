@@ -46,8 +46,15 @@ const AnalyticsDashboard: React.FC = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeMetric, setActiveMetric] = useState<string>('visitors');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!supabase) {
+      setErrorMessage('Supabase belum dikonfigurasi. Analytics tidak dapat dimuat.');
+      setIsLoading(false);
+      return;
+    }
+
     fetchAnalytics();
 
     const channel = supabase
@@ -71,58 +78,79 @@ const AnalyticsDashboard: React.FC = () => {
   }, []);
 
   const fetchAnalytics = async () => {
-    try {
-      const { data: stats } = await supabase.rpc('get_visitor_stats');
+    if (!supabase) {
+      setErrorMessage('Supabase belum tersedia. Coba lagi nanti.');
+      setIsLoading(false);
+      return;
+    }
 
-      const { data: visitors } = await supabase
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    try {
+      const { data: stats, error: statsError } = await supabase.rpc('get_visitor_stats');
+      if (statsError) {
+        throw new Error(`Gagal memuat statistik pengunjung: ${statsError.message}`);
+      }
+
+      const { data: visitors, error: visitorsError } = await supabase
         .from('visitors')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
+      if (visitorsError) {
+        throw new Error(`Gagal memuat data pengunjung: ${visitorsError.message}`);
+      }
 
-      const { data: pageViews } = await supabase
+      const { data: pageViews, error: pageViewsError } = await supabase
         .from('page_views')
         .select('page_url, visited_at')
         .order('visited_at', { ascending: false })
         .limit(100);
-
-      if (stats && stats.length > 0) {
-        const pageCounts: { [key: string]: number } = {};
-        pageViews?.forEach(pv => {
-          pageCounts[pv.page_url] = (pageCounts[pv.page_url] || 0) + 1;
-        });
-
-        const topPages = Object.entries(pageCounts)
-          .map(([path, views]) => ({ path, views }))
-          .sort((a, b) => b.views - a.views)
-          .slice(0, 5);
-
-        const last7Days = Array.from({ length: 7 }, (_, i) => {
-          const date = new Date();
-          date.setDate(date.getDate() - i);
-          return date.toISOString().split('T')[0];
-        }).reverse();
-
-        const visitorTrend = last7Days.map(date => {
-          const count = visitors?.filter(v =>
-            v.created_at.startsWith(date)
-          ).length || 0;
-          return { date, visitors: count };
-        });
-
-        setAnalytics({
-          totalVisitors: stats[0].total_visitors,
-          totalPageViews: stats[0].total_page_views,
-          avgSessionDuration: 145,
-          bounceRate: 32,
-          topPages,
-          visitorTrend
-        });
+      if (pageViewsError) {
+        throw new Error(`Gagal memuat data page views: ${pageViewsError.message}`);
       }
 
-      setIsLoading(false);
+      const resolvedStats = stats?.[0] ?? {
+        total_visitors: 0,
+        total_page_views: 0
+      };
+
+      const pageCounts: { [key: string]: number } = {};
+      pageViews?.forEach(pv => {
+        pageCounts[pv.page_url] = (pageCounts[pv.page_url] || 0) + 1;
+      });
+
+      const topPages = Object.entries(pageCounts)
+        .map(([path, views]) => ({ path, views }))
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 5);
+
+      const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        return date.toISOString().split('T')[0];
+      }).reverse();
+
+      const visitorTrend = last7Days.map(date => {
+        const count = visitors?.filter(v => v.created_at.startsWith(date)).length || 0;
+        return { date, visitors: count };
+      });
+
+      setAnalytics({
+        totalVisitors: Number(resolvedStats.total_visitors) || 0,
+        totalPageViews: Number(resolvedStats.total_page_views) || 0,
+        avgSessionDuration: 145,
+        bounceRate: 32,
+        topPages,
+        visitorTrend
+      });
     } catch (error) {
       console.error('Error fetching analytics:', error);
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Terjadi kesalahan saat memuat analytics.'
+      );
+    } finally {
       setIsLoading(false);
     }
   };
@@ -235,6 +263,22 @@ const AnalyticsDashboard: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200">
+        <p className="font-semibold">Analytics tidak tersedia.</p>
+        <p>{errorMessage}</p>
+        <button
+          type="button"
+          onClick={fetchAnalytics}
+          className="rounded-md bg-red-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-red-700"
+        >
+          Coba lagi
+        </button>
       </div>
     );
   }
