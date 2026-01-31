@@ -1,11 +1,38 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../components/ToastNotification';
 
 export const useKeyboardShortcuts = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
+
+  const showShortcutsModal = useCallback(() => {
+    const shortcuts = [
+      { keys: 'Ctrl/Cmd + H', action: 'Go to Home' },
+      { keys: 'Ctrl/Cmd + K', action: 'Go to Contact' },
+      { keys: 'Ctrl/Cmd + P', action: 'Go to Projects' },
+      { keys: 'Ctrl/Cmd + E', action: 'Go to Experience' },
+      { keys: '?', action: 'Show this help' }
+    ];
+
+    const message = shortcuts
+      .map(s => `${s.keys}: ${s.action}`)
+      .join(' • ');
+
+    showToast('info', `Keyboard shortcuts: ${message}`, 8000);
+  }, [showToast]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      const target = e.target;
+      const isEditableTarget =
+        target instanceof Element &&
+        target.closest('input, textarea, select, [contenteditable="true"]');
+
+      if (isEditableTarget) {
+        return;
+      }
+
       if (e.ctrlKey || e.metaKey) {
         switch (e.key.toLowerCase()) {
           case 'h':
@@ -29,31 +56,12 @@ export const useKeyboardShortcuts = () => {
       }
 
       if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
-        const target = e.target as HTMLElement;
-        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-          showShortcutsModal();
-        }
+        e.preventDefault();
+        showShortcutsModal();
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [navigate]);
-
-  const showShortcutsModal = () => {
-    const shortcuts = [
-      { keys: 'Ctrl/Cmd + H', action: 'Go to Home' },
-      { keys: 'Ctrl/Cmd + K', action: 'Go to Contact' },
-      { keys: 'Ctrl/Cmd + P', action: 'Go to Projects' },
-      { keys: 'Ctrl/Cmd + E', action: 'Go to Experience' },
-      { keys: '?', action: 'Show this help' }
-    ];
-
-    const message = shortcuts
-      .map(s => `${s.keys}: ${s.action}`)
-      .join('\n');
-
-    alert(`Keyboard Shortcuts:\n\n${message}`);
-  };
+  }, [navigate, showShortcutsModal]);
 };
