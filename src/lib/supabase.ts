@@ -73,50 +73,44 @@ export const trackVisitor = async () => {
     const now = Date.now();
     const trackedOnce = getSessionStorageItem(VISITOR_TRACKED_KEY);
 
-    if (trackedOnce) {
-      return;
-    }
-
-    if (now - lastTrackTime < TRACK_DEBOUNCE) {
-      return;
-    }
-
-    lastTrackTime = now;
-    setSessionStorageItem(VISITOR_TRACKED_KEY, '1');
-    setSessionStorageItem(VISITOR_TRACKED_TIME_KEY, now.toString());
-
     const identifier = await getOrCreateVisitorIdentifier();
     const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
     const isNew = isNewVisitor();
 
-    const { data: existingVisitor } = await supabase
-      .from('visitors')
-      .select('*')
-      .eq('session_id', identifier.sessionId)
-      .maybeSingle();
+    if (!trackedOnce && now - lastTrackTime >= TRACK_DEBOUNCE) {
+      lastTrackTime = now;
+      setSessionStorageItem(VISITOR_TRACKED_KEY, '1');
+      setSessionStorageItem(VISITOR_TRACKED_TIME_KEY, now.toString());
 
-    if (existingVisitor) {
-      const timeSinceLastVisit = now - new Date(existingVisitor.last_visit).getTime();
-      const shouldIncrementPageView = timeSinceLastVisit > PAGE_VIEW_WINDOW_MS;
+      const { data: existingVisitor } = await supabase
+        .from('visitors')
+        .select('*')
+        .eq('session_id', identifier.sessionId)
+        .maybeSingle();
 
-      await supabase
-        .from('visitors')
-        .update({
-          page_views: shouldIncrementPageView
-            ? existingVisitor.page_views + 1
-            : existingVisitor.page_views,
-          last_visit: new Date().toISOString()
-        })
-        .eq('session_id', identifier.sessionId);
-    } else {
-      await supabase
-        .from('visitors')
-        .insert({
-          session_id: identifier.sessionId,
-          user_agent: userAgent,
-          ip_address: identifier.fingerprint,
-          page_views: 1
-        });
+      if (existingVisitor) {
+        const timeSinceLastVisit = now - new Date(existingVisitor.last_visit).getTime();
+        const shouldIncrementPageView = timeSinceLastVisit > PAGE_VIEW_WINDOW_MS;
+
+        await supabase
+          .from('visitors')
+          .update({
+            page_views: shouldIncrementPageView
+              ? existingVisitor.page_views + 1
+              : existingVisitor.page_views,
+            last_visit: new Date().toISOString()
+          })
+          .eq('session_id', identifier.sessionId);
+      } else {
+        await supabase
+          .from('visitors')
+          .insert({
+            session_id: identifier.sessionId,
+            user_agent: userAgent,
+            ip_address: identifier.fingerprint,
+            page_views: 1
+          });
+      }
     }
 
     const currentPath = window.location.pathname;
