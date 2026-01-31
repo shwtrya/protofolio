@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastProvider } from './components/ToastNotification';
@@ -52,6 +52,16 @@ function KeyboardShortcutsWrapper() {
   return null;
 }
 
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    void trackVisitor();
+  }, [location.pathname]);
+
+  return null;
+}
+
 function App() {
   const [appKey, setAppKey] = useState(0);
   useEffect(() => {
@@ -69,16 +79,13 @@ function App() {
     return () => window.removeEventListener('error', handleModuleError);
   }, []);
 
-  useEffect(() => {
-    trackVisitor();
-  }, []);
-
   return (
     
       <ThemeProvider key={appKey}>
         <ToastProvider>
           <Router>
             <KeyboardShortcutsWrapper />
+            <RouteTracker />
             <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 overflow-x-hidden w-full">
               <ThemeTransitionEffect />
               <ScrollProgress />
