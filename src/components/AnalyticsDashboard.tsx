@@ -255,13 +255,37 @@ const AnalyticsDashboard: React.FC = () => {
     }
   };
 
+  const metricStyles: Record<
+    string,
+    {
+      iconWrapper: string;
+      icon: string;
+    }
+  > = {
+    visitors: {
+      iconWrapper: 'bg-blue-100 dark:bg-blue-900/30',
+      icon: 'text-blue-600 dark:text-blue-400'
+    },
+    pageviews: {
+      iconWrapper: 'bg-green-100 dark:bg-green-900/30',
+      icon: 'text-green-600 dark:text-green-400'
+    },
+    duration: {
+      iconWrapper: 'bg-purple-100 dark:bg-purple-900/30',
+      icon: 'text-purple-600 dark:text-purple-400'
+    },
+    bounce: {
+      iconWrapper: 'bg-orange-100 dark:bg-orange-900/30',
+      icon: 'text-orange-600 dark:text-orange-400'
+    }
+  };
+
   const metrics = [
     {
       id: 'visitors',
       label: 'Total Visitors',
       value: analytics.totalVisitors,
       icon: Users,
-      color: 'blue',
       change: '+12%'
     },
     {
@@ -269,7 +293,6 @@ const AnalyticsDashboard: React.FC = () => {
       label: 'Page Views',
       value: analytics.totalPageViews,
       icon: Eye,
-      color: 'green',
       change: '+8%'
     },
     {
@@ -277,7 +300,6 @@ const AnalyticsDashboard: React.FC = () => {
       label: 'Avg. Session',
       value: `${Math.floor(analytics.avgSessionDuration / 60)}m ${analytics.avgSessionDuration % 60}s`,
       icon: Clock,
-      color: 'purple',
       change: '+5%'
     },
     {
@@ -285,7 +307,6 @@ const AnalyticsDashboard: React.FC = () => {
       label: 'Bounce Rate',
       value: `${analytics.bounceRate}%`,
       icon: Activity,
-      color: 'orange',
       change: '-3%'
     }
   ];
@@ -323,38 +344,42 @@ const AnalyticsDashboard: React.FC = () => {
       className="space-y-6"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {metrics.map((metric, index) => (
-          <motion.div
-            key={metric.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            onClick={() => setActiveMetric(metric.id)}
-            className={`cursor-pointer min-h-[140px] p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-              activeMetric === metric.id
-                ? 'border-blue-500'
-                : 'border-gray-200 dark:border-gray-700'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div
-                className={`w-12 h-12 rounded-lg flex items-center justify-center bg-${metric.color}-100 dark:bg-${metric.color}-900/30`}
-              >
-                <metric.icon className={`w-6 h-6 text-${metric.color}-600 dark:text-${metric.color}-400`} />
+        {metrics.map((metric, index) => {
+          const style = metricStyles[metric.id] ?? metricStyles.visitors;
+
+          return (
+            <motion.div
+              key={metric.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              onClick={() => setActiveMetric(metric.id)}
+              className={`cursor-pointer min-h-[140px] p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                activeMetric === metric.id
+                  ? 'border-blue-500'
+                  : 'border-gray-200 dark:border-gray-700'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center ${style.iconWrapper}`}
+                >
+                  <metric.icon className={`w-6 h-6 ${style.icon}`} />
+                </div>
+                <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                  {metric.change}
+                </span>
               </div>
-              <span className="text-sm font-semibold text-green-600 dark:text-green-400">
-                {metric.change}
-              </span>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 line-clamp-1 max-w-[140px] sm:max-w-none">
-              {metric.label}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {typeof metric.value === 'number' ? metric.value.toLocaleString() : metric.value}
-            </p>
-          </motion.div>
-        ))}
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 line-clamp-1 max-w-[140px] sm:max-w-none">
+                {metric.label}
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {typeof metric.value === 'number' ? metric.value.toLocaleString() : metric.value}
+              </p>
+            </motion.div>
+          );
+        })}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
