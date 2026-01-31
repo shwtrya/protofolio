@@ -16,7 +16,41 @@ export interface BrowserFingerprint {
   };
 }
 
+let hasLoggedHashFallbackWarning = false;
+
+function logHashFallbackWarning(reason: string, error?: unknown): void {
+  if (hasLoggedHashFallbackWarning) return;
+  hasLoggedHashFallbackWarning = true;
+  if (error) {
+    console.warn(`Hash generation failed (${reason}); using FNV-1a fallback.`, error);
+    return;
+  }
+  console.warn(`Hash generation failed (${reason}); using FNV-1a fallback.`);
+}
+
+function fnv1aHash(str: string): string {
+  let hash = 0x811c9dc5;
+  const encoder = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
+  const bytes = encoder ? encoder.encode(str) : Array.from(str, char => char.charCodeAt(0));
+
+  for (const byte of bytes) {
+    hash ^= byte;
+    hash = Math.imul(hash, 0x01000193);
+  }
+
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
 async function hashString(str: string): Promise<string> {
+  const hasCryptoSubtle = typeof crypto !== 'undefined'
+    && typeof crypto.subtle !== 'undefined'
+    && typeof crypto.subtle.digest === 'function';
+
+  if (!hasCryptoSubtle) {
+    logHashFallbackWarning('crypto.subtle unavailable');
+    return fnv1aHash(str);
+  }
+
   try {
     const encoder = new TextEncoder();
     const data = encoder.encode(str);
@@ -24,10 +58,8 @@ async function hashString(str: string): Promise<string> {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   } catch (error) {
-    console.warn('Hash generation failed, using fallback:', error);
-    return str.split('').reduce((acc, char) => {
-      return ((acc << 5) - acc) + char.charCodeAt(0);
-    }, 0).toString(16);
+    logHashFallbackWarning('crypto.subtle error', error);
+    return fnv1aHash(str);
   }
 }
 
