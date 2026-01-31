@@ -57,7 +57,7 @@ const Contact: React.FC = () => {
     return getRateLimitValue('lastSubmitTime', 0);
   });
   const [isTyping, setIsTyping] = useState<{[key: string]: boolean}>({});
-  const [typingTimeout, setTypingTimeout] = useState<{[key: string]: NodeJS.Timeout | null}>({});
+  const [typingTimeout, setTypingTimeout] = useState<{[key: string]: ReturnType<typeof setTimeout> | null}>({});
 
   const COOLDOWN_TIME = 60000; // 1 menit
   const MAX_SUBMISSIONS_PER_HOUR = 3;
