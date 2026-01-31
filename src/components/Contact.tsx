@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, Shield, Clock, Download, User, MessageSquare } from 'lucide-react';
 import { useToast } from './ToastNotification';
 import CopyEmail from './CopyEmail';
+import { isStorageAvailable, safeGetItem, safeParseInt, safeSetItem } from '../utils/storage';
 
 const Contact: React.FC = () => {
   const { showToast } = useToast();
@@ -17,8 +18,43 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const storageAvailable = useMemo(() => isStorageAvailable(), []);
+  const rateLimitRef = useRef({
+    lastSubmitTime: 0,
+    hourlySubmissions: 0,
+    lastHourReset: 0
+  });
+
+  type RateLimitKey = keyof typeof rateLimitRef.current;
+
+  const setRateLimitValue = useCallback(
+    (key: RateLimitKey, value: number) => {
+      rateLimitRef.current[key] = value;
+      if (storageAvailable) {
+        const stored = safeSetItem(key, value.toString());
+        if (!stored) {
+          console.warn(`Falling back to in-memory rate limit for key \"${key}\".`);
+        }
+      }
+    },
+    [storageAvailable]
+  );
+
+  const getRateLimitValue = useCallback(
+    (key: RateLimitKey, defaultValue: number) => {
+      if (storageAvailable) {
+        return safeParseInt(
+          safeGetItem(key, defaultValue.toString()),
+          defaultValue
+        );
+      }
+      return rateLimitRef.current[key] ?? defaultValue;
+    },
+    [storageAvailable]
+  );
+
   const [lastSubmitTime, setLastSubmitTime] = useState<number>(() => {
-    return parseInt(localStorage.getItem('lastSubmitTime') || '0');
+    return getRateLimitValue('lastSubmitTime', 0);
   });
   const [isTyping, setIsTyping] = useState<{[key: string]: boolean}>({});
   const [typingTimeout, setTypingTimeout] = useState<{[key: string]: NodeJS.Timeout | null}>({});
@@ -27,15 +63,24 @@ const Contact: React.FC = () => {
   const MAX_SUBMISSIONS_PER_HOUR = 3;
 
   useEffect(() => {
-    localStorage.setItem('lastSubmitTime', lastSubmitTime.toString());
-  }, [lastSubmitTime]);
+    setRateLimitValue('lastSubmitTime', lastSubmitTime);
+  }, [lastSubmitTime, setRateLimitValue]);
 
   useEffect(() => {
-    if (!localStorage.getItem('lastHourReset')) {
-      localStorage.setItem('lastHourReset', Date.now().toString());
-      localStorage.setItem('hourlySubmissions', '0');
+    const lastHourReset = safeGetItem('lastHourReset');
+    if (lastHourReset === null) {
+      const now = Date.now();
+      setRateLimitValue('lastHourReset', now);
+      setRateLimitValue('hourlySubmissions', 0);
+      return;
     }
-  }, []);
+
+    rateLimitRef.current.lastHourReset = safeParseInt(lastHourReset, 0);
+    rateLimitRef.current.hourlySubmissions = getRateLimitValue(
+      'hourlySubmissions',
+      0
+    );
+  }, [getRateLimitValue, setRateLimitValue]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -60,17 +105,13 @@ const Contact: React.FC = () => {
   };
 
   const getHourlySubmissionState = (now: number, persistReset: boolean) => {
-    const hourlySubmissions = parseInt(
-      localStorage.getItem('hourlySubmissions') || '0'
-    );
-    const lastHourReset = parseInt(
-      localStorage.getItem('lastHourReset') || '0'
-    );
+    const hourlySubmissions = getRateLimitValue('hourlySubmissions', 0);
+    const lastHourReset = getRateLimitValue('lastHourReset', 0);
     const shouldReset = now - lastHourReset > 3600000;
 
     if (shouldReset && persistReset) {
-      localStorage.setItem('hourlySubmissions', '0');
-      localStorage.setItem('lastHourReset', now.toString());
+      setRateLimitValue('hourlySubmissions', 0);
+      setRateLimitValue('lastHourReset', now);
     }
 
     return {
@@ -143,10 +184,7 @@ const Contact: React.FC = () => {
       }
 
       setLastSubmitTime(now);
-      localStorage.setItem(
-        'hourlySubmissions',
-        (hourlySubmissions + 1).toString()
-      );
+      setRateLimitValue('hourlySubmissions', hourlySubmissions + 1);
       setSubmitStatus('success');
       setSubmitError(null);
       setFormData({
