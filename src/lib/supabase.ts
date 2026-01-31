@@ -86,7 +86,7 @@ export const trackVisitor = async () => {
     setSessionStorageItem(VISITOR_TRACKED_TIME_KEY, now.toString());
 
     const identifier = await getOrCreateVisitorIdentifier();
-    const userAgent = navigator.userAgent;
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
     const isNew = isNewVisitor();
 
     const { data: existingVisitor } = await supabase
