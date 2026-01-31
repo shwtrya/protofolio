@@ -34,21 +34,32 @@ const TRACK_DEBOUNCE = 5000;
 const PAGE_VIEW_WINDOW_MS = 60000;
 const VISITOR_TRACKED_KEY = 'visitor_tracked_once';
 const VISITOR_TRACKED_TIME_KEY = 'visitor_tracked_time';
+const sessionFallback = new Map<string, string>();
 
 const getSessionStorageItem = (key: string) => {
+  if (typeof sessionStorage === 'undefined') {
+    return sessionFallback.get(key) ?? null;
+  }
+
   try {
     return sessionStorage.getItem(key);
   } catch (error) {
     console.warn(`Unable to read sessionStorage key "${key}":`, error);
-    return null;
+    return sessionFallback.get(key) ?? null;
   }
 };
 
 const setSessionStorageItem = (key: string, value: string) => {
+  if (typeof sessionStorage === 'undefined') {
+    sessionFallback.set(key, value);
+    return;
+  }
+
   try {
     sessionStorage.setItem(key, value);
   } catch (error) {
     console.warn(`Unable to write sessionStorage key "${key}":`, error);
+    sessionFallback.set(key, value);
   }
 };
 
