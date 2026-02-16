@@ -47,7 +47,7 @@ const About = () => {
             className="order-2 md:order-1 px-4 md:px-0"
           >
             <img
-              src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=400&w=400"
+              src="https://i.ibb.co.com/JWBQMssz/image.png?auto=compress&cs=tinysrgb&dpr=2&h=400&w=400"
               alt="Shawava Tritya - Pelajar SMK Teknik Komputer dan Jaringan"
               width="400"
               height="400"
