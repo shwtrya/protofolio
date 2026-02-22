@@ -173,7 +173,7 @@ const Contact: React.FC = () => {
     setSubmitError(null);
 
     try {
-      const response = await fetch('/.netlify/functions/sendEmail', {
+      const response = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

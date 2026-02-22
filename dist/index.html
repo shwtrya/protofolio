@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Shawava Tritya - Pelajar SMK Teknik Komputer dan Jaringan yang passionate dalam bidang teknologi, Arduino, IoT, dan pengolahan data. Portfolio profesional dengan pengalaman di produksi dan data entry." />
+    <meta name="author" content="Shawava Tritya" />
+    <meta name="keywords" content="Shawava Tritya, SMK, Teknik Komputer Jaringan, Arduino, IoT, Data Entry, Portfolio, Web Developer, Network Installation" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://shawavatritya-qzao.bolt.host/" />
+    <meta property="og:title" content="Shawava Tritya - Portfolio" />
+    <meta property="og:description" content="Pelajar SMK Teknik Komputer dan Jaringan yang passionate dalam bidang teknologi, Arduino, IoT, dan pengolahan data." />
+    <meta property="og:image" content="https://i.ibb.co.com/JWBQMssz/image.png?auto=compress&cs=tinysrgb&dpr=2&h=400&w=400" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://shawavatritya-qzao.bolt.host/" />
+    <meta property="twitter:title" content="Shawava Tritya - Portfolio" />
+    <meta property="twitter:description" content="Pelajar SMK Teknik Komputer dan Jaringan yang passionate dalam bidang teknologi, Arduino, IoT, dan pengolahan data." />
+    <meta property="twitter:image" content="https://i.ibb.co.com/JWBQMssz/image.png?auto=compress&cs=tinysrgb&dpr=2&h=400&w=400" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.pexels.com" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#3B82F6" />
+
+    <!-- Cache control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>Shawava Tritya - Portfolio</title>
+
+    <!-- Module error handler -->
+    <script>
+      (function() {
+        let moduleErrorCount = 0;
+        const MAX_RETRIES = 2;
+
+        window.addEventListener('error', function(e) {
+          if (e.message && (
+            e.message.includes('Failed to fetch') ||
+            e.message.includes('Importing a module') ||
+            e.message.includes('dynamically imported module')
+          )) {
+            moduleErrorCount++;
+            console.warn('Module loading error detected:', e.message);
+
+            if (moduleErrorCount <= MAX_RETRIES) {
+              console.log('Attempting to reload... (attempt ' + moduleErrorCount + ')');
+
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  return Promise.all(
+                    names.map(function(name) {
+                      return caches.delete(name);
+                    })
+                  );
+                }).then(function() {
+                  window.location.reload();
+                });
+              } else {
+                setTimeout(function() {
+                  window.location.reload();
+                }, 500);
+              }
+
+              e.preventDefault();
+            }
+          }
+        }, true);
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/js/index-DhXPgJ2y.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/js/supabase-DLEQYjNO.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/charts-ZBQjWPDy.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/vendor-Dg0TF_Ah.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/motion-r3vbE9-c.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-DSyv5bpc.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
