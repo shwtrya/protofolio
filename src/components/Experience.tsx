@@ -5,7 +5,20 @@ import { Calendar, MapPin, Building } from 'lucide-react';
 const Experience = () => {
   const experiences = [
     {
-      title: 'Operator Produksi Tas',
+      title: 'Operator Produksi',
+      company: 'PT Rekadaya Multi Adiprima',
+      location: 'Ciangsana',
+      period: 'September - Desember 2025',
+      description: [
+        'Menyortir material sesuai standar kualitas untuk meminimalkan produk defect',
+        'Melakukan assy double tape pada part felt dengan hasil presisi dan rapi',
+        'Melakukan packing produk hasil assembly agar aman dan siap distribusi',
+        'Membantu kelancaran proses produksi untuk mencapai target kerja harian'
+      ],
+      technologies: ['Internship', 'Quality Control', 'Manufacturing', 'Teamwork']
+    },
+    {
+      title: 'Operator Produksi',
       company: 'PT Serin Indonesia',
       location: 'Bekasi',
       period: 'Juni - September 2025',
@@ -15,7 +28,7 @@ const Experience = () => {
         'Membantu proses produksi sesuai standar kerja',
         'Menjaga kebersihan area kerja'
       ],
-      technologies: ['Production', 'Quality Control', 'Manufacturing', 'Teamwork']
+      technologies: ['Internship', 'Production', 'Manufacturing', 'Teamwork']
     },
     {
       title: 'Data Entry',
@@ -28,7 +41,7 @@ const Experience = () => {
         'Menjaga kecepatan dan ketelitian dalam entri data',
         'Mendukung administrasi tim dengan sistem digital'
       ],
-      technologies: ['Microsoft Office', 'Data Entry', 'Excel', 'Administration']
+      technologies: ['Freelance', 'Canva', 'Microsoft Office', 'Administration']
     }
   ];
 
