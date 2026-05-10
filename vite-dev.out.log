@@ -1,0 +1,36 @@
+
+> vite-react-typescript-starter@0.0.0 dev
+> vite --host 127.0.0.1
+
+
+  [32m[1mVITE[22m v5.4.8[39m  [2mready in [0m[1m268[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m3000[22m/[39m
+[2m2:21:44 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Projects.tsx, /src/index.css[22m
+[2m2:21:44 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/CaseStudy.tsx, /src/index.css[22m
+[2m2:21:50 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Projects.tsx, /src/index.css[22m
+[2m2:36:02 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m2:36:05 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m2:49:30 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Skills.tsx, /src/index.css[22m
+[2m2:50:06 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m2:50:10 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m2:55:13 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Hero.tsx, /src/index.css[22m
+[2m2:55:13 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Footer.tsx, /src/index.css[22m
+[2m2:55:13 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m2:55:28 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m2:56:10 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m2:56:12 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m2:59:59 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/Testimonials.tsx[22m
+[2m3:00:06 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/References.tsx[22m
+[2m3:00:36 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:00:38 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:06:07 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/VisitorCounter.tsx, /src/index.css[22m
+[2m3:06:07 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m3:06:35 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:06:38 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:16:24 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Contact.tsx, /src/index.css[22m
+[2m3:18:28 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:18:30 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:29:10 AM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m3:33:04 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
+[2m3:33:06 AM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mdist/index.html[22m
