@@ -35,7 +35,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative overflow-hidden bg-white pt-28 pb-16 transition-colors duration-300 dark:bg-gray-900 sm:pt-32 sm:pb-20"
+      className="relative overflow-hidden bg-white pt-20 pb-12 transition-colors duration-300 dark:bg-gray-900 sm:pt-28 sm:pb-16 md:pt-32 md:pb-20"
     >
       <div className="container-responsive">
         <div className="mx-auto max-w-4xl text-center">
@@ -52,7 +52,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900 dark:text-white"
+            className="text-3xl font-bold leading-tight text-gray-900 dark:text-white sm:text-4xl md:text-5xl lg:text-6xl"
           >
             Shawava Tritya
           </motion.h1>
@@ -61,7 +61,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-gray-600 dark:text-gray-300 sm:text-xl"
+            className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg md:text-xl"
           >
             Lulusan SMK Negeri 1 Cileungsi jurusan Teknik Komputer dan Jaringan,
             fokus pada Arduino, IoT, instalasi jaringan, dan pekerjaan data yang

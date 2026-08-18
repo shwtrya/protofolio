@@ -36,11 +36,13 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscKey);
       document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscKey);
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [isOpen, onClose]);
 

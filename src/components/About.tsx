@@ -34,7 +34,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-16 sm:py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <section id="about" className="py-16 sm:py-20 md:py-24 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="container-responsive">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -46,17 +46,17 @@ const About = () => {
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
             Tentang
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Tentang Saya
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-4">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-4">
             Saya adalah lulusan SMK Negeri 1 Cileungsi jurusan Teknik Komputer dan
             Jaringan dengan nilai rata-rata ijazah 85. Saya tertarik pada mikrokontroler,
             jaringan komputer, dan pekerjaan data yang membutuhkan ketelitian.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-16">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-10 lg:gap-12 items-center mb-12 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -69,7 +69,7 @@ const About = () => {
               alt="Shawava Tritya - Lulusan SMK Teknik Komputer dan Jaringan"
               width="400"
               height="400"
-              className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-lg shadow-2xl transition-shadow duration-300 hover:shadow-2xl"
+              className="w-full max-w-sm mx-auto rounded-lg shadow-2xl transition-shadow duration-300 hover:shadow-2xl md:max-w-md lg:max-w-lg"
               loading="lazy"
             />
           </motion.div>
@@ -82,7 +82,7 @@ const About = () => {
             className="space-y-6 order-1 md:order-2 px-4 md:px-0"
           >
             <h3
-              className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white"
+              className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white"
               role="heading"
               aria-level={3}
             >

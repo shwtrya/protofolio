@@ -22,11 +22,14 @@ export const Header: React.FC = () => {
   React.useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [isMenuOpen]);
 
