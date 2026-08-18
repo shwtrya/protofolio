@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -48,7 +48,7 @@ const Skills = () => {
       tools: ['Arduino Uno', 'Arduino IDE', 'Sensor', 'Relay'],
       relatedProof: [
         { label: 'Smart Home', to: '#projects' },
-        { label: 'Pendidikan TKJ', to: '/education' }
+        { label: 'Pendidikan TKJ', to: '#education' }
       ]
     },
     {
@@ -66,7 +66,7 @@ const Skills = () => {
       tools: ['Router', 'Kabel UTP', 'LAN tester', 'Topologi'],
       relatedProof: [
         { label: 'Instalasi ISP', to: '#projects' },
-        { label: 'Sertifikat Networking', to: '/certificates' }
+        { label: 'Sertifikat Networking', to: '#certificates' }
       ]
     },
     {
@@ -83,8 +83,8 @@ const Skills = () => {
       ],
       tools: ['Microsoft Word', 'Excel', 'PowerPoint', 'Canva'],
       relatedProof: [
-        { label: 'Pengalaman Data Entry', to: '/experience' },
-        { label: 'Tools pendidikan', to: '/education' }
+        { label: 'Pengalaman Data Entry', to: '#experience' },
+        { label: 'Tools pendidikan', to: '#education' }
       ]
     },
     {
@@ -101,8 +101,8 @@ const Skills = () => {
       ],
       tools: ['Quality check', 'Assembly', 'Packing', 'Teamwork'],
       relatedProof: [
-        { label: 'Pengalaman Produksi', to: '/experience' },
-        { label: 'Sertifikat PKL', to: '/certificates' }
+        { label: 'Pengalaman Produksi', to: '#experience' },
+        { label: 'Sertifikat PKL', to: '#certificates' }
       ]
     }
   ];
@@ -226,14 +226,15 @@ const Skills = () => {
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {group.relatedProof.map((proof) => (
-                      <Link
+                      <button
+                        type="button"
                         key={proof.label}
-                        to={proof.to}
-                        className={`inline-flex min-h-[36px] items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-semibold transition ${colors.link}`}
+                        onClick={() => document.getElementById(proof.to.replace('#', ''))?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                        className={`inline-flex min-h-[44px] items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-semibold transition ${colors.link}`}
                       >
                         {proof.label}
                         <ArrowRight size={14} />
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 </div>
