@@ -115,13 +115,14 @@ const Hero = () => {
               Lihat CV
             </a>
 
-            <Link
-              to="/contact"
+            <button
+              type="button"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:border-blue-600 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-600 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:text-blue-400 sm:w-auto"
             >
               <Mail size={18} />
               Hubungi Saya
-            </Link>
+            </button>
           </motion.div>
 
           <motion.div

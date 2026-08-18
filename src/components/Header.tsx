@@ -40,13 +40,16 @@ export const Header: React.FC = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <button
+              type="button"
               onClick={() => {
                 navigate('/');
                 setIsMenuOpen(false);
               }}
-              className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg text-left text-lg font-bold tracking-tight text-gray-900 transition-colors hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-white dark:hover:text-blue-400 sm:text-xl"
+              aria-label="Kembali ke beranda Shawava Tritya"
             >
-              Shawava Tritya
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-emerald-500 text-xs font-black text-white">ST</span>
+              <span>Shawava <span className="text-blue-600 dark:text-blue-400">Tritya</span></span>
             </button>
           </div>
 

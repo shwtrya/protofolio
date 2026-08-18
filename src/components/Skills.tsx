@@ -270,13 +270,14 @@ const Skills = () => {
               Lihat Proyek
               <ArrowRight size={16} />
             </button>
-            <Link
-              to="/certificates"
+            <button
+              type="button"
+              onClick={() => document.getElementById('certificates')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-blue-600 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-600 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:text-blue-400"
             >
               <FileText size={16} />
               Lihat Sertifikat
-            </Link>
+            </button>
           </div>
         </motion.div>
       </div>

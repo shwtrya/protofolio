@@ -277,14 +277,17 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ isOpen, onClose, project }) => {
                     </p>
                   </section>
 
-                  <Link
-                    to="/contact"
-                    onClick={onClose}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      window.setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+                    }}
                     className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   >
                     <Mail size={18} />
                     {getRequestCtaLabel(project.status)}
-                  </Link>
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
