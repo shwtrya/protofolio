@@ -12,6 +12,7 @@ import {
   Wrench
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { scrollToSectionById } from '../utils/scrollToSection';
 
 type SkillAccent = 'blue' | 'emerald' | 'purple' | 'orange';
 
@@ -229,7 +230,7 @@ const Skills = () => {
                       <button
                         type="button"
                         key={proof.label}
-                        onClick={() => document.getElementById(proof.to.replace('#', ''))?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                        onClick={() => scrollToSectionById(proof.to)}
                         className={`inline-flex min-h-[44px] items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-semibold transition ${colors.link}`}
                       >
                         {proof.label}
@@ -261,10 +262,7 @@ const Skills = () => {
           <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
             <button
               onClick={() => {
-                const projectsSection = document.getElementById('projects');
-                if (projectsSection) {
-                  projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                scrollToSectionById('#projects');
               }}
               className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
@@ -273,7 +271,7 @@ const Skills = () => {
             </button>
             <button
               type="button"
-              onClick={() => document.getElementById('certificates')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              onClick={() => scrollToSectionById('#certificates')}
               className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-blue-600 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-600 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:text-blue-400"
             >
               <FileText size={16} />

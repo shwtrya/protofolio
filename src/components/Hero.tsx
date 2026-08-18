@@ -94,10 +94,7 @@ const Hero = () => {
           >
             <button
               onClick={() => {
-                const projectsSection = document.getElementById('projects');
-                if (projectsSection) {
-                  projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
               className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:w-auto"
             >

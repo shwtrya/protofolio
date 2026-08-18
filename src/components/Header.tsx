@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => {
-                navigate('/');
+                scrollToSection('#home', location.pathname, navigate);
                 setIsMenuOpen(false);
               }}
               className="inline-flex min-h-[44px] items-center gap-2 rounded-lg text-left text-lg font-bold tracking-tight text-gray-900 transition-colors hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-white dark:hover:text-blue-400 sm:text-xl"
@@ -60,8 +60,7 @@ export const Header: React.FC = () => {
                 key={item.id}
                 onClick={() => scrollHandler(item.href)}
                 className={`px-2 py-2 text-sm font-medium transition-colors relative ${
-                  (location.pathname === '/' && activeSection === item.id) ||
-                  (location.pathname === item.route && item.route !== '/')
+                  activeSection === item.id
                     ? 'text-blue-600 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
                 }`}
@@ -122,8 +121,7 @@ export const Header: React.FC = () => {
                     <button
                       onClick={() => scrollHandler(item.href)}
                       className={`w-full text-left px-6 py-4 text-base font-medium transition-all border-0 ${
-                        (location.pathname === '/' && activeSection === item.id) ||
-                        (location.pathname === item.route && item.route !== '/')
+                        activeSection === item.id
                           ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                       } ${index === 0 ? 'rounded-t-lg' : ''} ${

@@ -1,35 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { navigationItems } from '../data/navigation';
 
 export const useActiveSection = () => {
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = navigationItems.map((item) => item.id);
-      const scrollPosition = window.scrollY + 100; // Offset for header
+    const sections = navigationItems
+      .map(({ id }) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section));
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
+    if (!sections.length) return;
 
-    // Set initial active section
-    handleScroll();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: '-76px 0px -45% 0px', threshold: [0.1, 0.25, 0.5] },
+    );
 
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   return activeSection;
