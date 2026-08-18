@@ -414,7 +414,7 @@ END:VCARD`;
                   <iframe
                     title="Domisili Map"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d993.1633390811642!2d106.9597323!3d-6.408152199999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6994aa2aee1d2f%3A0x65a8f73c2e7c6f1e!2sCileungsi%2C%20Bogor%2C%20Jawa%20Barat!5e0!3m2!1sen!2sid!4v1690000000000!5m2!1sen!2sid"
-                    className="w-full h-[250px] pointer-events-auto touch-auto"
+                    className="w-full h-48 sm:h-56 md:h-64 pointer-events-auto touch-auto"
                     style={{ border: 0 }}
                     allowFullScreen
                     loading="lazy"

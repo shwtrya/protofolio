@@ -54,7 +54,7 @@ const Projects = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           {projects.map((project, index) => (
             <motion.article
               key={project.title}
@@ -80,7 +80,7 @@ const Projects = () => {
 
               <div className="p-5 sm:p-6">
                 <div className="mb-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                     {project.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
