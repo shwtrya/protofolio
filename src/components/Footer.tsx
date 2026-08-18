@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { navigationItems } from '../data/navigation';
 import { scrollToSection } from '../utils/scrollToSection';
@@ -9,123 +9,84 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const location = useLocation();
   const navigate = useNavigate();
+  const footerNavItems = navigationItems.filter((item) => item.id !== 'home');
 
   const handleSocialClick = () => {
     try {
-      if (typeof window !== 'undefined') {
-        const currentClicks = parseInt(localStorage.getItem('social_clicks') || '0', 10);
-        localStorage.setItem('social_clicks', (currentClicks + 1).toString());
-      }
-    } catch (error) {
-      console.warn('Failed to record social click.', error);
+      const currentClicks = parseInt(localStorage.getItem('social_clicks') || '0', 10);
+      localStorage.setItem('social_clicks', String(currentClicks + 1));
+    } catch {
+      // Analytics must never block navigation.
     }
   };
 
-  const footerNavItems = navigationItems.filter((item) => item.id !== 'home');
-
-  const handleFooterNavClick = React.useCallback((href: string) => {
-    scrollToSection(href, location.pathname, navigate);
-  }, [location.pathname, navigate]);
+  const goTop = () => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <footer className="bg-gray-900 dark:bg-black text-white py-10 sm:py-12 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-8">
-          {/* Brand & Description */}
+    <footer className="relative overflow-hidden bg-slate-950 text-white">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+      <div className="container-responsive py-14 sm:py-16">
+        <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr] lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            className="max-w-md"
           >
-            <h3 className="text-2xl font-bold mb-4">
-              Shawava<span className="text-blue-400 dark:text-blue-300">Tritya</span>
-            </h3>
-            <p className="text-gray-400 dark:text-gray-300 leading-relaxed max-w-sm sm:max-w-none line-clamp-3">
-              Lulusan Teknik Komputer dan Jaringan di SMK Negeri 1 Cileungsi, fokus pada Arduino, IoT, instalasi jaringan, dan pengolahan data.
+            <button type="button" onClick={goTop} className="group inline-flex min-h-[44px] items-center text-left">
+              <span className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                Shawava <span className="text-blue-400">Tritya</span>
+              </span>
+            </button>
+            <p className="mt-5 text-sm leading-7 text-slate-400 sm:text-base">
+              Portfolio pribadi berisi pengalaman Teknik Komputer dan Jaringan, Arduino, IoT,
+              instalasi jaringan, dan pengolahan data.
             </p>
+            <div className="mt-6 flex items-center gap-3">
+              <a href="https://github.com/CyXd404" target="_blank" rel="noopener noreferrer" onClick={handleSocialClick} aria-label="GitHub" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-slate-800 text-slate-400 transition hover:border-blue-500 hover:bg-blue-500/10 hover:text-blue-400">
+                <Github size={21} />
+              </a>
+              <a href="https://www.linkedin.com/in/shawava-tritya" target="_blank" rel="noopener noreferrer" onClick={handleSocialClick} aria-label="LinkedIn" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-slate-800 text-slate-400 transition hover:border-blue-500 hover:bg-blue-500/10 hover:text-blue-400">
+                <Linkedin size={21} />
+              </a>
+              <a href="mailto:shawavatritya@gmail.com" onClick={handleSocialClick} aria-label="Email" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-slate-800 text-slate-400 transition hover:border-emerald-500 hover:bg-emerald-500/10 hover:text-emerald-400">
+                <Mail size={21} />
+              </a>
+            </div>
           </motion.div>
 
-          {/* Quick Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="md:text-center"
-          >
-            <h4 className="text-lg font-semibold mb-4">Navigasi Cepat</h4>
-            <div className="space-y-2">
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">Navigasi</h3>
+            <nav className="mt-5 grid grid-cols-2 gap-x-5 gap-y-1 sm:grid-cols-3 lg:grid-cols-1">
               {footerNavItems.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleFooterNavClick(item.href)}
-                  className="flex min-h-[44px] w-full items-center text-left text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded"
-                >
+                <button key={item.id} type="button" onClick={() => scrollToSection(item.href, location.pathname, navigate)} className="min-h-[44px] text-left text-sm text-slate-400 transition hover:text-white">
                   {item.footerLabel}
                 </button>
               ))}
-            </div>
+            </nav>
           </motion.div>
 
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="md:text-right"
-          >
-            <h4 className="text-lg font-semibold mb-4">Terhubung dengan Saya</h4>
-            <div className="flex md:justify-end space-x-4">
-              <motion.a
-                href="https://github.com/CyXd404"
-                onClick={handleSocialClick}
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="min-h-[44px] min-w-[44px] text-gray-400 dark:text-gray-300 hover:text-white transition-colors duration-300 focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded flex items-center justify-center"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Kunjungi profil GitHub Shawava Tritya"
-              >
-                <Github size={24} />
-              </motion.a>
-              <motion.a
-                href="https://www.linkedin.com/in/shawava-tritya"
-                onClick={handleSocialClick}
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="min-h-[44px] min-w-[44px] text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 focus:outline-none focus-visible:text-blue-400 focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded flex items-center justify-center"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Kunjungi profil LinkedIn Shawava Tritya"
-              >
-                <Linkedin size={24} />
-              </motion.a>
-              <motion.a
-                href="mailto:shawavatritya@gmail.com"
-                onClick={handleSocialClick}
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="min-h-[44px] min-w-[44px] text-gray-400 dark:text-gray-300 hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors duration-300 focus:outline-none focus-visible:text-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 rounded flex items-center justify-center"
-                aria-label="Kirim email ke Shawava Tritya"
-              >
-                <Mail size={24} />
-              </motion.a>
-            </div>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">Kontak</h3>
+            <p className="mt-5 text-sm leading-7 text-slate-400">Terbuka untuk peluang kerja, kolaborasi teknis, dan proyek baru.</p>
+            <a href="mailto:shawavatritya@gmail.com" className="mt-4 inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-blue-400 transition hover:text-blue-300">
+              <Mail size={17} /> Kirim email
+            </a>
           </motion.div>
         </div>
 
-        {/* Footer bottom */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="border-t border-gray-800 dark:border-gray-700 pt-8 text-center"
-        >
-          <p className="text-gray-400 dark:text-gray-300">
-            <span>&copy; {currentYear} Shawava Tritya.</span>
-          </p>
-        </motion.div>
+        <div className="mt-12 flex flex-col gap-4 border-t border-slate-800 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {currentYear} Shawava Tritya. Dibuat dengan teliti.</p>
+          <button type="button" onClick={goTop} className="inline-flex min-h-[44px] items-center gap-2 self-start text-slate-400 transition hover:text-white sm:self-auto">
+            Kembali ke atas <ArrowUp size={16} />
+          </button>
+        </div>
       </div>
     </footer>
   );

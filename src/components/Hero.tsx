@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -10,6 +10,7 @@ import {
   Mail
 } from 'lucide-react';
 import { useGreeting } from '../hooks/useGreeting';
+import { scrollToSection } from '../utils/scrollToSection';
 
 const Hero = () => {
   const greeting = useGreeting();
@@ -91,13 +92,18 @@ const Hero = () => {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
-            <Link
-              to="/projects"
+            <button
+              onClick={() => {
+                const projectsSection = document.getElementById('projects');
+                if (projectsSection) {
+                  projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
               className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:w-auto"
             >
               Lihat Proyek
               <ArrowRight size={18} />
-            </Link>
+            </button>
 
             <a
               href="/Shawava_Tritya_CV.pdf"

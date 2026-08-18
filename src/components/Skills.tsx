@@ -47,7 +47,7 @@ const Skills = () => {
       ],
       tools: ['Arduino Uno', 'Arduino IDE', 'Sensor', 'Relay'],
       relatedProof: [
-        { label: 'Smart Home', to: '/projects' },
+        { label: 'Smart Home', to: '#projects' },
         { label: 'Pendidikan TKJ', to: '/education' }
       ]
     },
@@ -65,7 +65,7 @@ const Skills = () => {
       ],
       tools: ['Router', 'Kabel UTP', 'LAN tester', 'Topologi'],
       relatedProof: [
-        { label: 'Instalasi ISP', to: '/projects' },
+        { label: 'Instalasi ISP', to: '#projects' },
         { label: 'Sertifikat Networking', to: '/certificates' }
       ]
     },
@@ -258,13 +258,18 @@ const Skills = () => {
             dan berkembang melalui bimbingan serta pekerjaan nyata.
           </p>
           <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              to="/projects"
+            <button
+              onClick={() => {
+                const projectsSection = document.getElementById('projects');
+                if (projectsSection) {
+                  projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
               className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               Lihat Proyek
               <ArrowRight size={16} />
-            </Link>
+            </button>
             <Link
               to="/certificates"
               className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-blue-600 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-600 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:text-blue-400"
