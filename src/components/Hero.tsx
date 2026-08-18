@@ -52,7 +52,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl font-bold leading-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900 dark:text-white"
           >
             Shawava Tritya
           </motion.h1>
@@ -72,7 +72,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-6 flex flex-wrap justify-center gap-2"
+            className="mt-6 flex flex-wrap justify-center gap-2 px-4"
           >
             {focusAreas.map((area) => (
               <span

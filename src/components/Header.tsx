@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6">
             {navigationItems.map((item) => (
               <button
                 key={item.id}
@@ -79,9 +79,10 @@ export const Header: React.FC = () => {
             <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="xl:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="lg:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
@@ -96,7 +97,7 @@ export const Header: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="xl:hidden fixed inset-0 bg-black/30 z-40"
+              className="lg:hidden fixed inset-0 bg-black/30 z-40"
               onClick={() => setIsMenuOpen(false)}
             />
             
@@ -106,7 +107,7 @@ export const Header: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="xl:hidden fixed top-16 left-0 right-0 bg-white dark:bg-gray-900 z-50"
+              className="lg:hidden fixed top-16 left-0 right-0 bg-white dark:bg-gray-900 z-50"
             >
               {/* Container dengan padding yang ketat */}
               <div className="px-0 py-1">
