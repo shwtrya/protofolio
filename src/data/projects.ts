@@ -143,16 +143,16 @@ export const projects: PortfolioProject[] = [
         src: '/proof/instalasi-isp-proses.jpg',
         alt:
           'Foto proses instalasi jaringan, penataan kabel, dan persiapan perangkat dari ISP hingga router',
-        width: 1200,
-        height: 800
+        width: 1920,
+        height: 1080
       },
       {
         label: 'Hasil instalasi jaringan',
         src: '/proof/instalasi-isp-hasil.jpg',
         alt:
           'Foto hasil instalasi jaringan dan router setelah pengecekan konektivitas',
-        width: 1200,
-        height: 800
+        width: 1920,
+        height: 1080
       }
     ],
     caseStudy: {
