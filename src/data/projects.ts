@@ -127,13 +127,13 @@ export const projects: PortfolioProject[] = [
   {
     title: 'Instalasi ISP hingga Router',
     summary:
-      'Praktik instalasi dan konfigurasi jaringan dari persiapan perangkat, penataan kabel, konfigurasi router, sampai pengecekan konektivitas.',
-    role: 'Pelaksana teknis/praktik lapangan',
+      'Dokumentasi praktik instalasi jaringan FTTH: persiapan perangkat, penataan kabel, konfigurasi router, serta hasil uji konektivitas.',
+    role: 'Teknis praktik',
     period: '3 bulan',
     image: '/proof/instalasi-isp-hasil.jpg',
     imageAlt:
       'Foto hasil instalasi jaringan dari perangkat ISP hingga router',
-    tags: ['Networking', 'Router', 'ISP', 'Troubleshooting'],
+    tags: ['Networking', 'Router', 'FTTH', 'Documentation'],
     status: 'documentation_on_request',
     statusLabel: 'Dokumentasi on request',
     links: {},
@@ -158,25 +158,26 @@ export const projects: PortfolioProject[] = [
     caseStudy: {
       title: 'Instalasi ISP hingga Router',
       overview:
-        'Pengalaman ini membantu saya memahami alur teknis jaringan dari instalasi fisik sampai konfigurasi dasar perangkat.',
+        'Pengalaman praktik mendokumentasi alur teknis jaringan dari persiapan perangkat hingga konfigurasi dasar router untuk dokumentasi portofolio.',
       role:
-        'Saya membantu proses instalasi, penataan perangkat, konfigurasi dasar, dan pengecekan koneksi sesuai arahan kerja.',
+        'Terkatatan praktik instalasi dan konfigurasi router serta verifikasi konektivitas.',
       problem:
-        'Instalasi jaringan membutuhkan ketelitian pada kabel, perangkat, konfigurasi, dan pengecekan koneksi agar jaringan stabil.',
+        'Keterbatasan dokumentasi visual dan catatan konfigurasi terstruktur saat pelatihan praktik jaringan.',
       solution:
-        'Melakukan pekerjaan secara bertahap: menyiapkan perangkat, merapikan jalur kabel, mengatur router, lalu melakukan testing konektivitas.',
+        'Membuat catatan tahap per tahap: persiapan perangkat, jalur kabel, setting router, hasil test konektivitas. Disertai foto referensi hasil instalasi FTTH.',
       work: [
         'Membantu persiapan perangkat jaringan dan kebutuhan instalasi.',
         'Melakukan penataan kabel agar rapi dan mudah diperiksa.',
-        'Membantu konfigurasi dasar router sesuai kebutuhan jaringan.',
-        'Melakukan pengecekan koneksi dan troubleshooting sederhana.'
+        'Membantu konfigurasi dasar router sesuai kebutuhan koneksi.',
+        'Melakukan pengecekan konektivitas dan troubleshooting sederhana.',
+        'Mendokumentasikan setiap tahap dengan foto referensi.'
       ],
       tools: ['Router', 'Kabel UTP', 'LAN tester', 'Mikrotik dasar', 'Topologi jaringan'],
       result:
-        'Pengalaman ini memperkuat pemahaman saya tentang instalasi jaringan, konfigurasi router, dan pemeriksaan koneksi secara sistematis.',
+        'Dokumentasi terstruktur praktik instalasi jaringan FTTH untuk referensi portofolio.',
       learnings: [
-        'Belajar bekerja rapi karena kesalahan kecil pada kabel dapat mengganggu koneksi.',
-        'Memahami pentingnya dokumentasi konfigurasi dan topologi.',
+        'Kesalahan kecil pada kabel dapat mengganggu konektivitas.',
+        'Pentingnya dokumentasi konfigurasi dan topologi yang terstruktur.',
         'Meningkatkan kemampuan troubleshooting dari gejala koneksi ke kemungkinan penyebab.'
       ],
       timeline: [
