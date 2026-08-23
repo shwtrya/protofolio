@@ -49,54 +49,46 @@ export interface PortfolioProject {
 
 export const projects: PortfolioProject[] = [
   {
-    title: 'Smart Home Berbasis Arduino Uno',
+    title: 'Smart Home Berbasis ESP8266',
     summary:
-      'Prototype sistem smart home untuk memantau suhu ruangan dan mengontrol lampu menggunakan Arduino, sensor, relay, dan modul konektivitas.',
+      'Prototype sistem smart home untuk memantau suhu ruangan dan mengontrol lampu menggunakan ESP8266 NodeMCU, sensor DHT11, relay 4-channel, dan modul konektivitas.',
     role: 'Perancang dan perakit prototype',
     period: 'Proyek pembelajaran TKJ',
-    image: '/proof/smart-home-hasil.jpg',
+    image: '/proof/smart-home-komponen.jpg',
     imageAlt:
-      'Foto hasil prototype smart home berbasis Arduino untuk monitoring suhu dan kontrol lampu',
-    tags: ['Arduino', 'IoT', 'Sensor', 'Relay'],
+      'Foto komponen prototype smart home berbasis ESP8266 untuk monitoring suhu dan kontrol lampu',
+    tags: ['ESP8266', 'IoT', 'Sensor', 'Relay'],
     status: 'demo_on_request',
     statusLabel: 'Demo on request',
     links: {},
     proofAssets: [
       {
-        label: 'Proses perakitan prototype smart home',
-        src: '/proof/smart-home-proses.jpg',
+        label: 'Komponen prototype smart home',
+        src: '/proof/smart-home-komponen.jpg',
         alt:
-          'Foto proses perakitan rangkaian Arduino, sensor, relay, dan modul pendukung untuk prototype smart home',
+          'Foto komponen prototype smart home: NodeMCU ESP8266 V3, modul sensor suhu dan kelembapan DHT11, serta relay 5V 4 channel',
         width: 1200,
-        height: 800
-      },
-      {
-        label: 'Hasil prototype smart home',
-        src: '/proof/smart-home-hasil.jpg',
-        alt:
-          'Foto hasil prototype smart home berbasis Arduino untuk monitoring suhu dan kontrol lampu',
-        width: 1200,
-        height: 800
+        height: 1200
       }
     ],
     caseStudy: {
-      title: 'Smart Home Berbasis Arduino Uno',
+      title: 'Smart Home Berbasis ESP8266',
       overview:
-        'Prototype ini dibuat sebagai latihan penerapan mikrokontroler untuk membaca kondisi ruangan dan mengontrol perangkat sederhana.',
+        'Prototype ini dibuat sebagai latihan penerapan mikrokontroler ESP8266 untuk membaca kondisi ruangan dan mengontrol perangkat sederhana melalui jaringan wireless.',
       role: 'Saya merancang alur kerja sistem, merakit komponen, menulis program dasar, dan melakukan pengujian fungsi utama.',
       problem:
-        'Perangkat elektronik sederhana sering belum memiliki indikator kondisi yang mudah dipantau dan kontrol yang praktis.',
+        'Perangkat elektronik sederhana sering belum memiliki indikator kondisi yang mudah dipantau dan kontrol yang praktis, terutama untuk sistem monitoring jarak jauh.',
       solution:
-        'Membuat rangkaian berbasis Arduino dengan sensor suhu dan relay, lalu menyusun logika kontrol agar perangkat dapat dipantau dan dikendalikan.',
+        'Membuat rangkaian berbasis ESP8266 NodeMCU dengan sensor DHT11 suhu/humidity, relay 4-channel untuk switching lampu, serta konfigurasi konektivitas WiFi untuk kontrol via antarmuka web atau aplikasi mobile.',
       work: [
         'Menyusun kebutuhan komponen dan alur input-output sistem.',
         'Merakit Arduino, sensor, relay, dan modul pendukung secara bertahap.',
         'Menulis program dasar untuk membaca sensor dan mengaktifkan kontrol relay.',
-        'Menguji respons sensor, koneksi komponen, dan kondisi nyala/mati perangkat.'
+        'Menguji respons sensor, konektivitas WiFi, dan kondisi nyala/mati perangkat secara remote.'
       ],
-      tools: ['Arduino Uno', 'Sensor suhu', 'Relay module', 'ESP8266', 'Arduino IDE'],
+      tools: ['ESP8266 NodeMCU', 'DHT11 module', '5V 4-channel relay module', 'Jumper wires', 'Arduino IDE', 'Blynk IoT platform'],
       result:
-        'Prototype berhasil menunjukkan alur monitoring suhu dan kontrol lampu dalam skala pembelajaran. Dokumentasi demo dapat saya tunjukkan saat dihubungi.',
+        'Prototype berhasil menunjukkan alur monitoring suhu dan kontrol lampu melalui jaringan WiFi. Dokumentasi demo dapat saya tunjukkan saat dihubungi.',
       learnings: [
         'Lebih memahami pembacaan sensor dan kontrol output pada Arduino.',
         'Belajar memeriksa wiring, power, dan logika program saat troubleshooting.',
