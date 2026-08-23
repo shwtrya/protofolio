@@ -42,6 +42,19 @@ const Experience = () => {
         'Mendukung kebutuhan administrasi tim menggunakan tools digital.'
       ],
       tags: ['Freelance', 'Data Entry', 'Microsoft Office', 'Administrasi']
+    },
+    {
+      title: 'Commissioning Engineer',
+      company: 'GPON Network Installation',
+      location: 'Cileungsi, Bogor',
+      period: 'Agustus 2026',
+      description: [
+        'GPON OLT HSGQ-E04R commissioning: verified PON1 link active, 1×8 PLC splitter cascaded topology, fiber routing & termination quality check.',
+        'Commissioned FTTH bench mock-up: 2x Outdoor Optical Distribution Box (FDB), 1×8 PLC-M-1-8 splitters, SC/UPC connector termination, yellow fiber jumper routing between OLT → splitter #1 → splitter #2 → ONT.',
+        'Tested and documented mid-stage commissioning: PON port status (1 of 4 active), uplink Ethernet connectivity, power-up verification, loss budget assessment (cascaded 1×8+1×8 ≈ 21 dB total split loss).',
+        'Produced technical report: splitter type, connector spec (SC/UPC, 0.9mm pigtail), adapter row configuration, topology diagram, cable management gaps identified for hand-over.'
+      ],
+      tags: ['GPON', 'PLC Splitter', 'FTTH', 'Commissioning', 'Fiber Optic', 'OLT', 'HSGQ-E04R']
     }
   ];
 
