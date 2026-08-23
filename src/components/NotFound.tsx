@@ -1,6 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const NotFound: React.FC = () => (
+// Soft-404 guard: SPA catch-all serves HTTP 200, so tell crawlers not to index.
+// ponytail: client-side noindex only. Upgrade to a real 404 status via prerender/SSR if Search Console still reports soft 404s.
+const useNoIndex = () => {
+  useEffect(() => {
+    const tag = document.createElement('meta');
+    tag.name = 'robots';
+    tag.content = 'noindex, nofollow';
+    document.head.appendChild(tag);
+    return () => tag.remove();
+  }, []);
+};
+
+const NotFound: React.FC = () => {
+  useNoIndex();
+  return (
   <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 px-4 text-center dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     <div>
       <div className="mb-4 text-8xl font-bold text-blue-600 dark:text-blue-400 sm:text-9xl">404</div>
@@ -18,6 +32,7 @@ const NotFound: React.FC = () => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default NotFound;
