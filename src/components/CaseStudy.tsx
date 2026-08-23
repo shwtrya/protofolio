@@ -262,7 +262,7 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ isOpen, onClose, project }) => {
                             alt={asset.alt}
                             width={asset.width}
                             height={asset.height}
-                            className="h-44 w-full object-cover"
+                            className="h-48 w-full object-contain bg-slate-900"
                             loading="lazy"
                           />
                           <figcaption className="p-3 text-xs font-medium text-gray-600 dark:text-gray-300">

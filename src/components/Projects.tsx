@@ -69,7 +69,7 @@ const Projects = () => {
                   alt={project.imageAlt}
                   width={600}
                   height={400}
-                  className="w-full h-44 sm:h-52 object-cover transition-transform duration-500 hover:scale-105"
+                  className="w-full h-52 sm:h-80 object-contain bg-slate-900 transition-transform duration-500 hover:scale-105"
                   loading="lazy"
                 />
                 <span className="absolute left-4 top-4 rounded-md bg-white/95 px-3 py-1 text-xs font-semibold text-blue-700 shadow-sm dark:bg-gray-900/95 dark:text-blue-300">
