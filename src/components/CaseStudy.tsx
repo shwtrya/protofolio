@@ -250,31 +250,49 @@ const CaseStudy: React.FC<CaseStudyProps> = ({ isOpen, onClose, project }) => {
                   </section>
 
                   <section>
-                    <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
-                      <ImageIcon size={20} className="text-blue-600 dark:text-blue-400" />
-                      Bukti & Catatan
-                    </h3>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {project.proofAssets.map((asset) => (
-                        <figure key={asset.label} className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-                          <ProofImage
-                            src={asset.src}
-                            alt={asset.alt}
-                            width={asset.width}
-                            height={asset.height}
-                            className="h-48 w-full object-contain bg-slate-900"
-                            loading="lazy"
-                          />
-                          <figcaption className="p-3 text-xs font-medium text-gray-600 dark:text-gray-300">
-                            {asset.label}
-                          </figcaption>
-                        </figure>
-                      ))}
-                    </div>
-                    <p className="mt-3 rounded-lg bg-gray-50 p-4 text-sm leading-relaxed text-gray-600 dark:bg-gray-900 dark:text-gray-300">
-                      {caseStudy.proofNotes}
-                    </p>
-                  </section>
+                                      <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
+                                        <ImageIcon size={20} className="text-blue-600 dark:text-blue-400" />
+                                        Bukti & Catatan
+                                      </h3>
+                                      <div className="grid gap-4 sm:grid-cols-2">
+                                        {project.proofAssets.map((asset) => (
+                                          <figure key={asset.label} className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+                                            {asset.type === 'video' ? (
+                                              <video 
+                                                controls 
+                                                className="h-48 w-full object-contain bg-slate-900"
+                                                poster={asset.videoProps?.poster}
+                                              >
+                                                <source src={asset.src} type="video/mp4" />
+                                                <p className="p-4 text-sm text-gray-600 dark:text-gray-300">
+                                                  Browser Anda tidak mendukung video HTML5. <a href={asset.src} className="text-blue-600 hover:underline">Download video</a> untuk melihat.
+                                                </p>
+                                              </video>
+                                            ) : (
+                                              <ProofImage
+                                                src={asset.src}
+                                                alt={asset.alt}
+                                                width={asset.width || 600}
+                                                height={asset.height || 400}
+                                                className="h-48 w-full object-contain bg-slate-900"
+                                                loading="lazy"
+                                              />
+                                            )}
+                                            <figcaption className="p-3 text-xs font-medium text-gray-600 dark:text-gray-300">
+                                              {asset.label}
+                                              {asset.type === 'video' && asset.videoProps?.duration && (
+                                                <span className="ml-2 text-gray-500">
+                                                  ({Math.floor(asset.videoProps.duration / 60)}:{(asset.videoProps.duration % 60).toString().padStart(2, '0')})
+                                                </span>
+                                              )}
+                                            </figcaption>
+                                          </figure>
+                                        ))}
+                                      </div>
+                                      <p className="mt-3 rounded-lg bg-gray-50 p-4 text-sm leading-relaxed text-gray-600 dark:bg-gray-900 dark:text-gray-300">
+                                        {caseStudy.proofNotes}
+                                      </p>
+                                    </section>
 
                   <button
                     type="button"

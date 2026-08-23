@@ -9,8 +9,13 @@ export interface ProofAsset {
   label: string;
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
+  type?: 'image' | 'video';
+  videoProps?: {
+    duration?: number;
+    poster?: string;
+  };
 }
 
 export interface CaseStudyTimelineItem {
@@ -58,7 +63,7 @@ export const projects: PortfolioProject[] = [
     imageAlt:
       'Foto komponen prototype smart home berbasis ESP8266 untuk monitoring suhu dan kontrol lampu',
     tags: ['ESP8266', 'IoT', 'Sensor', 'Relay'],
-    status: 'demo_on_request',
+    status: 'documentation_on_request',
     statusLabel: 'Dokumentasi on request',
     links: {},
     proofAssets: [
@@ -68,7 +73,18 @@ export const projects: PortfolioProject[] = [
         alt:
           'Foto komponen prototype smart home: NodeMCU ESP8266 V3, modul sensor suhu dan kelembapan DHT11, serta relay 5V 4 channel',
         width: 1920,
-        height: 1080
+        height: 1080,
+        type: 'image'
+      },
+      {
+        label: 'Video dokumentasi prototype smart home',
+        src: '/proof/video6077800798866120109.mp4',
+        alt:
+          'Video dokumentasi proses dan hasil prototype smart home berbasis ESP8266',
+        type: 'video',
+        videoProps: {
+          duration: 60
+        }
       }
     ],
     caseStudy: {
@@ -88,7 +104,7 @@ export const projects: PortfolioProject[] = [
       ],
       tools: ['ESP8266 NodeMCU', 'DHT11 module', '5V 4-channel relay module', 'Jumper wires', 'Arduino IDE', 'Blynk IoT platform'],
       result:
-        'Prototype berhasil menunjukkan alur monitoring suhu dan kontrol lampu melalui jaringan WiFi. Dokumentasi demo dapat saya tunjukkan saat dihubungi.',
+        'Prototype berhasil menunjukkan alur monitoring suhu dan kontrol lampu melalui jaringan WiFi. Video dokumentasi terlampir menunjukkan proses dan hasil prototype.',
       learnings: [
         'Lebih memahami pembacaan sensor dan kontrol output pada Arduino.',
         'Belajar memeriksa wiring, power, dan logika program saat troubleshooting.',
@@ -113,7 +129,7 @@ export const projects: PortfolioProject[] = [
         }
       ],
       proofNotes:
-        'Dokumentasi berupa video proses dan hasil prototype smart home dengan ESP8266. Demonstrasi dan dokumentasi tambahan dapat saya tunjukkan saat dihubungi.'
+        'Dokumentasi berupa foto komponen dan video proses prototype smart home dengan ESP8266. Video menunjukkan démonstrasi sistem monitoring suhu dan kontrol relay. Demonstrasi dan dokumentasi tambahan dapat saya tunjukkan saat dihubungi.'
     }
   },
   {
@@ -136,7 +152,8 @@ export const projects: PortfolioProject[] = [
         alt:
           'Foto proses instalasi jaringan, penataan kabel, dan persiapan perangkat dari ISP hingga router',
         width: 1920,
-        height: 1080
+        height: 1080,
+        type: 'image'
       },
       {
         label: 'Hasil instalasi jaringan',
@@ -144,7 +161,8 @@ export const projects: PortfolioProject[] = [
         alt:
           'Foto hasil instalasi jaringan dan router setelah pengecekan konektivitas',
         width: 1920,
-        height: 1080
+        height: 1080,
+        type: 'image'
       }
     ],
     caseStudy: {
