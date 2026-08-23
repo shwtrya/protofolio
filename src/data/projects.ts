@@ -67,8 +67,8 @@ export const projects: PortfolioProject[] = [
         src: '/proof/smart-home-komponen.jpg',
         alt:
           'Foto komponen prototype smart home: NodeMCU ESP8266 V3, modul sensor suhu dan kelembapan DHT11, serta relay 5V 4 channel',
-        width: 1200,
-        height: 1200
+        width: 1920,
+        height: 1080
       }
     ],
     caseStudy: {
@@ -113,7 +113,7 @@ export const projects: PortfolioProject[] = [
         }
       ],
       proofNotes:
-        'Foto proses dan hasil menjadi dokumentasi utama proyek. Demo atau dokumentasi tambahan dapat saya tunjukkan saat dihubungi.'
+        'Dokumentasi berupa video proses dan hasil prototype smart home dengan ESP8266. Demonstrasi dan dokumentasi tambahan dapat saya tunjukkan saat dihubungi.'
     }
   },
   {
