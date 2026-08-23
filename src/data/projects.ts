@@ -59,7 +59,7 @@ export const projects: PortfolioProject[] = [
       'Foto komponen prototype smart home berbasis ESP8266 untuk monitoring suhu dan kontrol lampu',
     tags: ['ESP8266', 'IoT', 'Sensor', 'Relay'],
     status: 'demo_on_request',
-    statusLabel: 'Demo on request',
+    statusLabel: 'Dokumentasi on request',
     links: {},
     proofAssets: [
       {
