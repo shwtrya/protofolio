@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -10,7 +9,6 @@ import {
   Mail
 } from 'lucide-react';
 import { useGreeting } from '../hooks/useGreeting';
-import { scrollToSection } from '../utils/scrollToSection';
 
 const Hero = () => {
   const greeting = useGreeting();

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, CalendarDays, Eye, TrendingUp, Users } from 'lucide-react';
-import { supabase, getVisitorStats, type VisitorStats } from '../lib/supabase';
+import { supabaseConfigured, getVisitorStats, type VisitorStats } from '../lib/supabase';
 
 interface VisitorCounterProps {
   variant?: 'floating' | 'inline';
@@ -35,55 +35,9 @@ const VisitorCounter = ({ variant = 'floating', className = '' }: VisitorCounter
     };
 
     initializeTracking();
-
-    if (!supabase) {
-      return;
-    }
-
-    const channel = supabase
-      .channel('visitor-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'visitors'
-        },
-        async () => {
-          try {
-            const updatedStats = await getVisitorStats();
-            setStats(updatedStats);
-          } catch (error) {
-            console.error('Failed to update visitor stats:', error);
-          }
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'page_views'
-        },
-        async () => {
-          try {
-            const updatedStats = await getVisitorStats();
-            setStats(updatedStats);
-          } catch (error) {
-            console.error('Failed to update page view stats:', error);
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      if (supabase) {
-        supabase.removeChannel(channel);
-      }
-    };
   }, []);
 
-  const connectionStatus = supabase ? 'Realtime' : 'Belum terhubung';
+  const connectionStatus = supabaseConfigured ? 'Terhubung' : 'Belum terhubung';
 
   if (variant === 'inline') {
     const statCards = [

@@ -8,29 +8,30 @@
     <meta name="keywords" content="Shawava Tritya, SMK, Teknik Komputer Jaringan, Arduino, IoT, Data Entry, Portofolio, Instalasi Jaringan" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.shawavatritya.web.id/" />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.shawavatritya.web.id/" />
     <meta property="og:title" content="Shawava Tritya - Portofolio TKJ" />
     <meta property="og:description" content="Lulusan SMK Teknik Komputer dan Jaringan yang fokus pada Arduino, IoT, instalasi jaringan, dan data entry." />
     <meta property="og:image" content="https://i.ibb.co.com/JWBQMssz/image.png?auto=compress&cs=tinysrgb&dpr=2&h=400&w=400" />
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://www.shawavatritya.web.id/" />
     <meta property="twitter:title" content="Shawava Tritya - Portofolio TKJ" />
     <meta property="twitter:description" content="Lulusan SMK Teknik Komputer dan Jaringan yang fokus pada Arduino, IoT, instalasi jaringan, dan data entry." />
     <meta property="twitter:image" content="https://i.ibb.co.com/JWBQMssz/image.png?auto=compress&cs=tinysrgb&dpr=2&h=400&w=400" />
-    
+
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- Favicon -->
+
+    <!-- Favicon / app icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
-    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
     <!-- Theme color -->
     <meta name="theme-color" content="#3B82F6" />
 
@@ -39,50 +40,18 @@
     <script type="application/ld+json">
       {"@context":"https://schema.org","@type":"Person","name":"Shawava Tritya","url":"https://www.shawavatritya.web.id/","image":"https://i.ibb.co.com/JWBQMssz/image.png","jobTitle":"Teknisi Komputer dan Jaringan","description":"Lulusan SMK Teknik Komputer dan Jaringan yang fokus pada Arduino, IoT, instalasi jaringan, dan data entry.","knowsAbout":["Arduino","IoT","Instalasi Jaringan","Data Entry","Teknik Komputer dan Jaringan"],"address":{"@type":"PostalAddress","addressLocality":"Cileungsi","addressRegion":"Jawa Barat","addressCountry":"ID"}}
     </script>
-
-    <!-- Module error handler -->
-    <script>
-      (function() {
-        let moduleErrorCount = 0;
-        const MAX_RETRIES = 2;
-
-        window.addEventListener('error', function(e) {
-          if (e.message && (
-            e.message.includes('Failed to fetch') ||
-            e.message.includes('Importing a module') ||
-            e.message.includes('dynamically imported module')
-          )) {
-            moduleErrorCount++;
-            console.warn('Module loading error detected:', e.message);
-
-            if (moduleErrorCount <= MAX_RETRIES) {
-              console.log('Attempting to reload... (attempt ' + moduleErrorCount + ')');
-
-              if ('caches' in window) {
-                caches.keys().then(function(names) {
-                  return Promise.all(
-                    names.map(function(name) {
-                      return caches.delete(name);
-                    })
-                  );
-                }).then(function() {
-                  window.location.reload();
-                });
-              } else {
-                setTimeout(function() {
-                  window.location.reload();
-                }, 500);
-              }
-
-              e.preventDefault();
-            }
-          }
-        }, true);
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>Shawava Tritya</h1>
+      <p>
+        Lulusan SMK Teknik Komputer dan Jaringan (TKJ) di Cileungsi, Bogor, Jawa Barat.
+        Fokus pada Arduino, IoT, instalasi jaringan, dan data entry.
+      </p>
+      <p>Portofolio ini butuh JavaScript aktif untuk tampil penuh.</p>
+      <p>Kontak: <a href="/Shawava_Tritya_CV.pdf">unduh CV (PDF)</a></p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,27 +1,35 @@
-import { createClient } from '@supabase/supabase-js';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { getOrCreateVisitorIdentifier } from './fingerprint';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Talks to Supabase over plain REST. The whole @supabase/supabase-js client
+// (130KB raw) was only used for two RPC calls, so fetch replaces it.
+// ponytail: no auth, no realtime, no query builder. Re-add the SDK if the site
+// ever needs sign-in or live subscriptions.
+const baseUrl = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
+const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-let supabase: SupabaseClient | null = null;
+export const supabaseConfigured = Boolean(baseUrl && apiKey);
 
-try {
-  if (supabaseUrl && supabaseAnonKey) {
-    supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false
-      }
-    });
-  } else {
-    console.warn('Supabase credentials not found. Visitor tracking will be disabled.');
-  }
-} catch (error) {
-  console.error('Failed to initialize Supabase client:', error);
+if (!supabaseConfigured) {
+  console.warn('Supabase credentials not found. Visitor tracking will be disabled.');
 }
 
-export { supabase };
+const rpc = async (fn: string, params: Record<string, unknown>): Promise<unknown> => {
+  const res = await fetch(`${baseUrl}/rest/v1/rpc/${fn}`, {
+    method: 'POST',
+    headers: {
+      apikey: apiKey,
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params)
+  });
+
+  if (!res.ok) {
+    throw new Error(`rpc ${fn} failed: ${res.status} ${await res.text()}`);
+  }
+
+  return res.status === 204 ? null : res.json();
+};
 
 export interface VisitorStats {
   total_visitors: number;
@@ -30,11 +38,16 @@ export interface VisitorStats {
   today_page_views: number;
 }
 
-let lastTrackTime = 0;
-const TRACK_DEBOUNCE = 5000;
+const EMPTY_STATS: VisitorStats = {
+  total_visitors: 0,
+  total_page_views: 0,
+  today_visitors: 0,
+  today_page_views: 0
+};
+
 const PAGE_VIEW_WINDOW_MS = 60000;
-const VISITOR_TRACKED_KEY = 'visitor_tracked_once';
-const VISITOR_TRACKED_TIME_KEY = 'visitor_tracked_time';
+const LAST_PATH_KEY = 'last_tracked_path';
+const LAST_TIME_KEY = 'last_tracked_time';
 const sessionFallback = new Map<string, string>();
 
 const getSessionStorageItem = (key: string) => {
@@ -65,111 +78,51 @@ const setSessionStorageItem = (key: string, value: string) => {
 };
 
 export const trackVisitor = async () => {
-  if (!supabase) {
-    console.warn('Supabase not initialized. Skipping visitor tracking.');
-    return;
-  }
+  if (!supabaseConfigured) return;
 
   try {
     const now = Date.now();
-    const trackedOnce = getSessionStorageItem(VISITOR_TRACKED_KEY);
+    const currentPath = window.location.pathname;
+    const lastPath = getSessionStorageItem(LAST_PATH_KEY);
+    const lastTime = Number(getSessionStorageItem(LAST_TIME_KEY) || '0');
+
+    // Same path within the dedupe window is not a new view.
+    if (currentPath === lastPath && now - lastTime <= PAGE_VIEW_WINDOW_MS) return;
 
     const identifier = await getOrCreateVisitorIdentifier();
-    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
-    if (!trackedOnce && now - lastTrackTime >= TRACK_DEBOUNCE) {
-      lastTrackTime = now;
-      setSessionStorageItem(VISITOR_TRACKED_KEY, '1');
-      setSessionStorageItem(VISITOR_TRACKED_TIME_KEY, now.toString());
 
-      const { data: existingVisitor } = await supabase
-        .from('visitors')
-        .select('*')
-        .eq('session_id', identifier.sessionId)
-        .maybeSingle();
+    // Upsert + page-view insert happen server-side in one SECURITY DEFINER
+    // function, so anon needs no direct table access.
+    await rpc('track_visit', {
+      p_session_id: identifier.sessionId,
+      p_user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+      p_fingerprint: identifier.fingerprint,
+      p_page_url: currentPath
+    });
 
-      if (existingVisitor) {
-        const timeSinceLastVisit = now - new Date(existingVisitor.last_visit).getTime();
-        const shouldIncrementPageView = timeSinceLastVisit > PAGE_VIEW_WINDOW_MS;
-
-        await supabase
-          .from('visitors')
-          .update({
-            page_views: shouldIncrementPageView
-              ? existingVisitor.page_views + 1
-              : existingVisitor.page_views,
-            last_visit: new Date().toISOString()
-          })
-          .eq('session_id', identifier.sessionId);
-      } else {
-        await supabase
-          .from('visitors')
-          .insert({
-            session_id: identifier.sessionId,
-            user_agent: userAgent,
-            ip_address: identifier.fingerprint,
-            page_views: 1
-          });
-      }
-    }
-
-    const currentPath = window.location.pathname;
-    const lastTrackedPath = getSessionStorageItem('last_tracked_path');
-    const lastTrackedTime = Number(getSessionStorageItem('last_tracked_time') || '0');
-
-    if (currentPath !== lastTrackedPath || (now - lastTrackedTime) > PAGE_VIEW_WINDOW_MS) {
-      await supabase
-        .from('page_views')
-        .insert({
-          session_id: identifier.sessionId,
-          page_url: currentPath
-        });
-
-      setSessionStorageItem('last_tracked_path', currentPath);
-      setSessionStorageItem('last_tracked_time', now.toString());
-    }
-
+    setSessionStorageItem(LAST_PATH_KEY, currentPath);
+    setSessionStorageItem(LAST_TIME_KEY, now.toString());
   } catch (error) {
     console.error('Error tracking visitor:', error);
   }
 };
 
 export const getVisitorStats = async (): Promise<VisitorStats> => {
-  if (!supabase) {
-    return {
-      total_visitors: 0,
-      total_page_views: 0,
-      today_visitors: 0,
-      today_page_views: 0
-    };
-  }
+  if (!supabaseConfigured) return EMPTY_STATS;
 
   try {
-    const { data, error } = await supabase.rpc('get_visitor_stats');
-
-    if (error) throw error;
-
-    if (data && data.length > 0) {
-      return {
-        total_visitors: Number(data[0].total_visitors) || 0,
-        total_page_views: Number(data[0].total_page_views) || 0,
-        today_visitors: Number(data[0].today_visitors) || 0,
-        today_page_views: Number(data[0].today_page_views) || 0
-      };
-    }
+    const rows = await rpc('get_visitor_stats', {});
+    const row = Array.isArray(rows) ? rows[0] : null;
+    if (!row) return EMPTY_STATS;
 
     return {
-      total_visitors: 0,
-      total_page_views: 0,
-      today_visitors: 0,
-      today_page_views: 0
+      total_visitors: Number(row.total_visitors) || 0,
+      total_page_views: Number(row.total_page_views) || 0,
+      today_visitors: Number(row.today_visitors) || 0,
+      today_page_views: Number(row.today_page_views) || 0
     };
   } catch (error) {
     console.error('Error fetching visitor stats:', error);
-    return {
-      total_visitors: 0,
-      total_page_views: 0,
-      today_visitors: 0,
-      today_page_views: 0
-    };
+    return EMPTY_STATS;
   }
 };

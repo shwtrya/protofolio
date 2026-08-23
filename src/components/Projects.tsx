@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, ExternalLink, Mail, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
