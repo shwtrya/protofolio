@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import { useActiveSection } from '../hooks/useActiveSection';
@@ -80,7 +80,17 @@ export const Header: React.FC = () => {
           </nav>
 
           {/* Theme Toggle & Mobile Menu Button */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
+            <a
+              href="/Shawava_Tritya_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex min-h-[40px] items-center gap-1.5 rounded-md bg-blue-600 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              aria-label="Unduh CV Shawava Tritya"
+            >
+              <FileText size={16} />
+              CV
+            </a>
             <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
