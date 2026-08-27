@@ -40,6 +40,7 @@ const About = lazy(() => retryLazyLoad(() => import('./components/About')));
 const Experience = lazy(() => retryLazyLoad(() => import('./components/Experience')));
 const Projects = lazy(() => retryLazyLoad(() => import('./components/Projects')));
 const Education = lazy(() => retryLazyLoad(() => import('./components/Education')));
+const References = lazy(() => retryLazyLoad(() => import('./components/References')));
 const Contact = lazy(() => retryLazyLoad(() => import('./components/Contact')));
 const NotFound = lazy(() => retryLazyLoad(() => import('./components/NotFound')));
 
@@ -120,6 +121,7 @@ function HomePage() {
       <Education />
       <Skills />
       <Certificates />
+      <References />
       <VisitorCounterSection />
       <Contact />
     </motion.div>
