@@ -3,6 +3,7 @@ import { FileText, ShieldCheck, ZoomIn } from 'lucide-react';
 import Modal from './ui/Modal';
 import { Reveal, SectionHeader } from './ui/Section';
 import Scroll3D from './ui/Scroll3D';
+import TiltCard from './ui/TiltCard';
 
 interface Certificate {
   title: string;
@@ -63,7 +64,8 @@ const Certificates = () => {
                 drift={20}
                 scaleAmount={0.985}
               >
-              <article className="card card-interactive group flex h-full flex-col overflow-hidden">
+                <TiltCard maxTilt={6} className="h-full rounded-[14px]">
+                  <article className="card card-interactive group flex h-full flex-col overflow-hidden">
                 {/* Thumbnail — clickable, opens lightbox */}
                 <button
                   type="button"
@@ -125,7 +127,8 @@ const Certificates = () => {
                     </button>
                   </div>
                 </div>
-              </article>
+                  </article>
+                </TiltCard>
               </Scroll3D>
             </Reveal>
           ))}

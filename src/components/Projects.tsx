@@ -5,6 +5,7 @@ import ProofImage from './ProofImage';
 import { projects, type PortfolioProject } from '../data/projects';
 import { Reveal, SectionHeader } from './ui/Section';
 import Scroll3D from './ui/Scroll3D';
+import TiltCard from './ui/TiltCard';
 
 export const Projects = () => {
   const [activeProject, setActiveProject] = useState<PortfolioProject | null>(null);
@@ -55,7 +56,8 @@ export const Projects = () => {
           {projects.map((project, idx) => (
             <Reveal key={project.title} delay={idx * 0.1}>
               <Scroll3D rotateX={5} rotateY={idx % 2 === 0 ? 1.5 : -1.5} drift={26}>
-              <article className="card card-interactive group overflow-hidden">
+                <TiltCard maxTilt={5} className="h-full rounded-[14px]">
+                  <article className="card card-interactive group overflow-hidden">
                 <div className="grid lg:grid-cols-[1.1fr_1.3fr]">
                   {/* Visual preview */}
                   <div className="relative overflow-hidden border-b border-line bg-surface2 lg:border-b-0 lg:border-r">
@@ -143,7 +145,8 @@ export const Projects = () => {
                     </div>
                   </div>
                 </div>
-              </article>
+                  </article>
+                </TiltCard>
               </Scroll3D>
             </Reveal>
           ))}
