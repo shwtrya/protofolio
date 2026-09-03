@@ -61,7 +61,7 @@ export const projects: PortfolioProject[] = [
       'Prototype sistem smart home untuk memantau suhu ruangan dan mengontrol lampu menggunakan ESP8266 NodeMCU, sensor DHT11, relay 4-channel, dan modul konektivitas.',
     role: 'Perancang dan perakit prototype',
     period: 'Proyek pembelajaran TKJ',
-    image: '/proof/smart-home-komponen.jpg',
+    image: '/proof/smart-home-komponen.webp',
     imageAlt:
       'Foto komponen prototype smart home berbasis ESP8266 untuk monitoring suhu dan kontrol lampu',
     tags: ['ESP8266', 'IoT', 'Sensor', 'Relay'],
@@ -71,7 +71,7 @@ export const projects: PortfolioProject[] = [
     proofAssets: [
       {
         label: 'Komponen prototype smart home',
-        src: '/proof/smart-home-komponen.jpg',
+        src: '/proof/smart-home-komponen.webp',
         alt:
           'Foto komponen prototype smart home: NodeMCU ESP8266 V3, modul sensor suhu dan kelembapan DHT11, serta relay 5V 4 channel',
         width: 1920,
@@ -141,7 +141,7 @@ export const projects: PortfolioProject[] = [
       'Dokumentasi praktik instalasi jaringan FTTH: persiapan perangkat, penataan kabel, konfigurasi router, serta hasil uji konektivitas.',
     role: 'Teknis praktik',
     period: '3 bulan',
-    image: '/proof/instalasi-isp-hasil.jpg',
+    image: '/proof/instalasi-isp-hasil.webp',
     imageAlt:
       'Foto hasil instalasi jaringan dari perangkat ISP hingga router',
     tags: ['Networking', 'Router', 'FTTH', 'Documentation'],
@@ -151,7 +151,7 @@ export const projects: PortfolioProject[] = [
     proofAssets: [
       {
         label: 'Proses instalasi jaringan',
-        src: '/proof/instalasi-isp-proses.jpg',
+        src: '/proof/instalasi-isp-proses.webp',
         alt:
           'Foto proses instalasi jaringan, penataan kabel, dan persiapan perangkat dari ISP hingga router',
         width: 1920,
@@ -160,7 +160,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         label: 'Hasil instalasi jaringan',
-        src: '/proof/instalasi-isp-hasil.jpg',
+        src: '/proof/instalasi-isp-hasil.webp',
         alt:
           'Foto hasil instalasi jaringan dan router setelah pengecekan konektivitas',
         width: 1920,

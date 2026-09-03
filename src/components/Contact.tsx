@@ -341,10 +341,23 @@ const Contact = () => {
 
               <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
                 <p className="t-mono">MAKS. {MAX_PER_HOUR} PESAN / JAM</p>
-                <button type="submit" disabled={sending} className="btn btn-primary">
-                  <Send size={15} />
-                  {sending ? 'Mengirim…' : 'Kirim Pesan'}
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={`https://wa.me/${profile.whatsapp}?text=${encodeURIComponent(
+                      form.message.trim() || 'Halo Shawava, saya ingin berdiskusi terkait portofolio Anda.',
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary"
+                  >
+                    <Phone size={15} />
+                    Chat WhatsApp
+                  </a>
+                  <button type="submit" disabled={sending} className="btn btn-primary">
+                    <Send size={15} />
+                    {sending ? 'Mengirim…' : 'Kirim Pesan'}
+                  </button>
+                </div>
               </div>
             </form>
           </Reveal>

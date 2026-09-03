@@ -3,7 +3,7 @@ import { ZoomIn } from 'lucide-react';
 import Modal from './ui/Modal';
 
 /** Rendered page-1 JPG of the CV — preview only, no download path. */
-const CV_PREVIEW = '/proof/preview-cv.jpg';
+const CV_PREVIEW = '/proof/preview-cv.webp';
 
 interface Props {
   className?: string;

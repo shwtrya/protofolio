@@ -21,7 +21,7 @@ const certificates: Certificate[] = [
     period: '2025',
     description:
       'Bukti kompetensi IT Specialist bidang networking, mencakup pemahaman jaringan komputer dan troubleshooting dasar.',
-    preview: '/proof/preview-Sertifikat_IT_Specialist_Networking_2025.jpg',
+    preview: '/proof/preview-Sertifikat_IT_Specialist_Networking_2025.webp',
     tags: ['Networking', 'Troubleshooting', 'IT Specialist'],
   },
   {
@@ -30,7 +30,7 @@ const certificates: Certificate[] = [
     period: '2025',
     description:
       'Bukti pelaksanaan PKL di PT Rekadaya Multi Adiprima pada lingkungan produksi dengan fokus ketelitian dan standar kerja.',
-    preview: '/proof/preview-Sertifikat_PKL_PT_Rekadaya_2025.jpg',
+    preview: '/proof/preview-Sertifikat_PKL_PT_Rekadaya_2025.webp',
     tags: ['PKL', 'Produksi', 'Quality Control'],
   },
 ];
