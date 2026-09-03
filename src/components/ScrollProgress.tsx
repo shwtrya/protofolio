@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 const ScrollProgress = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
+    const onScroll = () => {
+      const total =
+        document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      setProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 z-[60] h-1 bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500 origin-left"
-      style={{ scaleX: scrollProgress / 100 }}
-      initial={{ scaleX: 0 }}
-      transition={{ duration: 0.1 }}
+    <div
+      className="fixed inset-x-0 top-0 z-[55] h-0.5 origin-left bg-accent transition-transform duration-100"
+      style={{ transform: `scaleX(${progress / 100})` }}
+      aria-hidden="true"
     />
   );
 };

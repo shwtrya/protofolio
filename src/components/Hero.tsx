@@ -1,233 +1,107 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import {
-  ArrowRight,
-  Award,
-  CheckCircle2,
-  FileText,
-  Github,
-  GraduationCap,
-  Linkedin,
-  Mail,
-  MapPin,
-  Sparkles
-} from 'lucide-react';
-import { useGreeting } from '../hooks/useGreeting';
+import { ArrowUpRight, Github, Linkedin, Mail, MapPin } from 'lucide-react';
+import { profile } from '../data/navigation';
+import { scrollToSectionById } from '../utils/scrollToSection';
+import { Parallax } from './ui/Scroll3D';
+import CvPreview from './CvPreview';
 
-const Hero = () => {
-  const greeting = useGreeting();
-
-  const focusAreas = [
-    'Teknik Komputer dan Jaringan',
-    'Arduino & IoT',
-    'Instalasi jaringan',
-    'Data entry dan administrasi'
-  ];
-
-  const stats = [
-    { icon: GraduationCap, value: '85', label: 'Rata-rata ijazah' },
-    { icon: Award, value: '2', label: 'Sertifikat resmi' },
-    { icon: Sparkles, value: '6+', label: 'Proyek & praktik' }
-  ];
-
-  const handleSocialClick = () => {
-    try {
-      if (typeof window !== 'undefined') {
-        const currentClicks = parseInt(localStorage.getItem('social_clicks') || '0', 10);
-        localStorage.setItem('social_clicks', (currentClicks + 1).toString());
-      }
-    } catch (error) {
-      console.warn('Failed to record social click.', error);
-    }
-  };
-
+export const Hero = () => {
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-white pt-20 pb-12 transition-colors duration-300 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 sm:pt-28 sm:pb-16 md:pt-32 md:pb-20"
-    >
-      {/* Decorative gradient blobs */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-blue-400/20 blur-3xl dark:bg-blue-500/10" />
-        <div className="absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl dark:bg-emerald-500/10" />
-      </div>
+    <section id="home" className="depth-stage relative pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-36 md:pb-24">
+      {/* Depth layer: technical grid that drifts slower than the content */}
+      <Parallax className="depth-grid" speed={0.4} fade aria-hidden="true">
+        <span />
+      </Parallax>
 
       <div className="container-responsive relative">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Availability badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-5 flex justify-center"
+        {/* Availability status line */}
+        <div className="status-pill">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+          </span>
+          <span className="t-mono t-mono-accent">SIAP MAGANG / KERJA TEKNIS</span>
+        </div>
+
+        {/* Main headline */}
+        <h1 className="t-display mt-6 max-w-4xl">Shawava Tritya</h1>
+
+        <p className="mt-4 text-xl font-semibold text-fg sm:text-2xl">
+          Lulusan TKJ — Fokus pada Jaringan, Mikrokontroler, Hardware &amp; IoT
+        </p>
+
+        <p className="t-lead mt-6 max-w-2xl">
+          SMK Negeri 1 Cileungsi (Nilai Ijazah: 85). Berpengalaman merakit prototype IoT berbasis ESP8266/Arduino, praktik instalasi ISP hingga router, serta disiplin kerja dari pengalaman magang produksi dan data entry.
+        </p>
+
+        {/* Technical quick-facts strip */}
+        <div className="mt-7 flex flex-col gap-2 text-sm text-muted sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2">
+          <div className="flex items-center gap-1.5">
+            <MapPin size={16} className="text-accent" />
+            <span>{profile.location}</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-mono text-[0.8125rem]">
+            <span className="font-semibold text-accent">NET:</span>
+            <span>LAN · FTTH · Router Config</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-mono text-[0.8125rem]">
+            <span className="font-semibold text-accent">HW:</span>
+            <span>ESP8266 · Arduino · Relay · Sensor</span>
+          </div>
+        </div>
+
+        {/* Action CTAs — full-width stack on phones, inline from sm up */}
+        <div className="mt-9 grid gap-2.5 sm:mt-10 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
+          <button
+            type="button"
+            onClick={() => scrollToSectionById('projects')}
+            className="btn btn-primary btn-lg w-full sm:w-auto"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-              </span>
-              Terbuka untuk peluang kerja &amp; magang
-            </span>
-          </motion.div>
+            Lihat Proyek
+            <ArrowUpRight size={18} />
+          </button>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-4 text-sm font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400"
+          <CvPreview className="btn btn-secondary btn-lg w-full sm:w-auto" />
+
+          <button
+            type="button"
+            onClick={() => scrollToSectionById('contact')}
+            className="btn btn-ghost btn-lg w-full sm:w-auto"
           >
-            {greeting}
-          </motion.p>
+            <Mail size={18} />
+            Hubungi Saya
+          </button>
+        </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-3xl font-bold leading-tight text-gray-900 dark:text-white sm:text-4xl md:text-5xl lg:text-6xl"
+        {/* External links */}
+        <div className="mt-9 flex flex-wrap items-center gap-3 border-t border-line pt-6 sm:mt-10">
+          <span className="t-mono text-faint">PROFIL:</span>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-icon"
+            aria-label="GitHub Shawava Tritya"
           >
-            Shawava Tritya
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="mt-3 text-base font-semibold text-blue-600 dark:text-blue-400 sm:text-lg"
+            <Github size={18} />
+          </a>
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-icon"
+            aria-label="LinkedIn Shawava Tritya"
           >
-            Teknisi Komputer &amp; Jaringan — Arduino, IoT, Data Entry
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mx-auto mt-4 flex items-center justify-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
+            <Linkedin size={18} />
+          </a>
+          <a
+            href={`mailto:${profile.email}`}
+            className="btn-icon"
+            aria-label="Email Shawava Tritya"
           >
-            <MapPin size={15} />
-            Cileungsi, Bogor, Jawa Barat
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.25 }}
-            className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg md:text-xl"
-          >
-            Lulusan SMK Negeri 1 Cileungsi jurusan Teknik Komputer dan Jaringan,
-            fokus pada Arduino, IoT, instalasi jaringan, dan pekerjaan data yang
-            rapi serta teliti.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-6 flex flex-wrap justify-center gap-2 px-4"
-          >
-            {focusAreas.map((area) => (
-              <span
-                key={area}
-                className="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white/70 px-3 py-2 text-sm font-medium text-gray-700 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/70 dark:text-gray-300"
-              >
-                <CheckCircle2 size={16} className="text-emerald-600 dark:text-emerald-400" />
-                {area}
-              </span>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
-          >
-            <button
-              onClick={() => {
-                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}
-              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 hover:shadow-blue-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:w-auto"
-            >
-              Lihat Proyek
-              <ArrowRight size={18} />
-            </button>
-
-            <a
-              href="/Shawava_Tritya_CV.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700 hover:shadow-emerald-600/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:w-auto"
-            >
-              <FileText size={18} />
-              Lihat CV
-            </a>
-
-            <button
-              type="button"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white/70 px-5 py-3 text-sm font-semibold text-gray-700 backdrop-blur-sm transition hover:border-blue-600 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-800/70 dark:text-gray-300 dark:hover:border-blue-400 dark:hover:text-blue-400 sm:w-auto"
-            >
-              <Mail size={18} />
-              Hubungi Saya
-            </button>
-          </motion.div>
-
-          {/* Stats strip — quick credibility signals for recruiters */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-3 sm:gap-4"
-          >
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center rounded-lg border border-gray-200 bg-white/70 px-2 py-4 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/60"
-              >
-                <stat.icon size={20} className="mb-1.5 text-blue-600 dark:text-blue-400" />
-                <span className="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">{stat.value}</span>
-                <span className="mt-0.5 text-center text-xs text-gray-500 dark:text-gray-400">{stat.label}</span>
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="mt-8 flex justify-center gap-4"
-          >
-            <a
-              href="https://github.com/CyXd404"
-              onClick={handleSocialClick}
-              className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-gray-200 bg-white/70 text-gray-600 backdrop-blur-sm transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:bg-gray-800/70 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-white"
-              aria-label="Kunjungi profil GitHub Shawava Tritya"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github size={20} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/shawava-tritya"
-              onClick={handleSocialClick}
-              className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-gray-200 bg-white/70 text-gray-600 backdrop-blur-sm transition hover:border-blue-500 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:bg-gray-800/70 dark:text-gray-400 dark:hover:border-blue-400 dark:hover:text-blue-400"
-              aria-label="Kunjungi profil LinkedIn Shawava Tritya"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Linkedin size={20} />
-            </a>
-            <a
-              href="mailto:shawavatritya@gmail.com"
-              onClick={handleSocialClick}
-              className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-gray-200 bg-white/70 text-gray-600 backdrop-blur-sm transition hover:border-emerald-500 hover:text-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:bg-gray-800/70 dark:text-gray-400 dark:hover:border-emerald-400 dark:hover:text-emerald-400"
-              aria-label="Kirim email ke Shawava Tritya"
-            >
-              <Mail size={20} />
-            </a>
-          </motion.div>
+            <Mail size={18} />
+          </a>
         </div>
       </div>
-
     </section>
   );
 };

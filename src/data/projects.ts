@@ -39,6 +39,7 @@ export interface ProjectCaseStudy {
 
 export interface PortfolioProject {
   title: string;
+  category: 'Networking' | 'IoT & Hardware' | 'Data';
   summary: string;
   role: string;
   period: string;
@@ -55,6 +56,7 @@ export interface PortfolioProject {
 export const projects: PortfolioProject[] = [
   {
     title: 'Smart Home Berbasis ESP8266',
+    category: 'IoT & Hardware',
     summary:
       'Prototype sistem smart home untuk memantau suhu ruangan dan mengontrol lampu menggunakan ESP8266 NodeMCU, sensor DHT11, relay 4-channel, dan modul konektivitas.',
     role: 'Perancang dan perakit prototype',
@@ -129,11 +131,12 @@ export const projects: PortfolioProject[] = [
         }
       ],
       proofNotes:
-        'Dokumentasi berupa foto komponen dan video proses prototype smart home dengan ESP8266. Video menunjukkan démonstrasi sistem monitoring suhu dan kontrol relay. Demonstrasi dan dokumentasi tambahan dapat saya tunjukkan saat dihubungi.'
+        'Dokumentasi berupa foto komponen dan video proses prototype smart home dengan ESP8266. Video menunjukkan demonstrasi sistem monitoring suhu dan kontrol relay. Demonstrasi dan dokumentasi tambahan dapat saya tunjukkan saat dihubungi.'
     }
   },
   {
     title: 'Instalasi ISP hingga Router',
+    category: 'Networking',
     summary:
       'Dokumentasi praktik instalasi jaringan FTTH: persiapan perangkat, penataan kabel, konfigurasi router, serta hasil uji konektivitas.',
     role: 'Teknis praktik',
