@@ -3,10 +3,14 @@ import { profile } from '../data/navigation';
 import { scrollToSectionById } from '../utils/scrollToSection';
 import { Parallax } from './ui/Scroll3D';
 import CvPreview from './CvPreview';
+import NetworkTopology3D from './ui/NetworkTopology3D';
 
 export const Hero = () => {
   return (
-    <section id="home" className="depth-stage relative pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-36 md:pb-24">
+    <section id="home" className="depth-stage relative pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-36 md:pb-24 overflow-hidden">
+      {/* 3D Network Topology background */}
+      <NetworkTopology3D />
+
       {/* Depth layer: technical grid that drifts slower than the content */}
       <Parallax className="depth-grid" speed={0.4} fade aria-hidden="true">
         <span />
