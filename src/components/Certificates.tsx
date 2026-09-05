@@ -95,7 +95,10 @@ export const Certificates = () => {
         </div>
 
         {/* 1. GitHub Contributions Bento Card (exact iqmal.dev) */}
-        <div className="mb-16 rounded-3xl border border-[#111114]/12 bg-white/60 p-6 sm:p-10 shadow-sm backdrop-blur-sm">
+        <div
+          data-aos="fade-up"
+          className="mb-16 rounded-3xl border border-[#111114]/12 bg-white/60 p-6 sm:p-10 shadow-sm backdrop-blur-sm"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left summary */}
             <div className="lg:col-span-4 flex flex-col justify-between">
@@ -187,9 +190,11 @@ export const Certificates = () => {
 
         {/* 2. Credentials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {certificates.map((cert) => (
+          {certificates.map((cert, idx) => (
             <div
               key={cert.title}
+              data-aos="fade-up"
+              data-aos-delay={(idx + 1) * 100}
               className="group flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30"
             >
               <div
@@ -257,7 +262,11 @@ export const Certificates = () => {
           ))}
 
           {/* Education Card matching aspect ratio & height */}
-          <div className="flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30">
+          <div
+            data-aos="fade-up"
+            data-aos-delay="300"
+            className="flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30"
+          >
             {/* Header banner */}
             <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#18181c] text-white p-6 flex flex-col justify-between">
               <div className="flex items-center justify-between">

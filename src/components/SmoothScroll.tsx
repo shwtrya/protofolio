@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import AOS from 'aos';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,10 +17,10 @@ export const SmoothScroll = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    // Only apply smooth wheel on devices that have a mouse or trackpad pointer
+    // Only apply smooth wheel on devices that have a precision mouse/trackpad pointer
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
     if (!hasFinePointer) {
-      // Mobile / touch devices: use native momentum scroll for responsive zero-lag feel
+      // Mobile / touch screen: let native browser momentum scroll handle everything
       return;
     }
 
@@ -34,7 +35,10 @@ export const SmoothScroll = () => {
 
     window.lenis = lenis;
 
-    lenis.on('scroll', ScrollTrigger.update);
+    lenis.on('scroll', () => {
+      ScrollTrigger.update();
+      AOS.refresh();
+    });
 
     const tickerCb = (time: number) => {
       lenis.raf(time * 1000);

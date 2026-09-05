@@ -21,7 +21,7 @@ export const Footer = () => {
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-between items-center gap-12 sm:gap-16">
         {/* Kicker */}
-        <div className="flex flex-col items-center gap-2">
+        <div data-aos="fade-up" className="flex flex-col items-center gap-2">
           <p className="font-mono text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
             GET IN TOUCH
           </p>
@@ -31,6 +31,8 @@ export const Footer = () => {
         <div className="flex flex-col items-center gap-8 max-w-4xl">
           <h2
             id="contact-heading"
+            data-aos="fade-up"
+            data-aos-delay="100"
             className="text-[clamp(3rem,8.5vw,7.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.04em] text-white"
           >
             <span className="inline-block overflow-hidden py-1">
@@ -47,7 +49,7 @@ export const Footer = () => {
             </span>
           </h2>
 
-          <div className="mt-4 flex flex-col items-center gap-8">
+          <div data-aos="fade-up" data-aos-delay="200" className="mt-4 flex flex-col items-center gap-8">
             <a
               href={`mailto:${profile.email}`}
               className="group relative inline-flex items-center gap-2 text-xl sm:text-3xl lg:text-4xl font-light text-white/80 transition-colors duration-300 hover:text-white"
@@ -61,7 +63,7 @@ export const Footer = () => {
             </a>
 
             {/* Social / Direct Links */}
-            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 font-mono text-xs uppercase tracking-wider text-white/50">
+            <div data-aos="fade-up" data-aos-delay="300" className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 font-mono text-xs uppercase tracking-wider text-white/50">
               <CvPreview
                 className="hover:text-white transition-colors duration-300 cursor-pointer bg-transparent border-0 p-0 text-white/50"
                 label="Resume"

@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import AOS from 'aos';
 import { trackVisitor } from './lib/supabase';
 
 import Header from './components/Header';
@@ -39,6 +40,16 @@ function HomePage() {
 }
 
 function App() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 50,
+      delay: 50,
+    });
+  }, []);
+
   return (
     <Router>
       <SmoothScroll />

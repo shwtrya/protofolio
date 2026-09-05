@@ -82,6 +82,8 @@ export const Projects = () => {
             return (
               <article
                 key={project.title}
+                data-aos="fade-up"
+                data-aos-duration="850"
                 className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
               >
                 {/* Image Column */}
