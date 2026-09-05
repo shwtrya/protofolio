@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -81,238 +82,273 @@ export const Experience = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const watermarkRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
 
-  const [activeIdx, setActiveIdx] = useState(0);
+  // Exact GSAP matchMedia scroll trigger from iqmal.dev
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      const viewport = viewportRef.current;
+      const track = trackRef.current;
+      const progressBar = progressBarRef.current;
+      const watermark = watermarkRef.current;
+      const header = headerRef.current;
+      const mobileContainer = mobileContainerRef.current;
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Watermark zoom/blur
-      if (watermarkRef.current && sectionRef.current) {
-        gsap.fromTo(
-          watermarkRef.current,
-          { opacity: 0, filter: 'blur(16px)', scale: 0.85 },
-          {
-            opacity: 1,
-            filter: 'blur(3px)',
-            scale: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top bottom',
-              end: 'top top',
-              scrub: true,
-            },
+      if (!section || !watermark || !header) return;
+
+      const mm = gsap.matchMedia();
+
+      return mm.add(
+        {
+          isDesktop: '(min-width: 1024px)',
+          isMobileTablet: '(max-width: 1023px)',
+          reduceMotion: '(prefers-reduced-motion: reduce)',
+        },
+        (context) => {
+          const { isDesktop, isMobileTablet, reduceMotion } = context.conditions ?? {};
+          const desktopCards = track?.querySelectorAll('[data-experience-card]') ?? [];
+          const mobileCards = mobileContainer?.querySelectorAll('[data-experience-card]') ?? [];
+
+          if (reduceMotion) {
+            gsap.set([track, progressBar, watermark, header, desktopCards, mobileCards], {
+              clearProps: 'all',
+            });
+            return;
           }
-        );
-      }
 
-      // Horizontal pinning only on desktop (lg+)
-      const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-      if (isDesktop && trackRef.current && viewportRef.current && sectionRef.current) {
-        const getScrollDistance = () =>
-          Math.max(0, trackRef.current!.scrollWidth - viewportRef.current!.clientWidth);
-
-        const tl = gsap.timeline({
-          defaults: { ease: 'none' },
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: () => `+=${getScrollDistance() + window.innerHeight * 0.7}`,
-            pin: true,
-            scrub: 0.8,
-            anticipatePin: 1,
+          // Watermark blur, scale, and opacity scrub
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: true,
+            animation: gsap.fromTo(
+              watermark,
+              { opacity: 0, filter: 'blur(20px)', scale: 0.8 },
+              { opacity: 1, filter: 'blur(3px)', scale: 1, ease: 'none' }
+            ),
             invalidateOnRefresh: true,
-          },
-        });
+          });
 
-        // Horizontal slide
-        tl.to(trackRef.current, {
-          x: () => -getScrollDistance(),
-          ease: 'none',
-        });
+          // Mobile / Tablet layout
+          if (isMobileTablet) {
+            gsap.fromTo(
+              header,
+              { opacity: 0, y: 18 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.65,
+                ease: 'power2.out',
+                scrollTrigger: { trigger: section, start: 'top 72%' },
+              }
+            );
 
-        // Progress bar fill
-        if (progressBarRef.current) {
-          tl.to(
-            progressBarRef.current,
-            {
-              scaleX: 1,
-              ease: 'none',
+            gsap.fromTo(
+              mobileCards,
+              { opacity: 0, y: 70, scale: 0.96 },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                stagger: 0.12,
+                duration: 0.75,
+                ease: 'power3.out',
+                scrollTrigger: { trigger: mobileContainer, start: 'top 78%' },
+              }
+            );
+            return;
+          }
+
+          // Desktop horizontal pin & scroll
+          if (!isDesktop || !viewport || !track || !progressBar) return;
+
+          const scrollDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+
+          const tl = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: () => `+=${scrollDistance() + window.innerHeight}`,
+              pin: true,
+              scrub: 0.85,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
             },
-            0
-          );
-        }
-      }
-    }, sectionRef);
+          });
 
-    return () => ctx.revert();
-  }, []);
+          gsap.set(header, { opacity: 0, y: 20 });
+          gsap.set(desktopCards, { opacity: 0, y: 120, scale: 0.92 });
+
+          tl.fromTo(header, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 0)
+            .fromTo(
+              desktopCards,
+              { opacity: 0, y: 120, scale: 0.92 },
+              { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.8, ease: 'power2.out' },
+              0.05
+            )
+            .to(track, { x: () => -scrollDistance(), ease: 'none' }, 0.2);
+
+          tl.to(progressBar, { scaleX: 1, ease: 'none' }, 0.2);
+        }
+      );
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <section
       ref={sectionRef}
       id="experience"
       aria-labelledby="experience-heading"
-      className="relative z-20 bg-[#18181c] text-[#f4f4f1] px-6 py-20 sm:px-10 sm:py-24 lg:px-20 lg:h-screen lg:flex lg:flex-col lg:justify-between overflow-hidden"
+      className="relative bg-[#111114] text-[#f4f4f1] py-24 sm:py-32 overflow-hidden"
     >
-      {/* Background blurred watermark text */}
+      {/* Background Parallax Watermark (exact iqmal.dev) */}
       <div
         ref={watermarkRef}
         aria-hidden="true"
-        className="watermark-bg top-8 sm:top-12 text-white/[0.035]"
+        className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none text-center font-serif text-[clamp(5rem,18vw,16rem)] font-bold italic tracking-tight text-white/[0.03] leading-none will-change-transform"
       >
-        EXPERIENCES
+        EXPERIENCE
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl flex flex-col h-full justify-between">
-        {/* Header */}
-        <div className="mb-8 sm:mb-10 flex shrink-0 items-end justify-between gap-6 border-b border-white/10 pb-6">
+      {/* Top Subtle Track Bar */}
+      <div className="absolute top-0 inset-x-0 h-1 bg-white/10">
+        <div
+          ref={progressBarRef}
+          className="h-full w-full bg-white origin-left"
+          style={{ transform: 'scaleX(0)' }}
+        />
+      </div>
+
+      {/* Header Container */}
+      <div ref={headerRef} className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 mb-12 sm:mb-16">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
-            <p className="font-mono text-[0.65rem] uppercase tracking-[0.28em] text-white/45">
-              Career Archive
+            <p className="font-mono text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
+              02 / Work &amp; Roles
             </p>
             <h2
               id="experience-heading"
-              className="mt-2 text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white"
+              className="mt-2 font-serif text-4xl sm:text-6xl text-white tracking-tight"
             >
-              Experiences
+              Pengalaman <span className="font-editorial italic font-normal text-white/80">Kerja.</span>
             </h2>
           </div>
-          <p className="hidden max-w-md text-right text-xs sm:text-sm leading-relaxed text-white/45 md:block">
-            Roles, systems, and the work behind them.
+          <p className="font-sans text-xs sm:text-sm text-white/60 max-w-md">
+            Rekam jejak praktik lapangan di sektor industri manufaktur otomotif, garmen, dan entri data administrasi digital.
           </p>
         </div>
+      </div>
 
-        {/* Mobile View: Tabbed Cards (< lg) */}
-        <div className="lg:hidden flex flex-col gap-6">
-          {/* Tabs */}
-          <div className="flex flex-wrap gap-2">
-            {experiences.map((exp, idx) => (
-              <button
-                key={exp.id}
-                type="button"
-                onClick={() => setActiveIdx(idx)}
-                className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all ${
-                  activeIdx === idx
-                    ? 'border-white bg-white text-[#111114] font-bold shadow-md'
-                    : 'border-white/15 bg-transparent text-white/60 hover:border-white/30'
-                }`}
-              >
-                {exp.num} {exp.org.split(' ')[1] ?? exp.org}
-              </button>
-            ))}
-          </div>
+      {/* Desktop Horizontal Pinning Track (min-width: 1024px) */}
+      <div
+        ref={viewportRef}
+        className="relative z-10 hidden lg:block w-full overflow-hidden px-6 sm:px-10"
+      >
+        <div
+          ref={trackRef}
+          className="flex gap-8 will-change-transform w-fit pb-8"
+        >
+          {experiences.map((exp) => (
+            <div
+              key={exp.id}
+              data-experience-card="true"
+              className="w-[440px] shrink-0 rounded-3xl border border-white/10 bg-white/[0.035] p-8 sm:p-10 backdrop-blur-md flex flex-col justify-between hover:border-white/20 transition-colors"
+            >
+              <div>
+                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                  <span className="font-mono text-xs text-white/40">{exp.num}</span>
+                  <span className="font-mono text-[0.65rem] uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 text-white/80">
+                    {exp.type}
+                  </span>
+                </div>
+                <h3 className="font-serif text-3xl text-white font-normal leading-tight">
+                  {exp.title}
+                </h3>
+                <p className="mt-1 font-sans text-base text-white/90 font-medium">
+                  {exp.org}
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-white/50 font-sans">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin size={13} /> {exp.place}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={13} /> {exp.period}
+                  </span>
+                </div>
+                <p className="mt-6 text-sm text-white/70 leading-relaxed">
+                  {exp.overview}
+                </p>
+              </div>
 
-          {/* Active Card Content */}
-          <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-md">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
-              <span className="font-mono text-xs text-white/40">{experiences[activeIdx].num} / 03</span>
-              <span className="rounded-full border border-white/20 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/80">
-                {experiences[activeIdx].type}
+              <div className="mt-8 pt-6 border-t border-white/10">
+                <p className="font-mono text-[0.65rem] uppercase tracking-wider text-white/40 mb-3">
+                  Tanggung Jawab Utama
+                </p>
+                <ul className="space-y-2 text-xs text-white/75">
+                  {exp.highlights.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-white/40 mt-0.5">✦</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile & Tablet Vertical Stack (max-width: 1023px) */}
+      <div
+        ref={mobileContainerRef}
+        className="relative z-10 lg:hidden px-6 sm:px-10 space-y-6"
+      >
+        {experiences.map((exp) => (
+          <div
+            key={exp.id}
+            data-experience-card="true"
+            className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-md"
+          >
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+              <span className="font-mono text-xs text-white/40">{exp.num}</span>
+              <span className="font-mono text-[0.65rem] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-white/80">
+                {exp.type}
               </span>
             </div>
-            <h3 className="mt-4 text-2xl font-bold uppercase text-white">
-              {experiences[activeIdx].title}
+            <h3 className="font-serif text-2xl text-white font-normal">
+              {exp.title}
             </h3>
-            <p className="mt-1 text-sm font-semibold text-white/80">
-              {experiences[activeIdx].org} · {experiences[activeIdx].place}
+            <p className="mt-0.5 font-sans text-sm text-white/90 font-medium">
+              {exp.org}
             </p>
-            <p className="font-mono text-xs text-white/40 mt-1">
-              {experiences[activeIdx].period} ({experiences[activeIdx].duration})
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-white/50">
+              <span className="flex items-center gap-1">
+                <MapPin size={12} /> {exp.place}
+              </span>
+              <span className="flex items-center gap-1">
+                <Calendar size={12} /> {exp.period}
+              </span>
+            </div>
+            <p className="mt-4 text-xs sm:text-sm text-white/70 leading-relaxed">
+              {exp.overview}
             </p>
-            <p className="mt-4 text-sm text-white/70 leading-relaxed">
-              {experiences[activeIdx].overview}
-            </p>
-            <div className="mt-6 border-t border-white/10 pt-4 space-y-2.5">
-              {experiences[activeIdx].highlights.map((h, i) => (
-                <div key={i} className="flex items-start gap-3 text-xs sm:text-sm text-white/80">
-                  <span className="font-mono text-white/40">0{i + 1}</span>
-                  <span>{h}</span>
-                </div>
-              ))}
+            <div className="mt-5 pt-4 border-t border-white/10">
+              <ul className="space-y-1.5 text-xs text-white/75">
+                {exp.highlights.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="text-white/40 mt-0.5">✦</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </div>
-
-        {/* Desktop View: Horizontal Track (Pinned on lg+) */}
-        <div
-          ref={viewportRef}
-          data-experience-viewport="true"
-          className="hidden min-h-0 flex-1 overflow-hidden lg:block my-auto"
-        >
-          <div
-            ref={trackRef}
-            className="flex gap-8 items-stretch w-max will-change-transform py-4"
-          >
-            {experiences.map((exp) => (
-              <article
-                key={exp.id}
-                className="w-[480px] lg:w-[520px] shrink-0 rounded-2xl border border-white/12 bg-white/[0.04] p-8 flex flex-col justify-between backdrop-blur-md shadow-xl transition-colors duration-300 hover:border-white/25 hover:bg-white/[0.06]"
-              >
-                <div>
-                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                    <span className="font-mono text-xs text-white/40">{exp.num} / 03</span>
-                    <span className="rounded-full border border-white/20 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-white/80">
-                      {exp.type}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-5 text-2xl lg:text-3xl font-bold uppercase tracking-tight text-white">
-                    {exp.title}
-                  </h3>
-
-                  <p className="mt-2 text-sm lg:text-base font-semibold text-white/90">
-                    {exp.org}
-                  </p>
-
-                  <div className="mt-2 flex items-center gap-4 font-mono text-xs text-white/45">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar size={13} />
-                      {exp.period}
-                    </span>
-                    <span>·</span>
-                    <span className="flex items-center gap-1">
-                      <MapPin size={12} />
-                      {exp.place}
-                    </span>
-                  </div>
-
-                  <p className="mt-5 text-sm leading-relaxed text-white/70">
-                    {exp.overview}
-                  </p>
-                </div>
-
-                <div className="mt-8 border-t border-white/10 pt-5">
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-3">
-                    Key Highlights
-                  </p>
-                  <div className="space-y-2.5">
-                    {exp.highlights.map((h, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-3 text-xs text-white/80 border-t border-white/5 pt-2"
-                      >
-                        <span className="font-mono text-[11px] text-white/40">0{i + 1}</span>
-                        <span className="leading-snug">{h}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        {/* Progress Bar (Desktop only) */}
-        <div
-          aria-hidden="true"
-          className="mt-6 hidden h-1 shrink-0 overflow-hidden rounded-full bg-white/10 lg:block"
-        >
-          <div
-            ref={progressBarRef}
-            className="h-full w-full origin-left scale-x-0 bg-white/80 rounded-full will-change-transform"
-          />
-        </div>
+        ))}
       </div>
     </section>
   );

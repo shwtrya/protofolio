@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { profile } from '../data/navigation';
 import CvPreview from './CvPreview';
 
 export const Hero = () => {
+  const heroRef = useRef<HTMLElement>(null);
+
   const roles = [
     'Network & IoT Technician',
-    'Mikrokontroler & Hardware',
+    'Hardware & Arduino Enthusiast',
     'Data Entry Specialist',
-    'Lulusan SMKN 1 Cileungsi',
+    'SMKN 1 Cileungsi Graduate',
   ];
 
   const [roleIndex, setRoleIndex] = useState(0);
@@ -17,7 +21,7 @@ export const Hero = () => {
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
-    const typingSpeed = isDeleting ? 35 : 70;
+    const typingSpeed = isDeleting ? 35 : 75;
 
     const timer = setTimeout(() => {
       if (!isDeleting) {
@@ -37,8 +41,58 @@ export const Hero = () => {
     return () => clearTimeout(timer);
   }, [displayText, isDeleting, roleIndex, roles]);
 
+  // Entrance animation matching iqmal.dev exact implementation
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      return mm.add(
+        {
+          isDesktop: '(min-width: 768px)',
+          isMobile: '(max-width: 767px)',
+          reduceMotion: '(prefers-reduced-motion: reduce)',
+        },
+        (context) => {
+          const { isDesktop, reduceMotion } = context.conditions ?? {};
+          if (reduceMotion) {
+            gsap.set(
+              [
+                '.hero-socials a',
+                '.location',
+                '.greetings',
+                '.profile-card',
+                '.hero-resume',
+                '.hero-scroll-indicator',
+              ],
+              { clearProps: 'all' }
+            );
+            return;
+          }
+
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+          if (isDesktop) {
+            tl.from('.hero-socials a', { opacity: 0, y: -20, stagger: 0.1, duration: 0.8 })
+              .from('.location', { opacity: 0, x: -200 }, '-=0.6')
+              .from('.greetings', { opacity: 0, x: 200, duration: 2 }, '-=0.8')
+              .from('.profile-card', { scale: 0.85, opacity: 0, duration: 1, rotate: 4 }, '-=1.7')
+              .from('.hero-resume', { opacity: 0, y: 10, duration: 0.6 }, '-=1.1')
+              .from('.hero-scroll-indicator', { opacity: 0, y: 15, duration: 1 }, '-=1.3');
+          } else {
+            tl.from('.hero-socials a', { opacity: 0, stagger: 0.08, duration: 0.45 })
+              .from('.location', { opacity: 0, duration: 0.4 }, '-=0.25')
+              .from('.greetings', { opacity: 0, duration: 0.55 }, '-=0.2')
+              .from('.hero-resume', { opacity: 0, duration: 0.35 }, '-=0.1')
+              .from('.hero-scroll-indicator', { opacity: 0, duration: 0.35 }, '-=0.15');
+          }
+        }
+      );
+    },
+    { scope: heroRef }
+  );
+
   return (
     <section
+      ref={heroRef}
       id="home"
       aria-label="Beranda Shawava Tritya"
       className="hero-section relative min-h-screen grid content-start items-start gap-8 px-6 pb-20 pt-28 sm:gap-10 sm:px-10 sm:pt-32 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)] lg:content-center lg:items-center lg:gap-12 lg:px-20 lg:py-16 overflow-hidden bg-[#e8e8e5]"
@@ -55,7 +109,7 @@ export const Hero = () => {
       {/* Left Column: Intro & Info */}
       <div className="relative z-10 max-w-4xl">
         {/* Socials Row */}
-        <div className="mb-4 flex items-center gap-5 sm:mb-6">
+        <div className="hero-socials mb-4 flex items-center gap-5 sm:mb-6">
           <a
             href={profile.github}
             target="_blank"
@@ -93,12 +147,12 @@ export const Hero = () => {
         </div>
 
         {/* Location tag */}
-        <p className="font-sans text-xs sm:text-sm uppercase tracking-[0.28em] text-[#111114]/60 font-medium">
+        <p className="location font-sans text-xs sm:text-sm uppercase tracking-[0.28em] text-[#111114]/60 font-medium">
           Bogor · Indonesia
         </p>
 
         {/* Main Display Headline */}
-        <h1 className="mt-3 font-serif text-6xl leading-[0.95] tracking-tight sm:text-8xl lg:text-9xl text-[#111114]">
+        <h1 className="greetings mt-3 font-serif text-6xl leading-[0.95] tracking-tight sm:text-8xl lg:text-9xl text-[#111114]">
           Hi, I’m <span className="font-editorial italic font-normal">Shawava.</span>
         </h1>
 
@@ -116,7 +170,7 @@ export const Hero = () => {
         </p>
 
         {/* Action Button */}
-        <div className="mt-8 flex items-center gap-4">
+        <div className="hero-resume mt-8 flex items-center gap-4">
           <CvPreview
             className="inline-flex w-fit items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer shadow-md"
             label="Resume"
@@ -128,7 +182,7 @@ export const Hero = () => {
       {/* Right Column: 3D Profile Card (matching iqmal.dev) */}
       <div className="relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end">
         <div
-          className="relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.01] sm:h-[520px] sm:max-w-[420px] lg:h-[580px] lg:max-w-[460px]"
+          className="profile-card relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.01] sm:h-[520px] sm:max-w-[420px] lg:h-[580px] lg:max-w-[460px]"
           style={{
             transformStyle: 'preserve-3d',
             boxShadow: '0 28px 70px rgba(17, 17, 20, 0.25)',
@@ -160,15 +214,14 @@ export const Hero = () => {
             <path d="M2.8 8L4.9 10.1L3.5 11.5L0 8L3.5 4.5L4.9 5.9L2.8 8Z" fill="currentColor" />
           </svg>
 
-          {/* Profile Photo - Local, Fast & Optimized */}
+          {/* Profile Photo */}
           <img
             src="/profile.webp"
-            alt="Foto Profil Shawava Tritya"
+            alt="Foto Shawava Tritya"
             width={600}
             height={600}
             loading="eager"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-top rounded-[2rem] grayscale contrast-105 hover:grayscale-0 transition-[filter] duration-700 ease-out z-10"
+            className="absolute inset-0 h-full w-full object-cover object-top rounded-[2rem] grayscale contrast-105 hover:grayscale-0 transition-[filter] duration-700 ease-out"
           />
 
           {/* Bottom Dark Vignette Fade */}
@@ -185,7 +238,7 @@ export const Hero = () => {
                 Available for work!
               </span>
             </div>
-            <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-white/40">
               Bogor, ID
             </span>
           </div>
@@ -193,9 +246,9 @@ export const Hero = () => {
       </div>
 
       {/* Scroll Down Indicator */}
-      <div className="hero-scroll col-span-full pt-4 pb-2 flex justify-center pointer-events-none opacity-60">
+      <div className="hero-scroll-indicator col-span-full mt-4 flex justify-center lg:mt-6 pointer-events-none opacity-60">
         <div className="flex flex-col items-center gap-1.5">
-          <div className="w-5 h-8 border border-[#111114]/40 rounded-full flex justify-center p-1">
+          <div className="w-5 h-8 border border-[#111114]/50 rounded-full flex justify-center p-1">
             <div className="w-1 h-2 bg-[#111114] rounded-full animate-bounce" />
           </div>
           <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#111114]/70">

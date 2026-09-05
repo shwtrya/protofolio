@@ -1,6 +1,15 @@
+import { useRef } from 'react';
 import { Award, Briefcase, Cpu } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const About = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const ovalRef = useRef<HTMLDivElement>(null);
+
   const marqueeSkills = [
     'MikroTik',
     'ESP8266 NodeMCU',
@@ -16,16 +25,66 @@ export const About = () => {
     'Quality Control',
   ];
 
+  // Exact iqmal.dev scroll animation for About
+  useGSAP(
+    () => {
+      // 1. Text lines scrub reveal
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 50%',
+            end: 'bottom 90%',
+            scrub: 1.4,
+          },
+        })
+        .fromTo(
+          '.line',
+          { opacity: 0, yPercent: 120 },
+          {
+            opacity: 1,
+            yPercent: 0,
+            duration: 2.5,
+            stagger: { each: 0.4, ease: 'power2.out' },
+            ease: 'power3.out',
+          },
+          '-=0.1'
+        );
+
+      // 2. Giant curved oval dynamic stretch
+      if (ovalRef.current && sectionRef.current) {
+        gsap.fromTo(
+          ovalRef.current,
+          { scaleY: 0.6, y: 50 },
+          {
+            scaleY: 1.4,
+            y: -50,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'top 20%',
+              scrub: 1,
+            },
+          }
+        );
+      }
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
+      ref={sectionRef}
       id="about"
       aria-labelledby="about-heading"
-      className="relative flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-20 sm:pb-36 sm:pt-28"
+      className="relative flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-20 sm:pb-36 sm:pt-28 overflow-hidden"
     >
-      {/* Giant curved dark entry oval (exact iqmal.dev) */}
+      {/* Giant curved dark entry oval (exact iqmal.dev scroll stretch) */}
       <div
+        ref={ovalRef}
         aria-hidden="true"
-        className="absolute left-1/2 -top-24 sm:-top-32 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none"
+        className="absolute left-1/2 -top-24 sm:-top-32 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform"
       />
 
       <h2 id="about-heading" className="sr-only">
@@ -33,36 +92,39 @@ export const About = () => {
       </h2>
 
       {/* Kicker */}
-      <p
-        data-aos="fade-up"
-        className="font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50"
-      >
+      <p className="font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
         About &amp; Overview
       </p>
 
-      {/* Big Statement Typography */}
-      <p
-        data-aos="fade-up"
-        data-aos-delay="100"
-        className="max-w-5xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.2] tracking-[-0.035em] text-white/70"
-      >
-        <span>Saya merancang </span>
-        <span className="font-semibold text-white">
-          solusi jaringan &amp; perangkat keras IoT
-        </span>
-        <span> dengan </span>
-        <span className="font-semibold text-white">eksekusi disiplin</span>
-        <span>, </span>
-        <span className="font-semibold text-white">infrastruktur andal</span>
-        <span>, dan </span>
-        <span className="font-semibold text-white">alur kerja terstruktur</span>
-        <span>—membantu tim mewujudkan sistem teknis yang efisien dan siap pakai.</span>
-      </p>
+      {/* Big Statement Typography with scrub line reveals */}
+      <div className="max-w-5xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.25] tracking-[-0.035em] text-white/70">
+        <div className="overflow-hidden py-1">
+          <p className="line will-change-transform">
+            <span>Saya merancang </span>
+            <span className="font-semibold text-white">
+              solusi jaringan &amp; perangkat keras IoT
+            </span>
+          </p>
+        </div>
+        <div className="overflow-hidden py-1">
+          <p className="line will-change-transform">
+            <span>dengan </span>
+            <span className="font-semibold text-white">eksekusi disiplin</span>
+            <span>, </span>
+            <span className="font-semibold text-white">infrastruktur andal</span>
+            <span>, dan </span>
+            <span className="font-semibold text-white">alur kerja terstruktur</span>
+          </p>
+        </div>
+        <div className="overflow-hidden py-1">
+          <p className="line will-change-transform">
+            <span>—membantu tim mewujudkan sistem teknis yang efisien dan siap pakai.</span>
+          </p>
+        </div>
+      </div>
 
       {/* Embedded Marquee Ticker with Mask (exact iqmal.dev setup) */}
       <div
-        data-aos="fade-up"
-        data-aos-delay="150"
         className="relative z-10 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
@@ -81,11 +143,7 @@ export const About = () => {
 
       {/* Bento Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl text-left">
-        <div
-          data-aos="fade-up"
-          data-aos-delay="200"
-          className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]"
-        >
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
           <div className="flex items-center gap-3 text-white/40 mb-3">
             <Award size={18} />
             <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
@@ -100,11 +158,7 @@ export const About = () => {
           </p>
         </div>
 
-        <div
-          data-aos="fade-up"
-          data-aos-delay="300"
-          className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]"
-        >
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
           <div className="flex items-center gap-3 text-white/40 mb-3">
             <Briefcase size={18} />
             <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
@@ -119,11 +173,7 @@ export const About = () => {
           </p>
         </div>
 
-        <div
-          data-aos="fade-up"
-          data-aos-delay="400"
-          className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]"
-        >
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
           <div className="flex items-center gap-3 text-white/40 mb-3">
             <Cpu size={18} />
             <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">

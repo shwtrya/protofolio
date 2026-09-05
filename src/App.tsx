@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import AOS from 'aos';
 import { trackVisitor } from './lib/supabase';
 
 import Header from './components/Header';
@@ -40,55 +39,38 @@ function HomePage() {
 }
 
 function App() {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      easing: 'ease-out-cubic',
-      once: true,
-      offset: 50,
-      delay: 50,
-    });
-  }, []);
-
   return (
     <Router>
-      <SmoothScroll />
       <RouteTracker />
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-full focus:bg-[#111114] focus:px-5 focus:py-2.5 focus:font-mono focus:text-xs focus:text-white focus:shadow-xl"
-      >
-        Lompat ke konten utama
-      </a>
+      <SmoothScroll />
       <ScrollProgress />
-      <Header />
-      <main id="main" className="relative z-20 bg-[#deded9] shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
-        <Routes>
-          {[
-            '/',
-            '/home',
-            '/about',
-            '/projects',
-            '/skills',
-            '/experience',
-            '/education',
-            '/certificates',
-            '/contact',
-          ].map((path) => (
-            <Route key={path} path={path} element={<HomePage />} />
-          ))}
-          <Route
-            path="*"
-            element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <NotFound />
-              </Suspense>
-            }
-          />
-        </Routes>
-      </main>
-      <Footer />
-      <BackToTop />
+      <a href="#main-content" className="skip-link">
+        Lewati ke Konten Utama
+      </a>
+      <div className="flex min-h-screen flex-col bg-[#e8e8e5] text-[#111114] selection:bg-[#111114] selection:text-white">
+        <Header />
+        <main id="main-content" className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="*"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="flex min-h-[60vh] items-center justify-center">
+                      <LoadingSpinner />
+                    </div>
+                  }
+                >
+                  <NotFound />
+                </Suspense>
+              }
+            />
+          </Routes>
+        </main>
+        <Footer />
+        <BackToTop />
+      </div>
     </Router>
   );
 }
