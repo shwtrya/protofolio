@@ -9,13 +9,11 @@ import ScrollProgress from './components/ScrollProgress';
 import BackToTop from './components/BackToTop';
 
 const Hero = lazy(() => import('./components/Hero'));
+const Marquee = lazy(() => import('./components/Marquee'));
 const About = lazy(() => import('./components/About'));
-const Projects = lazy(() => import('./components/Projects'));
-const Skills = lazy(() => import('./components/Skills'));
 const Experience = lazy(() => import('./components/Experience'));
-const Education = lazy(() => import('./components/Education'));
+const Projects = lazy(() => import('./components/Projects'));
 const Certificates = lazy(() => import('./components/Certificates'));
-const Contact = lazy(() => import('./components/Contact'));
 const NotFound = lazy(() => import('./components/NotFound'));
 
 function RouteTracker() {
@@ -26,18 +24,16 @@ function RouteTracker() {
   return null;
 }
 
-/** Deep routes render the single-page layout; the router only picks the anchor. */
+/** Single-page layout matching iqmal.dev */
 function HomePage() {
   return (
     <>
       <Hero />
+      <Marquee />
       <About />
-      <Projects />
-      <Skills />
       <Experience />
-      <Education />
+      <Projects />
       <Certificates />
-      <Contact />
     </>
   );
 }

@@ -36,6 +36,6 @@ export const profile = {
   email: 'shawavatritya@gmail.com',
   whatsapp: '6285187805786',
   whatsappLabel: '0851 8780 5786',
-  github: 'https://github.com/CyXd404',
+  github: 'https://github.com/shwtrya',
   linkedin: 'https://www.linkedin.com/in/shawava-tritya',
 } as const;
