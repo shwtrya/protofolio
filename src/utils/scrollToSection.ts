@@ -5,8 +5,8 @@ const ROUTE_TO_ID: Record<string, string> = {
   '/about': 'about',
   '/experience': 'experience',
   '/projects': 'projects',
-  '/education': 'education',
-  '/skills': 'skills',
+  '/education': 'certificates',
+  '/skills': 'about',
   '/certificates': 'certificates',
   '/contact': 'contact',
 };
@@ -20,13 +20,21 @@ const scrollToId = (href: string, attempt = 0) => {
   if (typeof document === 'undefined') return false;
   const id = targetId(href);
   const element = document.getElementById(id);
+
   if (!element) {
     if (attempt < 20 && typeof window !== 'undefined') {
       window.setTimeout(() => scrollToId(href, attempt + 1), 50);
     }
     return false;
   }
-  const headerOffset = 76;
+
+  const headerOffset = 80;
+
+  if (window.lenis) {
+    window.lenis.scrollTo(element, { offset: -headerOffset, duration: 1.2 });
+    return true;
+  }
+
   const top = element.getBoundingClientRect().top + window.scrollY - headerOffset;
   window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   return true;

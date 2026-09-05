@@ -139,7 +139,7 @@ export const Certificates = () => {
             </div>
 
             {/* Right Heatmap preview */}
-            <div className="lg:col-span-8 overflow-x-auto pb-2">
+            <div data-lenis-prevent="true" className="lg:col-span-8 overflow-x-auto pb-2">
               <p className="font-mono text-[0.65rem] uppercase tracking-wider text-[#111114]/50 mb-3">
                 CONTRIBUTION GRAPH (PAST YEAR)
               </p>

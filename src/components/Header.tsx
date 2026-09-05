@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowUpRight, Github, Linkedin, Mail, MessageCircle, Plus, X } from 'lucide-react';
+import { ArrowUpRight, Plus, X } from 'lucide-react';
 import { profile } from '../data/navigation';
 import { scrollToSection } from '../utils/scrollToSection';
 import CvPreview from './CvPreview';
@@ -10,188 +10,169 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const menuItems = [
-    { num: '01', id: 'home', href: '#home', label: 'Home' },
-    { num: '02', id: 'about', href: '#about', label: 'About' },
-    { num: '03', id: 'experience', href: '#experience', label: 'Experiences' },
-    { num: '04', id: 'projects', href: '#projects', label: 'Projects' },
-    { num: '05', id: 'credentials', href: '#credentials', label: 'Credentials' },
-    { num: '06', id: 'contact', href: '#contact', label: 'Contact' },
-  ];
-
   const handleNavClick = useCallback(
     (href: string) => {
-      scrollToSection(href, location.pathname, navigate);
       setOpen(false);
+      // Small timeout to allow drawer closing animation
+      setTimeout(() => {
+        scrollToSection(href, location.pathname, navigate);
+      }, 100);
     },
-    [location.pathname, navigate],
+    [location.pathname, navigate]
   );
 
-  // Esc key and body scroll lock
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && open) setOpen(false);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
     };
     if (open) {
       document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keydown', onKeyDown);
     } else {
       document.body.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keydown', onKeyDown);
     };
   }, [open]);
 
+  const navItems = [
+    { num: '01', label: 'Home', href: '#home' },
+    { num: '02', label: 'About', href: '#about' },
+    { num: '03', label: 'Experience', href: '#experience' },
+    { num: '04', label: 'Projects', href: '#projects' },
+    { num: '05', label: 'Credentials', href: '#certificates' },
+    { num: '06', label: 'Contact', href: '#contact' },
+  ];
+
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40 flex h-20 items-center justify-between px-5 sm:px-10 lg:px-16 pointer-events-none">
-        {/* Left: Brand badge */}
-        <button
-          type="button"
-          onClick={() => handleNavClick('#home')}
-          className="pointer-events-auto group flex items-center gap-3 rounded-full border border-foreground/10 bg-background/80 px-2 py-1.5 backdrop-blur-md transition-all hover:border-foreground/30 shadow-sm"
-          aria-label="Ke Beranda"
+      <header className="fixed top-0 left-0 w-full z-40 flex items-center justify-between px-6 py-5 sm:px-10 sm:py-6 lg:px-16 pointer-events-none transition-all">
+        {/* Brand / Logo */}
+        <a
+          href="#home"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick('#home');
+          }}
+          className="flex items-center gap-3 select-none pointer-events-auto group cursor-pointer"
+          aria-label="Kembali ke beranda"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background font-editorial text-xl font-bold italic transition-transform group-hover:scale-105">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#111114] text-white font-editorial text-xl italic font-bold shadow-md transition-transform duration-300 group-hover:scale-105">
             S
           </span>
-          <span className="font-mono text-[0.68rem] font-semibold tracking-[0.2em] text-foreground pr-2 sm:pr-3">
-            SHAWAVA <span className="opacity-40">/</span> PORTFOLIO
+          <span className="font-mono text-xs uppercase tracking-[0.2em] font-semibold text-[#111114] group-hover:text-black transition-colors">
+            Shawava / Portfolio
           </span>
-        </button>
+        </a>
 
-        {/* Right: Pill Menu Trigger */}
-        <div className="pointer-events-auto flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="group flex items-center gap-2 rounded-full border border-foreground/15 bg-background/85 px-4 py-2 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-foreground backdrop-blur-md transition-all hover:bg-foreground hover:text-background shadow-sm"
-            aria-expanded={open}
-            aria-label="Buka Menu"
-          >
-            <span>MENU</span>
-            <Plus size={15} className="transition-transform duration-300 group-hover:rotate-90" />
-          </button>
-        </div>
+        {/* Menu Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? 'Tutup menu' : 'Buka menu'}
+          aria-expanded={open}
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-4 py-2 sm:px-5 sm:py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer"
+        >
+          <span>{open ? 'Close' : 'Menu'}</span>
+          {open ? <X size={15} /> : <Plus size={15} />}
+        </button>
       </header>
 
-      {/* Fullscreen Overlay Menu */}
-      <div
-        className={`fixed inset-0 z-50 flex flex-col bg-[#141416] text-[#f4f4f1] transition-all duration-500 ${
-          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menu Navigasi"
-      >
-        {/* Top bar inside menu */}
-        <div className="flex h-20 items-center justify-between px-5 sm:px-10 lg:px-16 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#141416] font-editorial text-xl font-bold italic">
-              S
-            </span>
-            <span className="font-mono text-[0.68rem] font-semibold tracking-[0.2em] text-white/80">
-              SHAWAVA <span className="opacity-40">/</span> NAVIGATION
-            </span>
-          </div>
+      {/* Fullscreen / Drawer Menu Backdrop */}
+      {open && (
+        <div
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity"
+        />
+      )}
 
+      {/* Slide-over Menu Panel (matching iqmal.dev) */}
+      <aside
+        data-lenis-prevent="true"
+        aria-hidden={!open}
+        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-[#18181c] text-[#f4f4f1] z-50 flex flex-col justify-between p-8 sm:p-12 overflow-y-auto shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          open ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        {/* Top bar inside drawer */}
+        <div className="flex items-center justify-between pb-8 border-b border-white/10">
+          <span className="font-mono text-xs uppercase tracking-widest text-white/50">
+            Navigation
+          </span>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-white transition-all hover:bg-white hover:text-[#141416]"
-            aria-label="Tutup Menu"
+            className="rounded-full p-2 text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+            aria-label="Tutup menu"
           >
-            <span>CLOSE</span>
-            <X size={15} />
+            <X size={20} />
           </button>
         </div>
 
-        {/* Center: Large staggered links */}
-        <div className="flex-1 flex flex-col justify-center px-6 sm:px-14 lg:px-24 max-w-6xl mx-auto w-full py-8 overflow-y-auto">
-          <nav className="flex flex-col space-y-3 sm:space-y-4" aria-label="Navigasi Utama">
-            {menuItems.map((item, idx) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.href)}
-                style={{
-                  transitionDelay: open ? `${idx * 40}ms` : '0ms',
-                  transform: open ? 'translateY(0)' : 'translateY(15px)',
-                }}
-                className="group flex items-baseline gap-4 sm:gap-6 text-left transition-all duration-300 py-1"
-              >
-                <span className="font-mono text-xs sm:text-sm text-white/40 tracking-[0.2em] group-hover:text-white transition-colors">
-                  {item.num}
-                </span>
-                <span className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white/80 group-hover:text-white group-hover:translate-x-3 transition-all duration-200">
-                  {item.label}
-                </span>
-                <ArrowUpRight
-                  size={24}
-                  className="opacity-0 -translate-x-2 text-white transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 hidden sm:inline"
-                />
-              </button>
+        {/* Big Staggered Nav Links */}
+        <nav className="my-auto py-8">
+          <ul className="flex flex-col gap-4 sm:gap-6">
+            {navItems.map((item) => (
+              <li key={item.num} className="overflow-hidden">
+                <a
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.href);
+                  }}
+                  className="group flex items-baseline gap-4 text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-white/75 transition-all duration-300 hover:text-white hover:translate-x-2"
+                >
+                  <span className="font-mono text-xs sm:text-sm text-white/30 group-hover:text-white/70 transition-colors">
+                    {item.num}
+                  </span>
+                  <span>{item.label}</span>
+                </a>
+              </li>
             ))}
-          </nav>
-        </div>
+          </ul>
+        </nav>
 
-        {/* Bottom bar: Socials & Quick actions */}
-        <div className="border-t border-white/10 px-6 sm:px-14 lg:px-24 py-6">
-          <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-4 text-white/70">
-              <span className="font-mono text-[0.68rem] tracking-[0.2em] uppercase text-white/40 mr-1">
-                Sosial:
-              </span>
-              <a
-                href={profile.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                aria-label="GitHub"
-              >
-                <Github size={18} />
-              </a>
-              <a
-                href={profile.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={18} />
-              </a>
-              <a
-                href={`https://wa.me/${profile.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle size={18} />
-              </a>
-              <a
-                href={`mailto:${profile.email}`}
-                className="hover:text-white transition-colors"
-                aria-label="Email"
-              >
-                <Mail size={18} />
-              </a>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <CvPreview
-                className="rounded-full border border-white/20 px-4 py-1.5 font-mono text-[0.68rem] tracking-[0.18em] uppercase text-white hover:bg-white hover:text-[#141416] transition-colors"
-                label="RESUME CV"
-              />
-              <span className="font-mono text-[0.68rem] text-white/40">
-                CILEUNGSI, ID
-              </span>
-            </div>
+        {/* Bottom Social & Resume Links */}
+        <div className="pt-8 border-t border-white/10 flex flex-col gap-4">
+          <div className="flex flex-wrap gap-4 font-mono text-xs uppercase tracking-wider text-white/50">
+            <CvPreview
+              className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 p-0 text-white/50 font-mono text-xs uppercase"
+              label="Resume"
+            />
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              GitHub
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              LinkedIn
+            </a>
+            <a
+              href={`https://wa.me/${profile.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              WhatsApp
+            </a>
           </div>
+
+          <p className="font-mono text-[10px] uppercase text-white/30">
+            © 2026 Shawava Tritya. All rights reserved.
+          </p>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

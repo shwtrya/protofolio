@@ -5,11 +5,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+declare global {
+  interface Window {
+    lenis?: Lenis;
+  }
+}
+
 export const SmoothScroll = () => {
   useEffect(() => {
-    // Disable on coarse pointers / mobile touch if preferred, or run with touch: false
-    const isMobile = window.matchMedia('(pointer: coarse) or (max-width: 768px)').matches;
-    if (isMobile) return;
+    // Only disable if user explicitly requested reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -17,7 +23,10 @@ export const SmoothScroll = () => {
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
+      touchMultiplier: 1.5,
     });
+
+    window.lenis = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -31,6 +40,7 @@ export const SmoothScroll = () => {
     return () => {
       gsap.ticker.remove(tickerCb);
       lenis.destroy();
+      delete window.lenis;
     };
   }, []);
 

@@ -10,7 +10,6 @@ import BackToTop from './components/BackToTop';
 import SmoothScroll from './components/SmoothScroll';
 
 const Hero = lazy(() => import('./components/Hero'));
-const Marquee = lazy(() => import('./components/Marquee'));
 const About = lazy(() => import('./components/About'));
 const Experience = lazy(() => import('./components/Experience'));
 const Projects = lazy(() => import('./components/Projects'));
@@ -30,7 +29,6 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <Marquee />
       <About />
       <Experience />
       <Projects />
