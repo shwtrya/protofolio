@@ -1,24 +1,29 @@
-import { useState } from 'react';
-import { ZoomIn } from 'lucide-react';
+import { ReactNode, useState } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import Modal from './ui/Modal';
 
-/** Rendered page-1 JPG of the CV — preview only, no download path. */
 const CV_PREVIEW = '/proof/preview-cv.webp';
 
 interface Props {
   className?: string;
   label?: string;
+  showIcon?: boolean;
+  icon?: ReactNode;
 }
 
-/** CV lightbox, same pattern as the certificate previews. Nothing downloadable. */
-export const CvPreview = ({ className = 'btn btn-secondary btn-lg', label = 'Pratinjau CV' }: Props) => {
+export const CvPreview = ({
+  className = 'btn btn-secondary btn-lg',
+  label = 'Pratinjau CV',
+  showIcon = false,
+  icon,
+}: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <button type="button" onClick={() => setOpen(true)} className={className}>
-        <ZoomIn size={18} />
-        {label}
+        <span>{label}</span>
+        {showIcon && (icon ?? <ArrowUpRight size={16} />)}
       </button>
 
       {open && (

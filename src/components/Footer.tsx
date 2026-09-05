@@ -1,52 +1,17 @@
-import { useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { profile } from '../data/navigation';
 import CvPreview from './CvPreview';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const footerRef = useRef<HTMLElement>(null);
-  const wordsRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (wordsRef.current && footerRef.current) {
-        const words = wordsRef.current.querySelectorAll('.contact-word');
-        gsap.fromTo(
-          words,
-          { yPercent: 110, opacity: 0 },
-          {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: footerRef.current,
-              start: 'top 85%',
-              end: 'top 40%',
-              scrub: 0.6,
-            },
-          }
-        );
-      }
-    }, footerRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <footer
-      ref={footerRef}
       id="contact"
       aria-labelledby="contact-heading"
-      className="contact-section relative z-10 w-full bg-[#141416] text-white flex flex-col justify-between overflow-hidden px-6 py-20 sm:px-10 text-center md:sticky md:bottom-0 md:min-h-[560px] md:px-24 md:py-20"
+      className="contact-section relative z-20 w-full bg-[#141416] text-white flex flex-col justify-between overflow-hidden px-6 py-20 sm:px-10 text-center md:min-h-[580px] md:px-24 md:py-24"
     >
-      {/* Watermark text */}
+      {/* Watermark background text */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center text-[clamp(5rem,20vw,20rem)] font-bold leading-none tracking-[-0.075em] text-white/[0.025] blur-[3px]"
@@ -65,23 +30,18 @@ export const Footer = () => {
         {/* Big Headline & Email */}
         <div className="flex flex-col items-center gap-8 max-w-4xl">
           <h2
-            ref={wordsRef}
             id="contact-heading"
             className="text-[clamp(3rem,8.5vw,7.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.04em] text-white"
           >
             <span className="inline-block overflow-hidden py-1">
-              <span className="contact-word inline-block will-change-transform">
-                Let's
-              </span>
+              Let's
             </span>{' '}
             <span className="inline-block overflow-hidden py-1">
-              <span className="contact-word inline-block will-change-transform">
-                Work
-              </span>
+              Work
             </span>
             <br />
             <span className="inline-block overflow-hidden py-1">
-              <span className="contact-word font-editorial font-normal italic lowercase text-white/90 inline-block will-change-transform">
+              <span className="font-editorial font-normal italic lowercase text-white/90">
                 together.
               </span>
             </span>
@@ -105,6 +65,7 @@ export const Footer = () => {
               <CvPreview
                 className="hover:text-white transition-colors duration-300 cursor-pointer bg-transparent border-0 p-0 text-white/50"
                 label="Resume"
+                showIcon={false}
               />
               <a
                 href={profile.github}
@@ -128,19 +89,19 @@ export const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-white transition-colors duration-300"
               >
-                WhatsApp
+                Whatsapp
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full border-t border-white/10 pt-8 font-mono text-[0.72rem] text-white/40">
+        {/* Sub-footer Bar */}
+        <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 pt-8 font-mono text-xs text-white/40">
           <p>© {currentYear} Shawava Tritya. All rights reserved.</p>
 
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Cileungsi, Bogor (WIB · UTC+7)</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Cileungsi, Bogor (WIB • UTC+7)</span>
           </div>
         </div>
       </div>

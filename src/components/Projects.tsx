@@ -33,25 +33,6 @@ export const Projects = () => {
           }
         );
       }
-
-      // Parallax entry for desktop
-      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-      if (isDesktop && sectionRef.current) {
-        gsap.fromTo(
-          sectionRef.current,
-          { yPercent: 12 },
-          {
-            yPercent: 0,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top bottom',
-              end: 'top 55%',
-              scrub: 0.6,
-            },
-          }
-        );
-      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -62,7 +43,7 @@ export const Projects = () => {
       ref={sectionRef}
       id="projects"
       aria-labelledby="projects-heading"
-      className="projects-section relative z-30 rounded-t-[2.5rem] md:rounded-t-[3.5rem] bg-[#e8e8e5] text-[#111114] px-6 pt-20 pb-28 sm:px-10 sm:pt-28 sm:pb-36 lg:px-20 -mt-10 md:-mt-[12vh] shadow-[0_-30px_60px_rgba(0,0,0,0.18)] overflow-hidden"
+      className="projects-section relative z-30 rounded-t-[2.5rem] md:rounded-t-[3.5rem] bg-[#e8e8e5] text-[#111114] px-6 pt-20 pb-28 sm:px-10 sm:pt-28 sm:pb-36 lg:px-20 -mt-10 md:-mt-[10vh] shadow-[0_-30px_60px_rgba(0,0,0,0.18)] overflow-hidden"
     >
       {/* Watermark text */}
       <div
@@ -94,17 +75,16 @@ export const Projects = () => {
         </div>
 
         {/* Project List */}
-        <div className="space-y-24 sm:space-y-32">
+        <div className="space-y-20 sm:space-y-28">
           {projects.map((project, idx) => {
             const isEven = idx % 2 === 1;
 
             return (
               <article
                 key={project.title}
-                data-project-card="true"
-                className="grid gap-8 lg:grid-cols-12 lg:gap-14 items-center"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
               >
-                {/* Media Column */}
+                {/* Image Column */}
                 <div
                   className={`lg:col-span-6 ${
                     isEven ? 'lg:order-2' : 'lg:order-1'
@@ -121,11 +101,11 @@ export const Projects = () => {
                         width={1200}
                         height={750}
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        loading="lazy"
+                        loading="eager"
                       />
 
                       {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
                         <span className="flex items-center gap-2 rounded-full bg-white px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#111114] shadow-xl backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
                           <Eye size={15} />
                           Lihat Dokumentasi
@@ -133,10 +113,10 @@ export const Projects = () => {
                       </div>
                     </div>
 
-                    {/* Counter Pill */}
+                    {/* Project Index Pill */}
                     <div className="absolute left-4 top-4 z-10">
-                      <span className="font-mono text-[11px] font-bold tracking-wider rounded-full bg-[#111114]/85 text-white px-3 py-1 backdrop-blur-md">
-                        0{idx + 1} / 0{projects.length}
+                      <span className="font-mono text-xs font-bold tracking-wider rounded-full bg-[#111114]/85 text-white px-3.5 py-1 backdrop-blur-md">
+                        0{idx + 1}
                       </span>
                     </div>
                   </div>
@@ -172,9 +152,9 @@ export const Projects = () => {
                     {project.summary}
                   </p>
 
-                  {/* Highlights with top border lines (exact iqmal.dev) */}
+                  {/* Highlights */}
                   <div className="mt-6 border-t border-[#111114]/12 pt-4">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-[#111114]/50 mb-3">
+                    <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#111114]/70 mb-3">
                       Highlights
                     </p>
                     <div className="grid sm:grid-cols-2 gap-x-4 gap-y-2.5">
@@ -183,7 +163,7 @@ export const Projects = () => {
                           key={i}
                           className="flex items-start gap-2.5 border-t border-[#111114]/8 pt-2 text-xs text-[#111114]/80"
                         >
-                          <span className="font-mono text-[11px] font-semibold text-[#111114]/40">
+                          <span className="font-mono text-[11px] font-bold text-[#111114]/50">
                             0{i + 1}
                           </span>
                           <span className="leading-snug">{w}</span>
@@ -192,30 +172,26 @@ export const Projects = () => {
                     </div>
                   </div>
 
-                  {/* Tags */}
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-[#111114]/15 bg-[#dededb]/60 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-[#111114]/80"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Tags & Action Button */}
+                  <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-[#111114]/12 pt-6">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full border border-[#111114]/15 bg-white/60 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-[#111114]/75"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
 
-                  {/* Action CTA */}
-                  <div className="mt-8">
                     <button
                       type="button"
                       onClick={() => setActiveProject(project)}
-                      className="group inline-flex items-center gap-3 border-b-2 border-[#111114] pb-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#111114] transition-all hover:border-[#111114]/50 cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-full border border-[#111114] bg-[#111114] px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:bg-transparent hover:text-[#111114]"
                     >
-                      <span>Lihat Dokumentasi Lengkap</span>
-                      <ArrowUpRight
-                        size={16}
-                        className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                      />
+                      <span>Lihat Dokumentasi</span>
+                      <ArrowUpRight size={14} />
                     </button>
                   </div>
                 </div>
@@ -225,12 +201,12 @@ export const Projects = () => {
         </div>
       </div>
 
-      {/* Case Study Modal */}
+      {/* Case Study Lightbox Modal */}
       {activeProject && (
         <CaseStudy
-          isOpen={Boolean(activeProject)}
-          onClose={() => setActiveProject(null)}
           project={activeProject}
+          isOpen={!!activeProject}
+          onClose={() => setActiveProject(null)}
         />
       )}
     </section>

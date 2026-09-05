@@ -1,64 +1,6 @@
-import { useEffect, useRef } from 'react';
 import { Award, Briefcase, Cpu } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export const About = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Text scrub animation
-      if (textRef.current && sectionRef.current) {
-        gsap.fromTo(
-          textRef.current,
-          { opacity: 0.3, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: textRef.current,
-              start: 'top 80%',
-              end: 'top 40%',
-              scrub: 0.8,
-            },
-          }
-        );
-      }
-
-      // Cards staggered reveal
-      if (cardsRef.current) {
-        const cards = cardsRef.current.children;
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 40, scale: 0.96 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: cardsRef.current,
-              start: 'top 85%',
-              end: 'top 55%',
-              scrub: 0.5,
-            },
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   const marqueeSkills = [
     'MikroTik',
     'ESP8266 NodeMCU',
@@ -76,15 +18,14 @@ export const About = () => {
 
   return (
     <section
-      ref={sectionRef}
       id="about"
       aria-labelledby="about-heading"
-      className="relative flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-20 sm:pb-36 sm:pt-28"
+      className="relative flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-24 sm:pb-36 sm:pt-32"
     >
       {/* Giant curved dark entry oval (exact iqmal.dev) */}
       <div
         aria-hidden="true"
-        className="absolute left-1/2 -top-24 sm:-top-32 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none"
+        className="absolute left-1/2 -top-20 sm:-top-28 h-[140px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none"
       />
 
       <h2 id="about-heading" className="sr-only">
@@ -92,15 +33,12 @@ export const About = () => {
       </h2>
 
       {/* Kicker */}
-      <p className="font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/45">
+      <p className="font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
         About &amp; Overview
       </p>
 
       {/* Big Statement Typography */}
-      <p
-        ref={textRef}
-        className="max-w-5xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.2] tracking-[-0.035em] text-white/45"
-      >
+      <p className="max-w-6xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.2] tracking-[-0.035em] text-white/65">
         <span>Saya merancang </span>
         <span className="font-semibold text-white">
           solusi jaringan &amp; perangkat keras IoT
@@ -108,7 +46,7 @@ export const About = () => {
         <span> dengan </span>
         <span className="font-semibold text-white">eksekusi disiplin</span>
         <span>, </span>
-        <span className="font-semibold text-white">infrastruktur handal</span>
+        <span className="font-semibold text-white">infrastruktur andal</span>
         <span>, dan </span>
         <span className="font-semibold text-white">alur kerja terstruktur</span>
         <span>—membantu tim mewujudkan sistem teknis yang efisien dan siap pakai.</span>
@@ -116,29 +54,34 @@ export const About = () => {
 
       {/* Embedded Marquee Ticker with Mask (exact iqmal.dev setup) */}
       <div
-        className="relative z-10 w-full max-w-5xl overflow-hidden border-y border-white/10 py-5"
+        className="relative z-10 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, white 15%, white 85%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, white 15%, white 85%, transparent)',
+          maskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
         }}
       >
-        <div className="animate-marquee flex items-center gap-12 sm:gap-16 text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-white/50">
-          {[...marqueeSkills, ...marqueeSkills].map((skill, i) => (
-            <div key={`${skill}-${i}`} className="flex items-center gap-4 sm:gap-6 shrink-0">
-              <span className="text-white/80 hover:text-white transition-colors cursor-default">
-                {skill}
-              </span>
-              <span className="text-white/20 select-none">✦</span>
-            </div>
-          ))}
+        <div className="animate-marquee flex gap-16 text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-white/90">
+          <div className="flex shrink-0 items-center gap-12 sm:gap-16">
+            {marqueeSkills.map((skill) => (
+              <div key={skill} className="flex items-center gap-4 sm:gap-6">
+                <span>{skill}</span>
+                <span className="text-white/40">✦</span>
+              </div>
+            ))}
+          </div>
+          <div aria-hidden="true" className="flex shrink-0 items-center gap-12 sm:gap-16">
+            {marqueeSkills.map((skill) => (
+              <div key={`dup-${skill}`} className="flex items-center gap-4 sm:gap-6">
+                <span>{skill}</span>
+                <span className="text-white/40">✦</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Bento Stats Row */}
-      <div
-        ref={cardsRef}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-5xl text-left"
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl text-left">
         <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
           <div className="flex items-center gap-3 text-white/40 mb-3">
             <Award size={18} />

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Award, CheckCircle2, FileText, Github, GraduationCap, ShieldCheck, ZoomIn } from 'lucide-react';
+import { Award, ExternalLink, GraduationCap, ShieldCheck, ZoomIn } from 'lucide-react';
 import Modal from './ui/Modal';
-import { profile } from '../data/navigation';
 
 interface Certificate {
   title: string;
@@ -15,7 +14,7 @@ interface Certificate {
 const certificates: Certificate[] = [
   {
     title: 'Sertifikat IT Specialist - Networking',
-    issuer: 'Kompetensi Jaringan Komputer',
+    issuer: 'Certiport / IT Specialist',
     period: '2025',
     description:
       'Bukti kompetensi IT Specialist bidang networking, mencakup pemahaman jaringan komputer, topologi, dan troubleshooting koneksi.',
@@ -64,127 +63,121 @@ export const Certificates = () => {
   return (
     <section
       id="certificates"
-      aria-labelledby="credentials-heading"
-      className="relative z-30 bg-[#e8e8e5] text-[#111114] px-6 pt-20 pb-28 sm:px-10 sm:pt-28 sm:pb-36 lg:px-20 border-t border-[#111114]/10 overflow-hidden"
+      aria-labelledby="certificates-heading"
+      className="relative z-30 bg-[#e8e8e5] text-[#111114] px-6 py-20 pb-28 sm:px-10 sm:py-28 lg:px-20 overflow-hidden"
     >
-      <span id="credentials" className="sr-only" aria-hidden="true" />
-
-      {/* Watermark */}
+      {/* Watermark text */}
       <div
         aria-hidden="true"
-        className="watermark-bg top-12 text-[#111114]/[0.04]"
+        className="watermark-bg top-8 sm:top-12 text-[#111114]/[0.035]"
       >
         CREDENTIALS
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-14 sm:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#111114]/10 pb-8">
+        {/* Section Header */}
+        <div className="mb-14 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#111114]/10 pb-8">
           <div>
-            <p className="font-mono text-[0.68rem] uppercase tracking-[0.3em] text-[#111114]/60">
-              CODING ACTIVITY &amp; CREDENTIALS
+            <p className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-[#111114]/60">
+              Verified Records
             </p>
             <h2
-              id="credentials-heading"
-              className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-[-0.03em] text-[#111114]"
+              id="certificates-heading"
+              className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-tight text-[#111114]"
             >
               GitHub &amp; Certifications
             </h2>
           </div>
 
-          <p className="max-w-md text-sm sm:text-base text-[#111114]/65 leading-relaxed">
-            Aktivitas repository GitHub terbuka dan validasi sertifikasi resmi yang menguji kompetensi jaringan serta etos kerja industri.
+          <p className="max-w-md text-xs sm:text-sm text-[#111114]/65 leading-relaxed">
+            Rekam jejak komitmen belajar, riwayat aktivitas publik, serta bukti kelulusan formal dan sertifikasi keahlian teknis.
           </p>
         </div>
 
-        {/* 1. GitHub Contributions Block */}
-        <div className="mb-16 rounded-3xl border border-[#111114]/12 bg-white/40 p-6 sm:p-10 backdrop-blur-sm shadow-sm">
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
-            {/* Left Stats */}
+        {/* 1. GitHub Contributions Bento Card (exact iqmal.dev) */}
+        <div className="mb-16 rounded-3xl border border-[#111114]/12 bg-white/60 p-6 sm:p-10 shadow-sm backdrop-blur-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left summary */}
             <div className="lg:col-span-4 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 text-[#111114]/60 mb-3">
-                  <Github size={18} />
-                  <span className="font-mono text-[0.68rem] uppercase tracking-widest font-semibold">
-                    GitHub Tracker (@shwtrya)
-                  </span>
+                <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#111114]/60 mb-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  GitHub Activity
                 </div>
-
-                <div className="font-editorial text-5xl sm:text-6xl font-bold text-[#111114]">
+                <div className="font-editorial text-5xl sm:text-6xl font-bold text-[#111114] leading-none">
                   {totalContrib}
                 </div>
-                <p className="mt-2 text-sm text-[#111114]/70">
-                  kontribusi di GitHub dalam 365 hari terakhir
+                <p className="mt-2 text-xs sm:text-sm text-[#111114]/70 leading-relaxed">
+                  Kontribusi di GitHub dalam 365 hari terakhir. Menunjukkan konsistensi eksplorasi script, konfigurasi, dan open-source.
                 </p>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-4">
-                <div className="rounded-xl border border-[#111114]/10 bg-white/60 px-4 py-2.5">
-                  <span className="font-mono text-[0.62rem] uppercase tracking-wider text-[#111114]/50 block">
-                    STATUS
-                  </span>
-                  <span className="font-mono text-sm font-bold text-[#111114]">
-                    Active Contributor
-                  </span>
-                </div>
-                <div className="rounded-xl border border-[#111114]/10 bg-white/60 px-4 py-2.5">
-                  <span className="font-mono text-[0.62rem] uppercase tracking-wider text-[#111114]/50 block">
-                    REPOSITORIES
-                  </span>
-                  <span className="font-mono text-sm font-bold text-[#111114]">
-                    Public Projects
-                  </span>
-                </div>
+              <div className="mt-6 flex items-center gap-3">
+                <span className="rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300/60 px-3 py-1 font-mono text-[10px] uppercase font-semibold">
+                  Active Contributor
+                </span>
+                <span className="rounded-full bg-[#111114]/5 text-[#111114]/70 px-3 py-1 font-mono text-[10px] uppercase font-semibold">
+                  Public Projects
+                </span>
               </div>
             </div>
 
             {/* Right Heatmap preview */}
             <div data-lenis-prevent="true" className="lg:col-span-8 overflow-x-auto pb-2">
-              <p className="font-mono text-[0.65rem] uppercase tracking-wider text-[#111114]/50 mb-3">
-                CONTRIBUTION GRAPH (PAST YEAR)
-              </p>
-              <div className="flex gap-[3px] min-w-[650px] p-2 rounded-xl bg-white/60 border border-[#111114]/10">
-                {Array.from({ length: 50 }).map((_, weekIdx) => (
-                  <div key={weekIdx} className="flex flex-col gap-[3px]">
-                    {Array.from({ length: 7 }).map((_, dayIdx) => {
-                      const itemIdx = weekIdx * 7 + dayIdx;
-                      const day = contributions[itemIdx];
-                      const level = day ? day.level : ((weekIdx + dayIdx) % 4 === 0 ? 1 : 0);
-
-                      let bgClass = 'bg-[#111114]/5';
-                      if (level === 1) bgClass = 'bg-[#111114]/25';
-                      if (level === 2) bgClass = 'bg-[#111114]/45';
-                      if (level === 3) bgClass = 'bg-[#111114]/70';
-                      if (level >= 4) bgClass = 'bg-[#111114]';
-
-                      return (
-                        <div
-                          key={dayIdx}
-                          title={day ? `${day.date}: ${day.count} contributions` : 'Active commit'}
-                          className={`h-2.5 w-2.5 rounded-[2px] ${bgClass} transition-transform hover:scale-125`}
-                        />
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-3 flex items-center justify-between text-xs text-[#111114]/50 font-mono">
+              <div className="flex items-center justify-between mb-3 text-xs font-mono text-[#111114]/60">
+                <span>@shwtrya</span>
                 <a
-                  href={profile.github}
+                  href="https://github.com/shwtrya"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[#111114]"
+                  className="inline-flex items-center gap-1 text-[#111114] font-semibold hover:underline"
                 >
-                  Lihat profil GitHub lengkap ↗
+                  Lihat profil GitHub lengkap
+                  <ExternalLink size={12} />
                 </a>
-                <div className="flex items-center gap-1.5">
+              </div>
+
+              {/* Grid representation */}
+              <div className="min-w-[620px] rounded-2xl border border-[#111114]/10 bg-[#111114]/[0.02] p-4">
+                <div className="grid grid-flow-col grid-rows-7 gap-1.5 justify-start">
+                  {contributions.length > 0
+                    ? contributions.slice(-371).map((c, i) => {
+                        const levelColors = [
+                          'bg-[#111114]/[0.08]',
+                          'bg-emerald-300',
+                          'bg-emerald-400',
+                          'bg-emerald-500',
+                          'bg-emerald-600',
+                        ];
+                        const color = levelColors[c.level] ?? levelColors[0];
+                        return (
+                          <div
+                            key={i}
+                            title={`${c.date}: ${c.count} kontribusi`}
+                            className={`h-2.5 w-2.5 rounded-sm ${color} transition-transform hover:scale-125`}
+                          />
+                        );
+                      })
+                    : Array.from({ length: 371 }).map((_, i) => {
+                        const isFilled = (i % 7 === 1 || i % 7 === 3) && (i % 4 === 0 || i % 5 === 0);
+                        return (
+                          <div
+                            key={i}
+                            className={`h-2.5 w-2.5 rounded-sm ${
+                              isFilled ? 'bg-emerald-500' : 'bg-[#111114]/[0.08]'
+                            }`}
+                          />
+                        );
+                      })}
+                </div>
+
+                <div className="mt-3 flex items-center justify-end gap-2 text-[10px] font-mono text-[#111114]/50">
                   <span>Less</span>
-                  <span className="h-2 w-2 rounded-[2px] bg-[#111114]/5" />
-                  <span className="h-2 w-2 rounded-[2px] bg-[#111114]/25" />
-                  <span className="h-2 w-2 rounded-[2px] bg-[#111114]/45" />
-                  <span className="h-2 w-2 rounded-[2px] bg-[#111114]/70" />
-                  <span className="h-2 w-2 rounded-[2px] bg-[#111114]" />
+                  <span className="h-2 w-2 rounded-sm bg-[#111114]/[0.08]" />
+                  <span className="h-2 w-2 rounded-sm bg-emerald-300" />
+                  <span className="h-2 w-2 rounded-sm bg-emerald-400" />
+                  <span className="h-2 w-2 rounded-sm bg-emerald-500" />
+                  <span className="h-2 w-2 rounded-sm bg-emerald-600" />
                   <span>More</span>
                 </div>
               </div>
@@ -192,13 +185,12 @@ export const Certificates = () => {
           </div>
         </div>
 
-        {/* 2. Bento Grid for Certificates & Education */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Cert 1 */}
+        {/* 2. Credentials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           {certificates.map((cert) => (
             <div
               key={cert.title}
-              className="group flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/50 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30"
+              className="group flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30"
             >
               <div
                 onClick={() => setActiveCert(cert)}
@@ -209,23 +201,24 @@ export const Certificates = () => {
                   alt={cert.title}
                   width={600}
                   height={400}
-                  loading="lazy"
+                  loading="eager"
+                  decoding="async"
                   className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/25 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
-                  <span className="flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 font-mono text-[0.68rem] font-bold text-[#111114]">
+                  <span className="flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-1.5 font-mono text-[0.68rem] font-bold text-[#111114] shadow-md">
                     <ZoomIn size={14} />
                     Perbesar Dokumen
                   </span>
                 </div>
-                <span className="absolute top-3 left-3 font-mono text-[0.62rem] font-bold uppercase rounded-md bg-[#111114]/80 text-white px-2 py-0.5">
+                <span className="absolute top-3 left-3 font-mono text-[0.65rem] font-bold uppercase rounded-md bg-[#111114]/85 text-white px-2.5 py-1 backdrop-blur-md">
                   {cert.period}
                 </span>
               </div>
 
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-2 text-[#111114]/50 font-mono text-[0.65rem] uppercase tracking-wider mb-2">
+                  <div className="flex items-center gap-2 text-[#111114]/60 font-mono text-[0.65rem] uppercase tracking-wider mb-2">
                     <ShieldCheck size={14} className="text-emerald-600" />
                     <span>{cert.issuer}</span>
                   </div>
@@ -239,7 +232,7 @@ export const Certificates = () => {
                   </p>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-[#111114]/10 flex items-center justify-between">
+                <div className="mt-5 pt-4 border-t border-[#111114]/10 flex items-center justify-between">
                   <div className="flex flex-wrap gap-1.5">
                     {cert.tags.map((t) => (
                       <span
@@ -254,7 +247,7 @@ export const Certificates = () => {
                   <button
                     type="button"
                     onClick={() => setActiveCert(cert)}
-                    className="font-mono text-xs font-semibold text-[#111114] underline hover:no-underline"
+                    className="font-mono text-xs font-semibold text-[#111114] underline hover:no-underline cursor-pointer"
                   >
                     Buka
                   </button>
@@ -263,39 +256,50 @@ export const Certificates = () => {
             </div>
           ))}
 
-          {/* Education Card */}
-          <div className="flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/50 p-6 sm:p-8 transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30">
-            <div>
-              <div className="flex items-center gap-2 text-[#111114]/50 font-mono text-[0.65rem] uppercase tracking-wider mb-3">
-                <GraduationCap size={16} />
-                <span>Pendidikan Formal</span>
+          {/* Education Card matching aspect ratio & height */}
+          <div className="flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#111114]/30">
+            {/* Header banner */}
+            <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#18181c] text-white p-6 flex flex-col justify-between">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[0.65rem] font-bold uppercase rounded-md bg-white/15 text-white px-2.5 py-1 backdrop-blur-sm">
+                  LULUS: 2025
+                </span>
+                <GraduationCap size={22} className="text-white/60" />
               </div>
-
-              <h3 className="text-xl font-bold text-[#111114] leading-tight">
-                SMK Negeri 1 Cileungsi
-              </h3>
-              <p className="mt-1 font-mono text-xs text-[#111114]/70 font-semibold">
-                Teknik Komputer dan Jaringan (TKJ)
-              </p>
-
-              <div className="my-5 p-4 rounded-xl bg-[#111114]/5 border border-[#111114]/10">
-                <span className="font-mono text-[0.62rem] uppercase tracking-wider text-[#111114]/50 block">
+              <div>
+                <span className="font-mono text-[0.62rem] uppercase tracking-wider text-white/50 block">
                   NILAI RATA-RATA IJAZAH
                 </span>
-                <span className="font-editorial text-4xl font-bold text-[#111114]">
+                <span className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
                   85.00
                 </span>
-                <span className="text-xs text-[#111114]/60 ml-2">/ 100</span>
+                <span className="text-xs text-white/60 ml-2">/ 100</span>
               </div>
-
-              <p className="text-sm text-[#111114]/70 leading-relaxed">
-                Fokus kurikulum pada arsitektur komputer, TCP/IP, konfigurasi router Mikrotik &amp; Cisco Packet Tracer, serta dasar perakitan IoT berbasis mikrokontroler.
-              </p>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-[#111114]/10 flex items-center justify-between text-xs font-mono text-[#111114]/60">
-              <span>LULUS: 2025</span>
-              <span>KAB. BOGOR</span>
+            <div className="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-[#111114]/60 font-mono text-[0.65rem] uppercase tracking-wider mb-2">
+                  <Award size={14} className="text-[#111114]/80" />
+                  <span>Pendidikan Formal</span>
+                </div>
+
+                <h3 className="text-lg font-bold text-[#111114] leading-snug">
+                  SMK Negeri 1 Cileungsi
+                </h3>
+                <p className="mt-1 font-mono text-xs text-[#111114]/70 font-semibold">
+                  Teknik Komputer dan Jaringan (TKJ)
+                </p>
+
+                <p className="mt-3 text-sm text-[#111114]/70 leading-relaxed">
+                  Fokus kurikulum pada arsitektur komputer, TCP/IP, konfigurasi router Mikrotik &amp; Cisco Packet Tracer, serta dasar perakitan IoT berbasis mikrokontroler.
+                </p>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-[#111114]/10 flex items-center justify-between text-xs font-mono text-[#111114]/60">
+                <span>AKREDITASI: A</span>
+                <span>KAB. BOGOR</span>
+              </div>
             </div>
           </div>
         </div>

@@ -93,8 +93,8 @@ export const Header = () => {
       <aside
         data-lenis-prevent="true"
         aria-hidden={!open}
-        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-[#18181c] text-[#f4f4f1] z-50 flex flex-col justify-between p-8 sm:p-12 overflow-y-auto shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          open ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-[#18181c] text-[#f4f4f1] z-50 flex flex-col justify-between p-8 sm:p-12 overflow-y-auto shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          open ? 'translate-x-0 opacity-100 visible' : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
       >
         {/* Top bar inside drawer */}

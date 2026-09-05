@@ -12,18 +12,18 @@ export const Hero = () => {
   ];
 
   const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState(roles[0]);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
-    const typingSpeed = isDeleting ? 40 : 80;
+    const typingSpeed = isDeleting ? 35 : 70;
 
     const timer = setTimeout(() => {
       if (!isDeleting) {
         setDisplayText(currentRole.substring(0, displayText.length + 1));
         if (displayText === currentRole) {
-          setTimeout(() => setIsDeleting(true), 2000);
+          setTimeout(() => setIsDeleting(true), 2400);
         }
       } else {
         setDisplayText(currentRole.substring(0, displayText.length - 1));
@@ -41,7 +41,7 @@ export const Hero = () => {
     <section
       id="home"
       aria-label="Beranda Shawava Tritya"
-      className="hero-section relative min-h-screen grid content-start items-start gap-8 px-6 pb-16 pt-28 sm:gap-10 sm:px-10 sm:pt-32 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)] lg:content-center lg:items-center lg:gap-12 lg:px-20 lg:py-12 overflow-hidden"
+      className="hero-section relative min-h-screen grid content-start items-start gap-8 px-6 pb-20 pt-28 sm:gap-10 sm:px-10 sm:pt-32 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)] lg:content-center lg:items-center lg:gap-12 lg:px-20 lg:py-16 overflow-hidden bg-[#e8e8e5]"
     >
       {/* Radial dot grid background (exact iqmal.dev) */}
       <div
@@ -103,13 +103,11 @@ export const Hero = () => {
         </h1>
 
         {/* Dynamic Typewriter Role */}
-        <div className="mt-4 sm:mt-5 min-h-[2.5rem] sm:min-h-[3.25rem] flex items-center">
+        <div className="mt-4 sm:mt-5 min-h-[2.5rem] sm:min-h-[3rem] flex items-center">
           <span className="font-sans text-xl sm:text-3xl lg:text-4xl font-light tracking-wide text-[#111114]/80">
             {displayText}
           </span>
-          <span className="text-type-cursor ml-1 inline-block text-xl sm:text-3xl lg:text-4xl text-[#111114]">
-            █
-          </span>
+          <span className="inline-block w-0.5 h-6 sm:h-8 bg-[#111114] ml-1.5 animate-pulse align-middle" />
         </div>
 
         {/* Description */}
@@ -120,8 +118,9 @@ export const Hero = () => {
         {/* Action Button */}
         <div className="mt-8 flex items-center gap-4">
           <CvPreview
-            className="inline-flex w-fit items-center rounded-full border border-[#111114]/15 bg-[#111114] px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-transparent hover:text-[#111114] cursor-pointer shadow-md"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer shadow-md"
             label="Resume"
+            showIcon={true}
           />
         </div>
       </div>
@@ -129,7 +128,7 @@ export const Hero = () => {
       {/* Right Column: 3D Profile Card (matching iqmal.dev) */}
       <div className="relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end">
         <div
-          className="relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.01] sm:h-[540px] sm:max-w-[440px] lg:h-[600px] lg:max-w-[480px]"
+          className="relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.01] sm:h-[520px] sm:max-w-[420px] lg:h-[580px] lg:max-w-[460px]"
           style={{
             transformStyle: 'preserve-3d',
             boxShadow: '0 28px 70px rgba(17, 17, 20, 0.25)',
@@ -161,13 +160,15 @@ export const Hero = () => {
             <path d="M2.8 8L4.9 10.1L3.5 11.5L0 8L3.5 4.5L4.9 5.9L2.8 8Z" fill="currentColor" />
           </svg>
 
-          {/* Profile Photo */}
+          {/* Profile Photo - Local, Fast & Optimized */}
           <img
-            src="https://i.ibb.co.com/JWBQMssz/image.png?auto=compress&cs=tinysrgb&dpr=2&h=600&w=600"
-            alt="Foto Shawava Tritya"
+            src="/profile.webp"
+            alt="Foto Profil Shawava Tritya"
             width={600}
             height={600}
-            className="absolute inset-0 h-full w-full object-cover object-top rounded-[2rem] grayscale contrast-105 hover:grayscale-0 transition-[filter] duration-700 ease-out"
+            loading="eager"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover object-top rounded-[2rem] grayscale contrast-105 hover:grayscale-0 transition-[filter] duration-700 ease-out z-10"
           />
 
           {/* Bottom Dark Vignette Fade */}
@@ -184,7 +185,7 @@ export const Hero = () => {
                 Available for work!
               </span>
             </div>
-            <span className="font-mono text-[10px] uppercase tracking-wider text-white/40">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
               Bogor, ID
             </span>
           </div>
@@ -192,9 +193,9 @@ export const Hero = () => {
       </div>
 
       {/* Scroll Down Indicator */}
-      <div className="hero-scroll col-span-full mt-4 flex justify-center lg:mt-6 pointer-events-none opacity-50">
+      <div className="hero-scroll col-span-full pt-4 pb-2 flex justify-center pointer-events-none opacity-60">
         <div className="flex flex-col items-center gap-1.5">
-          <div className="w-5 h-8 border border-[#111114]/50 rounded-full flex justify-center p-1">
+          <div className="w-5 h-8 border border-[#111114]/40 rounded-full flex justify-center p-1">
             <div className="w-1 h-2 bg-[#111114] rounded-full animate-bounce" />
           </div>
           <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#111114]/70">

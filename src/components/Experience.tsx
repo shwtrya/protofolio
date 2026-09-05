@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Calendar, CheckCircle2, MapPin } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -25,7 +25,7 @@ const experiences: ExperienceItem[] = [
     title: 'Operator Produksi',
     org: 'PT Rekadaya Multi Adiprima',
     place: 'Ciangsana, Bogor',
-    period: 'Sep 2025 — Des 2025',
+    period: 'Sep 2024 — Des 2024',
     duration: '4 bulan',
     type: 'PKL / Industri',
     overview:
@@ -43,7 +43,7 @@ const experiences: ExperienceItem[] = [
     title: 'Operator Produksi',
     org: 'PT Serin Indonesia',
     place: 'Bekasi, Jawa Barat',
-    period: 'Jun 2025 — Sep 2025',
+    period: 'Jun 2024 — Sep 2024',
     duration: '4 bulan',
     type: 'PKL / Industri',
     overview:
@@ -117,9 +117,9 @@ export const Experience = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top top',
-            end: () => `+=${getScrollDistance() + window.innerHeight}`,
+            end: () => `+=${getScrollDistance() + window.innerHeight * 0.7}`,
             pin: true,
-            scrub: 0.85,
+            scrub: 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
@@ -166,7 +166,7 @@ export const Experience = () => {
 
       <div className="relative z-10 mx-auto w-full max-w-7xl flex flex-col h-full justify-between">
         {/* Header */}
-        <div className="mb-8 sm:mb-12 flex shrink-0 items-end justify-between gap-6 border-b border-white/10 pb-6">
+        <div className="mb-8 sm:mb-10 flex shrink-0 items-end justify-between gap-6 border-b border-white/10 pb-6">
           <div>
             <p className="font-mono text-[0.65rem] uppercase tracking-[0.28em] text-white/45">
               Career Archive
@@ -183,7 +183,7 @@ export const Experience = () => {
           </p>
         </div>
 
-        {/* Mobile View: Swiper / Tabbed Cards (< lg) */}
+        {/* Mobile View: Tabbed Cards (< lg) */}
         <div className="lg:hidden flex flex-col gap-6">
           {/* Tabs */}
           <div className="flex flex-wrap gap-2">
@@ -194,7 +194,7 @@ export const Experience = () => {
                 onClick={() => setActiveIdx(idx)}
                 className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-all ${
                   activeIdx === idx
-                    ? 'border-white bg-white text-[#111114] font-bold'
+                    ? 'border-white bg-white text-[#111114] font-bold shadow-md'
                     : 'border-white/15 bg-transparent text-white/60 hover:border-white/30'
                 }`}
               >
@@ -271,7 +271,10 @@ export const Experience = () => {
                       {exp.period}
                     </span>
                     <span>·</span>
-                    <span>{exp.duration}</span>
+                    <span className="flex items-center gap-1">
+                      <MapPin size={12} />
+                      {exp.place}
+                    </span>
                   </div>
 
                   <p className="mt-5 text-sm leading-relaxed text-white/70">

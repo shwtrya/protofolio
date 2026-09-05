@@ -13,17 +13,23 @@ declare global {
 
 export const SmoothScroll = () => {
   useEffect(() => {
-    // Only disable if user explicitly requested reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
+    // Only apply smooth wheel on devices that have a mouse or trackpad pointer
+    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+    if (!hasFinePointer) {
+      // Mobile / touch devices: use native momentum scroll for responsive zero-lag feel
+      return;
+    }
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      syncTouch: false,
     });
 
     window.lenis = lenis;
