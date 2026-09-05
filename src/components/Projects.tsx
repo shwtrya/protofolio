@@ -1,20 +1,79 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, CheckCircle2, Cpu, Eye, Network } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CaseStudy from './CaseStudy';
 import ProofImage from './ProofImage';
 import { projects, type PortfolioProject } from '../data/projects';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export const Projects = () => {
   const [activeProject, setActiveProject] = useState<PortfolioProject | null>(null);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Watermark subtle parallax
+      if (watermarkRef.current && sectionRef.current) {
+        gsap.fromTo(
+          watermarkRef.current,
+          { y: -50, opacity: 0.01 },
+          {
+            y: 50,
+            opacity: 0.045,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        );
+      }
+
+      // Parallax scroll on individual project articles
+      if (cardsContainerRef.current) {
+        const articles = cardsContainerRef.current.querySelectorAll('article');
+        articles.forEach((art) => {
+          gsap.fromTo(
+            art,
+            { opacity: 0, y: 60, scale: 0.98 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: art,
+                start: 'top 85%',
+                end: 'top 50%',
+                scrub: 0.35,
+              },
+            }
+          );
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="projects"
       aria-labelledby="projects-heading"
       className="relative z-30 curved-light-entry bg-[#e8e8e5] text-[#111114] px-6 pt-24 pb-28 sm:px-10 sm:pt-32 sm:pb-36 lg:px-20 -mt-10 sm:-mt-14 shadow-[0_-30px_60px_rgba(0,0,0,0.15)] overflow-hidden"
     >
       {/* Watermark text */}
       <div
+        ref={watermarkRef}
         aria-hidden="true"
         className="watermark-bg top-12 text-[#111114]/[0.04]"
       >
@@ -42,7 +101,7 @@ export const Projects = () => {
         </div>
 
         {/* Project List */}
-        <div className="space-y-24 sm:space-y-32">
+        <div ref={cardsContainerRef} className="space-y-24 sm:space-y-32">
           {projects.map((project, idx) => {
             const isEven = idx % 2 === 1;
 
@@ -98,72 +157,71 @@ export const Projects = () => {
                 >
                   {/* Category & Status */}
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#111114]/70">
+                    <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-[#111114]">
                       {project.category === 'Networking' ? (
-                        <Network size={14} className="text-[#111114]" />
+                        <Network size={14} />
                       ) : (
-                        <Cpu size={14} className="text-[#111114]" />
+                        <Cpu size={14} />
                       )}
                       {project.category}
                     </span>
-                    <span className="text-[#111114]/30">•</span>
+                    <span className="text-[#111114]/30">·</span>
                     <span className="font-mono text-xs text-[#111114]/60">
-                      {project.role}
+                      {project.period}
                     </span>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#111114]">
+                  {/* Project Title */}
+                  <h3 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#111114] uppercase">
                     {project.title}
                   </h3>
 
                   {/* Summary */}
-                  <p className="mt-4 text-base sm:text-lg leading-relaxed text-[#111114]/75">
+                  <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#111114]/70">
                     {project.summary}
                   </p>
 
-                  {/* Numbered Highlights */}
-                  <div className="mt-6 space-y-2.5">
-                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[#111114]/50 font-bold mb-3">
+                  {/* Highlights List */}
+                  <div className="mt-6 border-t border-[#111114]/12 pt-5">
+                    <p className="font-mono text-[0.65rem] uppercase tracking-widest text-[#111114]/50 mb-3">
                       HIGHLIGHTS
                     </p>
-                    {project.caseStudy.work.slice(0, 4).map((w, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start gap-3 border-t border-[#111114]/10 pt-2 text-sm text-[#111114]/80"
-                      >
-                        <span className="font-mono text-xs font-semibold text-[#111114]/40 pt-0.5">
-                          0{i + 1}
-                        </span>
-                        <span>{w}</span>
-                      </div>
-                    ))}
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {project.caseStudy.work.slice(0, 4).map((w, i) => (
+                        <li
+                          key={w}
+                          className="flex items-start gap-2 text-xs text-[#111114]/80 leading-snug"
+                        >
+                          <span className="font-mono text-[#111114]/40 text-[0.65rem] mt-0.5">
+                            0{i + 1}
+                          </span>
+                          <span>{w}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
-                  {/* Tech Tags */}
+                  {/* Tags */}
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
+                    {project.tags.map((t) => (
                       <span
-                        key={tag}
-                        className="rounded-md border border-[#111114]/15 bg-white/40 px-2.5 py-1 font-mono text-[0.68rem] font-semibold uppercase tracking-wide text-[#111114]"
+                        key={t}
+                        className="rounded-md border border-[#111114]/15 bg-white/40 px-2.5 py-1 font-mono text-[0.68rem] font-medium text-[#111114]/80"
                       >
-                        {tag}
+                        {t}
                       </span>
                     ))}
                   </div>
 
-                  {/* Action Button */}
-                  <div className="mt-8">
+                  {/* Action Link Button */}
+                  <div className="mt-8 flex items-center gap-4">
                     <button
                       type="button"
                       onClick={() => setActiveProject(project)}
-                      className="group inline-flex items-center gap-2 border-b-2 border-[#111114] pb-1 font-mono text-xs font-bold uppercase tracking-[0.16em] text-[#111114] transition-all hover:border-[#111114]/40"
+                      className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider font-bold text-[#111114] border-b-2 border-[#111114] pb-1 hover:text-[#111114]/60 hover:border-[#111114]/60 transition-colors"
                     >
-                      <span>Lihat Dokumentasi Lengkap</span>
-                      <ArrowUpRight
-                        size={16}
-                        className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      />
+                      <span>Lihat Dokumentasi</span>
+                      <ArrowUpRight size={16} />
                     </button>
                   </div>
                 </div>

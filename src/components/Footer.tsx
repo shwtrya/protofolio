@@ -1,15 +1,50 @@
+import { useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { profile } from '../data/navigation';
 import CvPreview from './CvPreview';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const footerRef = useRef<HTMLElement>(null);
+  const wordsRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (wordsRef.current && footerRef.current) {
+        const words = wordsRef.current.querySelectorAll('.contact-word');
+        gsap.fromTo(
+          words,
+          { yPercent: 110, opacity: 0 },
+          {
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: 'top 85%',
+              end: 'top 40%',
+              scrub: 0.6,
+            },
+          }
+        );
+      }
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <footer
+      ref={footerRef}
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative z-10 w-full bg-[#141416] text-white flex flex-col justify-between overflow-hidden px-6 py-20 sm:px-10 text-center lg:px-24 lg:py-24"
+      className="contact-section relative z-10 w-full bg-[#141416] text-white flex flex-col justify-between overflow-hidden px-6 py-20 sm:px-10 text-center md:sticky md:bottom-0 md:min-h-[560px] md:px-24 md:py-20"
     >
       {/* Watermark text */}
       <div
@@ -30,13 +65,25 @@ export const Footer = () => {
         {/* Big Headline & Email */}
         <div className="flex flex-col items-center gap-8 max-w-4xl">
           <h2
+            ref={wordsRef}
             id="contact-heading"
             className="text-[clamp(3rem,8.5vw,7.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.04em] text-white"
           >
-            <span>Let's Work</span>
+            <span className="inline-block overflow-hidden py-1">
+              <span className="contact-word inline-block will-change-transform">
+                Let's
+              </span>
+            </span>{' '}
+            <span className="inline-block overflow-hidden py-1">
+              <span className="contact-word inline-block will-change-transform">
+                Work
+              </span>
+            </span>
             <br />
-            <span className="font-editorial font-normal italic lowercase text-white/90">
-              together.
+            <span className="inline-block overflow-hidden py-1">
+              <span className="contact-word font-editorial font-normal italic lowercase text-white/90 inline-block will-change-transform">
+                together.
+              </span>
             </span>
           </h2>
 
@@ -87,33 +134,13 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Mascot / Icon & Copyright */}
-        <div className="flex flex-col items-center gap-5 pt-8 border-t border-white/10 w-full max-w-3xl">
-          {/* Subtle 8-bit / tech robot mascot matching iqmal.dev */}
-          <div className="text-white/40 hover:text-white transition-colors duration-300">
-            <svg
-              width="36"
-              height="36"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              className="animate-pulse"
-              style={{ animationDuration: '3s' }}
-            >
-              <rect x="2" y="1" width="2" height="3" />
-              <rect x="12" y="1" width="2" height="3" />
-              <rect x="4" y="3" width="8" height="9" />
-              <rect x="3" y="4" width="10" height="7" />
-              <rect x="5" y="6" width="1" height="1" fill="#10b981" />
-              <rect x="10" y="6" width="1" height="1" fill="#10b981" />
-              <rect x="7" y="8" width="2" height="1" fill="#111114" />
-              <rect x="3" y="12" width="2" height="2" />
-              <rect x="11" y="12" width="2" height="2" />
-            </svg>
-          </div>
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full border-t border-white/10 pt-8 font-mono text-[0.72rem] text-white/40">
+          <p>© {currentYear} Shawava Tritya. All rights reserved.</p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between w-full font-mono text-[10px] uppercase tracking-widest text-white/35 gap-2">
-            <span>CILEUNGSI, BOGOR (WIB · UTC+7)</span>
-            <span>© {currentYear} Shawava Tritya. All rights reserved.</span>
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Cileungsi, Bogor (WIB · UTC+7)</span>
           </div>
         </div>
       </div>
