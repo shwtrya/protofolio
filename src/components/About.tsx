@@ -115,8 +115,8 @@ export const About = () => {
       </p>
 
       {/* Big Statement Typography with scrub line reveals */}
-      <div className="relative z-20 w-full max-w-5xl px-3 sm:px-6 text-center font-sans text-[clamp(1.2rem,3.8vw,3.2rem)] leading-[1.32] tracking-[-0.03em] text-white/75">
-        <div className="overflow-hidden py-1">
+      <div className="relative z-20 w-full max-w-5xl px-3 sm:px-6 mb-2 sm:mb-4 text-center font-sans text-[clamp(1.2rem,3.8vw,3.2rem)] leading-[1.36] tracking-[-0.03em] text-white/75">
+        <div className="overflow-hidden py-1.5 sm:py-2">
           <p className="line will-change-transform break-words">
             <span>Saya merancang </span>
             <span className="font-semibold text-white">
@@ -124,7 +124,7 @@ export const About = () => {
             </span>
           </p>
         </div>
-        <div className="overflow-hidden py-1">
+        <div className="overflow-hidden py-1.5 sm:py-2">
           <p className="line will-change-transform break-words">
             <span>dengan </span>
             <span className="font-semibold text-white">eksekusi disiplin</span>
@@ -134,7 +134,7 @@ export const About = () => {
             <span className="font-semibold text-white">alur kerja terstruktur</span>
           </p>
         </div>
-        <div className="overflow-hidden py-1">
+        <div className="overflow-hidden py-1.5 sm:py-2">
           <p className="line will-change-transform break-words">
             <span>—membantu tim mewujudkan sistem teknis yang efisien dan siap pakai.</span>
           </p>
