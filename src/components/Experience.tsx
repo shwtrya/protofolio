@@ -1,43 +1,47 @@
 import { useRef } from 'react';
-import { Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, A11y, Keyboard } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface ExperienceItem {
+export interface ExperienceItem {
   id: string;
   num: string;
-  title: string;
-  org: string;
-  place: string;
+  role: string;
+  company: string;
+  location: string;
   period: string;
   duration: string;
   type: string;
-  overview: string;
+  summary: string;
   highlights: string[];
   image: string;
   imageAlt: string;
 }
 
-const experiences: ExperienceItem[] = [
+export const experiences: ExperienceItem[] = [
   {
     id: 'rekadaya',
     num: '01',
-    title: 'Operator Produksi',
-    org: 'PT Rekadaya Multi Adiprima',
-    place: 'Ciangsana, Bogor',
+    role: 'Operator Produksi',
+    company: 'PT Rekadaya Multi Adiprima',
+    location: 'Ciangsana, Bogor',
     period: 'Sep 2024 — Des 2024',
     duration: '4 bulan',
     type: 'PKL / Industri',
-    overview:
-      'Menjalankan tugas lini produksi manufaktur komponen felt otomotif dengan memprioritaskan ketelitian sortasi material, perakitan part presisi, dan kepatuhan standar kualitas pabrik.',
+    summary:
+      'Menjalankan tugas lini produksi manufaktur otomotif dengan memprioritaskan ketelitian sortasi material, perakitan part felt presisi, dan standardisasi kualitas.',
     highlights: [
-      'Sortir material & verifikasi spesifikasi fisik komponen',
-      'Assembly double tape pada part felt secara presisi dan rapi',
-      'Quality check produk akhir sebelum masuk packaging distribusi',
-      'Mencapai target output kerja harian dengan kedisiplinan 5S',
+      'Sortir material & verifikasi spesifikasi komponen',
+      'Assembly double tape felt presisi & rapi',
+      'Quality check produk akhir sebelum packaging',
+      'Mencapai target harian dengan disiplin 5S',
     ],
     image: '/proof/preview-Sertifikat_PKL_PT_Rekadaya_2025.webp',
     imageAlt: 'Sertifikat Praktik Kerja Lapangan PT Rekadaya Multi Adiprima',
@@ -45,19 +49,19 @@ const experiences: ExperienceItem[] = [
   {
     id: 'serin',
     num: '02',
-    title: 'Operator Produksi',
-    org: 'PT Serin Indonesia',
-    place: 'Bekasi, Jawa Barat',
+    role: 'Operator Produksi',
+    company: 'PT Serin Indonesia',
+    location: 'Bekasi, Jawa Barat',
     period: 'Jun 2024 — Sep 2024',
     duration: '4 bulan',
     type: 'PKL / Industri',
-    overview:
-      'Mendukung kelancaran lini perakitan tas dan perlengkapan dengan mematuhi instruksi kerja SOP pabrik, persiapan komponen, serta pengeleman material secara rapi dan presisi.',
+    summary:
+      'Mendukung kelancaran lini perakitan tas dan perlengkapan industri dengan mematuhi SOP, persiapan komponen, serta aplikasi pengeleman material secara rapi.',
     highlights: [
-      'Pemasangan aksesoris silinder pada zipper tas sesuai SOP',
-      'Aplikasi perekat dan lem presisi sebelum proses penjahitan',
-      'Pemeriksaan kerapian visual dan fungsi mekanis komponen',
-      'Menjaga keselamatan kerja, kebersihan area (5S), & alat produksi',
+      'Pemasangan aksesoris silinder pada zipper tas',
+      'Aplikasi perekat & lem presisi material jahitan',
+      'Pemeriksaan kerapian visual & fungsi mekanik',
+      'Menjaga kebersihan area kerja (5S) & mesin',
     ],
     image: '/proof/instalasi-isp-proses.webp',
     imageAlt: 'Praktik kerja teknis operasional dan perakitan peralatan',
@@ -65,24 +69,101 @@ const experiences: ExperienceItem[] = [
   {
     id: 'wova',
     num: '03',
-    title: 'Data Entry Specialist',
-    org: 'PT Wova Group Indonesia',
-    place: 'Cileungsi, Bogor',
+    role: 'Data Entry Specialist',
+    company: 'PT Wova Group Indonesia',
+    location: 'Cileungsi, Bogor',
     period: '2023 — 2025',
     duration: 'Freelance',
     type: 'Administrasi',
-    overview:
-      'Menginput, merapikan, dan memverifikasi data operasional pelanggan secara teliti untuk memastikan konsistensi database digital, mencegah duplikasi, dan mempermudah rekapitulasi.',
+    summary:
+      'Menginput, merapikan, dan memverifikasi data operasional pelanggan secara teliti untuk memastikan konsistensi database digital dan kemudahan rekapitulasi.',
     highlights: [
-      'Input data berkala dan validasi field untuk cegah duplikasi data',
-      'Pembersihan dan standardisasi format record berulang',
-      'Penyusunan rekapitulasi data siap baca untuk tim administrasi',
-      'Pemanfaatan spreadsheet digital mempercepat verifikasi akurasi',
+      'Input data berkala & validasi cegah duplikasi',
+      'Pembersihan & standardisasi format record berulang',
+      'Penyusunan rekapitulasi data siap baca untuk tim',
+      'Pemanfaatan spreadsheet digital percepat kerja',
     ],
     image: '/proof/preview-cv.webp',
     imageAlt: 'Dokumentasi rekapitulasi data administrasi dan berkas operasional',
   },
 ];
+
+interface ExperienceCardProps {
+  experience: ExperienceItem;
+  index: number;
+  className?: string;
+}
+
+function ExperienceCard({ experience: exp, index, className = '' }: ExperienceCardProps) {
+  return (
+    <article
+      data-experience-card="true"
+      className={`experience-card grid h-full w-[calc(100vw-2rem)] shrink-0 snap-center grid-rows-[auto_minmax(10rem,1fr)] overflow-hidden border border-white/10 bg-[#f4f4f1] text-[#111114] shadow-[0_32px_90px_rgba(0,0,0,0.28)] sm:w-[calc(100vw-5rem)] sm:grid-rows-[auto_minmax(12rem,1fr)] md:snap-none md:grid-cols-[1.28fr_0.92fr] md:grid-rows-none lg:w-[min(1120px,calc(100vw-12rem))] motion-reduce:h-auto motion-reduce:w-full motion-reduce:snap-none ${className}`}
+    >
+      {/* Content Column */}
+      <div className="flex min-h-0 flex-col overflow-hidden px-5 py-4 sm:px-8 sm:py-6 lg:px-14 lg:py-12">
+        <header>
+          <div className="flex flex-wrap items-center gap-2 font-mono text-[0.55rem] uppercase tracking-[0.24em] text-[#111114]/50 sm:gap-3 sm:text-[0.65rem]">
+            <span>Pengalaman Profesional</span>
+            <span className="rounded-full border border-[#111114]/14 px-2 py-0.5 text-[0.48rem] font-semibold tracking-[0.18em] text-[#111114]/65 sm:px-2.5 sm:text-[0.58rem]">
+              {exp.type}
+            </span>
+          </div>
+          <h3 className="mt-3 max-w-[16ch] font-sans text-[clamp(1.45rem,6.8vw,1.9rem)] font-bold uppercase leading-[0.9] tracking-[-0.055em] sm:mt-4 sm:text-[clamp(2rem,4.2vw,4rem)] sm:leading-[0.93] lg:mt-7 text-[#111114]">
+            {exp.role}
+          </h3>
+          <p className="mt-3 font-sans text-[0.68rem] font-bold uppercase leading-relaxed tracking-[0.08em] sm:mt-4 sm:text-sm lg:mt-5 lg:text-base text-[#111114]/85">
+            {exp.company}
+          </p>
+        </header>
+
+        <p className="mt-3 max-w-[55ch] text-[0.72rem] leading-[1.4] text-[#111114]/75 sm:mt-6 sm:text-base sm:leading-[1.55] lg:mt-auto lg:pt-10 lg:text-lg lg:leading-[1.65]">
+          {exp.summary}
+        </p>
+
+        <div className="mt-3 sm:mt-6 lg:mt-10">
+          <p className="mb-1.5 text-[0.55rem] font-bold uppercase tracking-[0.24em] text-[#111114]/50 sm:mb-3 sm:text-xs lg:mb-4">
+            Highlights
+          </p>
+          <ol className="grid sm:grid-cols-2">
+            {exp.highlights.map((item, idx) => (
+              <li
+                key={idx}
+                className="flex items-center gap-2 border-t border-[#111114]/18 py-1.5 pr-2 sm:min-h-12 sm:gap-3 sm:py-3 sm:pr-4 lg:min-h-16 lg:gap-4 lg:py-4"
+              >
+                <span className="font-mono text-[0.55rem] font-semibold text-[#111114]/45 sm:text-xs">
+                  0{idx + 1}
+                </span>
+                <span className="text-[0.58rem] font-semibold uppercase leading-[1.25] tracking-[0.06em] sm:text-[0.72rem] sm:leading-relaxed lg:text-[0.8rem] text-[#111114]">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* Media Column */}
+      <div className="group/media relative min-h-0 overflow-hidden border-t border-[#111114]/12 bg-black/90 md:min-h-full md:border-l md:border-t-0">
+        <img
+          src={exp.image}
+          alt={exp.imageAlt}
+          loading="lazy"
+          className="h-full w-full object-cover object-center grayscale contrast-105 transition-[filter,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] lg:group-hover/media:scale-105 group-hover/media:grayscale-0"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
+        <p className="absolute right-5 top-4 font-mono text-3xl font-semibold text-white sm:right-7 sm:top-6 sm:text-4xl">
+          0{index + 1}
+        </p>
+        <p className="absolute bottom-4 left-5 flex max-w-[calc(100%-2.5rem)] flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white sm:bottom-6 sm:left-7 sm:max-w-[calc(100%-3.5rem)] sm:text-xs sm:tracking-[0.22em]">
+          <span>{exp.period}</span>
+          <span aria-hidden="true">·</span>
+          <span>{exp.duration}</span>
+        </p>
+      </div>
+    </article>
+  );
+}
 
 export const Experience = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -91,9 +172,9 @@ export const Experience = () => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const watermarkRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const mobileContainerRef = useRef<HTMLDivElement>(null);
+  const swiperContainerRef = useRef<HTMLDivElement>(null);
 
-  // Exact GSAP matchMedia horizontal pinning matching iqmal.dev
+  // Exact GSAP matchMedia horizontal pinning from iqmal.dev
   useGSAP(
     () => {
       const section = sectionRef.current;
@@ -102,7 +183,7 @@ export const Experience = () => {
       const progressBar = progressBarRef.current;
       const watermark = watermarkRef.current;
       const header = headerRef.current;
-      const mobileContainer = mobileContainerRef.current;
+      const swiperContainer = swiperContainerRef.current;
 
       if (!section || !watermark || !header) return;
 
@@ -117,7 +198,7 @@ export const Experience = () => {
         (context) => {
           const { isDesktop, isMobileTablet, reduceMotion } = context.conditions ?? {};
           const desktopCards = track?.querySelectorAll('[data-experience-card]') ?? [];
-          const mobileCards = mobileContainer?.querySelectorAll('[data-experience-card]') ?? [];
+          const mobileCards = swiperContainer?.querySelectorAll('[data-experience-card]') ?? [];
 
           if (reduceMotion) {
             gsap.set([track, progressBar, watermark, header, desktopCards, mobileCards], {
@@ -144,27 +225,27 @@ export const Experience = () => {
           if (isMobileTablet) {
             gsap.fromTo(
               header,
-              { opacity: 0, y: 20 },
+              { opacity: 0, y: 18 },
               {
                 opacity: 1,
                 y: 0,
                 duration: 0.65,
                 ease: 'power2.out',
-                scrollTrigger: { trigger: section, start: 'top 75%' },
+                scrollTrigger: { trigger: section, start: 'top 72%' },
               }
             );
 
             gsap.fromTo(
               mobileCards,
-              { opacity: 0, y: 50, scale: 0.96 },
+              { opacity: 0, y: 70, scale: 0.96 },
               {
                 opacity: 1,
                 y: 0,
                 scale: 1,
-                stagger: 0.15,
+                stagger: 0.12,
                 duration: 0.75,
                 ease: 'power3.out',
-                scrollTrigger: { trigger: mobileContainer, start: 'top 80%' },
+                scrollTrigger: { trigger: swiperContainer, start: 'top 78%' },
               }
             );
             return;
@@ -180,16 +261,26 @@ export const Experience = () => {
             scrollTrigger: {
               trigger: section,
               start: 'top top',
-              end: () => `+=${scrollDistance() + 400}`,
+              end: () => `+=${scrollDistance() + window.innerHeight}`,
               pin: true,
-              scrub: 1,
+              scrub: 0.85,
               anticipatePin: 1,
               invalidateOnRefresh: true,
             },
           });
 
-          tl.to(track, { x: () => -scrollDistance(), ease: 'none' }, 0);
-          tl.to(progressBar, { scaleX: 1, ease: 'none' }, 0);
+          gsap.set(header, { opacity: 0, y: 20 });
+          gsap.set(desktopCards, { opacity: 0, y: 120, scale: 0.92 });
+
+          tl.fromTo(header, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 0)
+            .fromTo(
+              desktopCards,
+              { opacity: 0, y: 120, scale: 0.92 },
+              { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.5, ease: 'power2.out' },
+              0.2
+            )
+            .to(track, { x: () => -scrollDistance(), duration: 1.2 }, 0.8)
+            .fromTo(progressBar, { scaleX: 0 }, { scaleX: 1, transformOrigin: 'left center', duration: 1.2 }, 0.8);
         }
       );
     },
@@ -201,220 +292,100 @@ export const Experience = () => {
       ref={sectionRef}
       id="experience"
       aria-labelledby="experience-heading"
-      className="relative z-20 min-h-screen bg-[#18181c] text-[#f4f4f1] py-16 sm:py-20 lg:py-12 flex flex-col justify-between overflow-hidden"
+      className="relative z-20 h-svh overflow-hidden bg-[#18181c] text-[#f4f4f1] px-4 py-5 sm:px-8 sm:py-7 lg:px-24 lg:py-10 motion-reduce:h-auto motion-reduce:min-h-svh motion-reduce:overflow-visible"
     >
-      {/* Background Parallax Watermark (exact iqmal.dev) */}
+      <h2 id="experience-heading" className="sr-only">
+        Pengalaman Profesional Shawava Tritya
+      </h2>
+
+      {/* Parallax Watermark Text (exact iqmal.dev) */}
       <div
         ref={watermarkRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center text-[clamp(5rem,17vw,17rem)] font-bold leading-none tracking-[-0.075em] text-white/5 blur-[3px]"
+        className="pointer-events-none absolute inset-0 flex select-none items-center justify-center text-center text-[clamp(5rem,17vw,17rem)] font-bold leading-none tracking-[-0.075em] text-white/[0.045] blur-[3px]"
       >
         EXPERIENCES
       </div>
 
-      {/* Top Subtle Progress Track Bar */}
-      <div className="absolute top-0 inset-x-0 h-1 bg-white/10 z-30">
+      <div className="relative z-10 mx-auto flex h-full min-h-0 max-w-7xl flex-col">
+        {/* Header (exact iqmal.dev layout) */}
         <div
-          ref={progressBarRef}
-          className="h-full w-full bg-white origin-left will-change-transform"
-          style={{ transform: 'scaleX(0)' }}
-        />
-      </div>
-
-      {/* Header Container */}
-      <div
-        ref={headerRef}
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-24 mb-8 sm:mb-10 shrink-0"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          ref={headerRef}
+          className="mb-4 flex shrink-0 items-end justify-between gap-6 sm:mb-5 lg:mb-8"
+        >
           <div>
-            <p className="font-mono text-[0.62rem] sm:text-[0.68rem] uppercase tracking-[0.28em] text-white/45">
-              02 / Work &amp; Roles
+            <p className="font-mono text-[0.58rem] uppercase tracking-[0.28em] text-white/45 sm:text-[0.65rem]">
+              Career archive
             </p>
-            <h2
-              id="experience-heading"
-              className="mt-2 text-[clamp(1.9rem,6vw,2.75rem)] font-semibold uppercase leading-none tracking-[-0.035em] text-white"
-            >
-              Pengalaman <span className="font-editorial italic font-normal text-white/80">Kerja.</span>
-            </h2>
+            <p className="mt-2 text-[clamp(1.9rem,9vw,2.6rem)] font-semibold uppercase leading-none tracking-[-0.035em] text-white sm:mt-3 lg:text-3xl">
+              experiences
+            </p>
           </div>
-          <p className="font-sans text-xs sm:text-sm text-white/50 max-w-md sm:text-right leading-relaxed">
-            Rekam jejak praktik industri manufaktur otomotif, perlengkapan, dan operasional entri data digital.
+          <p className="hidden max-w-[26rem] text-right text-sm leading-relaxed text-white/45 md:block">
+            Roles, systems, and the work behind them.
           </p>
         </div>
-      </div>
 
-      {/* Desktop Horizontal Pinning Track (min-width: 1024px) */}
-      <div
-        ref={viewportRef}
-        className="relative z-10 hidden lg:block w-full overflow-hidden px-6 sm:px-10 lg:px-24 flex-1 min-h-0"
-      >
+        {/* Mobile & Tablet Interactive Swiper (< 1024px) */}
         <div
-          ref={trackRef}
-          className="flex gap-10 lg:gap-14 will-change-transform w-fit h-[540px] xl:h-[580px]"
+          ref={swiperContainerRef}
+          data-experience-swiper="true"
+          data-lenis-prevent="true"
+          className="min-h-0 flex-1 overflow-hidden lg:hidden"
         >
-          {experiences.map((exp) => (
-            <article
-              key={exp.id}
-              data-experience-card="true"
-              className="experience-card grid h-full w-[min(1080px,calc(100vw-12rem))] shrink-0 grid-cols-[1.25fr_0.95fr] overflow-hidden rounded-3xl border border-white/10 bg-[#f4f4f1] text-[#111114] shadow-[0_32px_90px_rgba(0,0,0,0.35)]"
-            >
-              {/* Left Column: Role Details & Highlights */}
-              <div className="flex min-h-0 flex-col justify-between overflow-hidden p-8 sm:p-10 lg:p-12">
-                <div>
-                  {/* Category & Badge */}
-                  <div className="flex items-center justify-between gap-3 font-mono text-[0.65rem] uppercase tracking-[0.22em] text-[#111114]/50 pb-4 border-b border-[#111114]/10">
-                    <span>Pengalaman Kerja</span>
-                    <span className="rounded-full border border-[#111114]/15 bg-[#111114]/5 px-3 py-1 font-semibold text-[#111114]">
-                      {exp.type}
-                    </span>
-                  </div>
-
-                  {/* Title & Company */}
-                  <h3 className="mt-6 font-serif text-3xl xl:text-4xl font-normal leading-[1.05] tracking-tight text-[#111114]">
-                    {exp.title}
-                  </h3>
-                  <p className="mt-2 font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.08em] text-[#111114]/75">
-                    {exp.org}
-                  </p>
-
-                  {/* Overview */}
-                  <p className="mt-5 text-sm sm:text-base leading-relaxed text-[#111114]/80">
-                    {exp.overview}
-                  </p>
-                </div>
-
-                {/* Highlights List */}
-                <div className="mt-6 pt-5 border-t border-[#111114]/10">
-                  <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#111114]/45 mb-3">
-                    Aktivitas &amp; Tanggung Jawab
-                  </p>
-                  <ol className="grid sm:grid-cols-2 gap-2.5">
-                    {exp.highlights.map((h, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-2 text-xs leading-relaxed text-[#111114]/85"
-                      >
-                        <span className="font-mono text-[10px] font-bold text-[#111114]/40 mt-0.5 shrink-0">
-                          0{idx + 1}
-                        </span>
-                        <span className="font-medium">{h}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </div>
-
-              {/* Right Column: Visual Media & Meta Overlay (exact iqmal.dev setup) */}
-              <div className="group/media relative min-h-full overflow-hidden border-l border-[#111114]/10 bg-[#0c0c0e]">
-                {/* Photo / Proof Media */}
-                <img
-                  src={exp.image}
-                  alt={exp.imageAlt}
-                  loading="lazy"
-                  className="h-full w-full object-cover object-center grayscale contrast-105 transition-all duration-700 group-hover/media:scale-105 group-hover/media:grayscale-0 opacity-80"
-                />
-
-                {/* Gradient Shadows */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
-
-                {/* Big Index Number (Top Right) */}
-                <span className="absolute right-6 top-6 font-mono text-4xl sm:text-5xl font-bold text-white/90">
-                  {exp.num}
-                </span>
-
-                {/* Metadata Pill & Location (Bottom) */}
-                <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
-                  <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-white/90 uppercase tracking-[0.16em]">
-                    <span className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/15">
-                      <Calendar size={13} className="text-white/60" />
-                      {exp.period}
-                    </span>
-                    <span className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/15">
-                      <MapPin size={13} className="text-white/60" />
-                      {exp.place}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      {/* Mobile & Tablet Vertical Stack (max-width: 1023px) */}
-      <div
-        ref={mobileContainerRef}
-        className="relative z-10 lg:hidden px-4 sm:px-8 space-y-6 w-full max-w-3xl mx-auto"
-      >
-        {experiences.map((exp) => (
-          <article
-            key={exp.id}
-            data-experience-card="true"
-            className="experience-card overflow-hidden rounded-3xl border border-white/10 bg-[#f4f4f1] text-[#111114] shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+          <Swiper
+            modules={[Pagination, A11y, Keyboard]}
+            className="experience-swiper"
+            slidesPerView={1}
+            spaceBetween={16}
+            speed={720}
+            grabCursor={true}
+            keyboard={{ enabled: true, onlyInViewport: true }}
+            pagination={{ clickable: true }}
+            breakpoints={{
+              640: { slidesPerView: 1.04, spaceBetween: 24 },
+              768: { slidesPerView: 1.08, spaceBetween: 28 },
+            }}
           >
-            {/* Top Media Banner */}
-            <div className="relative h-44 sm:h-52 w-full overflow-hidden bg-[#0c0c0e]">
-              <img
-                src={exp.image}
-                alt={exp.imageAlt}
-                loading="lazy"
-                className="h-full w-full object-cover grayscale opacity-75"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <span className="absolute right-4 top-4 font-mono text-2xl sm:text-3xl font-bold text-white/90">
-                {exp.num}
-              </span>
-              <div className="absolute bottom-3 left-4 right-4 flex flex-wrap items-center gap-2 font-mono text-[11px] text-white/90">
-                <span className="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/15">
-                  {exp.period}
-                </span>
-                <span className="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/15">
-                  {exp.place}
-                </span>
-              </div>
-            </div>
+            {experiences.map((exp, idx) => (
+              <SwiperSlide key={exp.id} className="h-full">
+                <ExperienceCard
+                  experience={exp}
+                  index={idx}
+                  className="h-full w-full sm:w-full lg:w-full"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
 
-            {/* Content Body */}
-            <div className="p-6 sm:p-8">
-              <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#111114]/10">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-[#111114]/50">
-                  Pengalaman Kerja
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#111114]/5 border border-[#111114]/10 text-[#111114] font-semibold">
-                  {exp.type}
-                </span>
-              </div>
+        {/* Desktop Viewport & Track (min-width: 1024px) */}
+        <div
+          ref={viewportRef}
+          data-experience-viewport="true"
+          className="hidden min-h-0 flex-1 overflow-x-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:block lg:overflow-visible motion-reduce:overflow-visible"
+        >
+          <div
+            ref={trackRef}
+            data-experience-track="true"
+            className="experience-track mx-auto flex h-full w-max gap-4 will-change-transform sm:gap-8 motion-reduce:h-auto motion-reduce:w-full motion-reduce:flex-col motion-reduce:will-change-auto"
+          >
+            {experiences.map((exp, idx) => (
+              <ExperienceCard key={exp.id} experience={exp} index={idx} />
+            ))}
+          </div>
+        </div>
 
-              <h3 className="mt-4 font-serif text-2xl sm:text-3xl font-normal leading-tight text-[#111114]">
-                {exp.title}
-              </h3>
-              <p className="mt-1 font-mono text-xs font-bold uppercase tracking-wider text-[#111114]/75">
-                {exp.org}
-              </p>
-
-              <p className="mt-3.5 text-xs sm:text-sm text-[#111114]/80 leading-relaxed">
-                {exp.overview}
-              </p>
-
-              <div className="mt-5 pt-4 border-t border-[#111114]/10">
-                <p className="font-mono text-[10px] uppercase tracking-wider font-bold text-[#111114]/45 mb-2.5">
-                  Tanggung Jawab Utama
-                </p>
-                <ul className="space-y-1.5 text-xs text-[#111114]/85">
-                  {exp.highlights.map((h, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="font-mono text-[10px] font-bold text-[#111114]/40 mt-0.5 shrink-0">
-                        0{idx + 1}
-                      </span>
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </article>
-        ))}
+        {/* Desktop Bottom Progress Line */}
+        <div
+          aria-hidden="true"
+          className="mt-6 hidden h-px shrink-0 overflow-hidden bg-white/12 lg:block motion-reduce:hidden"
+        >
+          <div
+            ref={progressBarRef}
+            className="h-full w-full origin-left scale-x-0 bg-white/70 will-change-transform"
+          />
+        </div>
       </div>
     </section>
   );
