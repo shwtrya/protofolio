@@ -139,8 +139,10 @@ export const Header = () => {
         role="dialog"
         aria-modal="true"
         aria-label="Panel Navigasi"
-        className={`fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[420px] bg-[#111114] text-[#e8e8e5] p-8 sm:p-10 flex flex-col justify-between transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          open ? 'translate-x-0 shadow-2xl' : 'translate-x-full'
+        className={`fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[420px] bg-[#111114] text-[#e8e8e5] p-8 sm:p-10 flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          open
+            ? 'translate-x-0 shadow-2xl opacity-100 visible pointer-events-auto'
+            : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
       >
         {/* Drawer Header */}

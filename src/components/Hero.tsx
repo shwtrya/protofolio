@@ -153,7 +153,7 @@ export const Hero = () => {
       ref={heroRef}
       id="home"
       aria-label="Pengenalan Shawava Tritya"
-      className="hero-section relative grid min-h-screen content-start items-start gap-8 px-5 pb-16 pt-24 sm:gap-10 sm:px-10 sm:pt-28 lg:h-screen lg:min-h-[720px] lg:max-h-[960px] lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-24 lg:py-0 overflow-visible lg:overflow-hidden"
+      className="hero-section relative grid min-h-screen content-start items-start gap-8 px-5 pb-24 pt-20 sm:gap-10 sm:px-10 sm:pt-28 sm:pb-32 lg:h-screen lg:min-h-[720px] lg:max-h-[960px] lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-24 lg:py-0 overflow-x-clip lg:overflow-hidden"
     >
       {/* Background Dot Grid */}
       <div
@@ -248,7 +248,7 @@ export const Hero = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           data-profile-card="true"
-          className="relative h-[400px] w-full max-w-[340px] overflow-hidden rounded-[1.75rem] border border-white/18 bg-[#0b0b0d] will-change-transform sm:h-[480px] sm:max-w-[420px] sm:rounded-[2rem] lg:h-[560px] lg:max-w-[460px] xl:h-[600px] xl:max-w-[490px]"
+          className="relative h-[370px] w-full max-w-[320px] overflow-hidden rounded-[1.75rem] border border-white/18 bg-[#0b0b0d] will-change-transform sm:h-[460px] sm:max-w-[400px] sm:rounded-[2rem] lg:h-[560px] lg:max-w-[460px] xl:h-[600px] xl:max-w-[490px]"
           style={{
             transformStyle: 'preserve-3d',
             transform: isHovered

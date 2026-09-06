@@ -47,9 +47,9 @@ function App() {
       <a href="#main-content" className="skip-link">
         Lewati ke Konten Utama
       </a>
-      <div className="flex min-h-screen flex-col bg-[#e8e8e5] text-[#111114] selection:bg-[#111114] selection:text-white">
+      <div className="flex min-h-screen flex-col bg-[#e8e8e5] text-[#111114] selection:bg-[#111114] selection:text-white overflow-x-hidden max-w-full">
         <Header />
-        <main id="main-content" className="flex-grow">
+        <main id="main-content" className="flex-grow overflow-x-hidden max-w-full">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route

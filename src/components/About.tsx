@@ -55,15 +55,15 @@ export const About = () => {
       if (ovalRef.current && sectionRef.current) {
         gsap.fromTo(
           ovalRef.current,
-          { scaleY: 0.2, y: 150 },
+          { scaleY: 0.25, y: 80 },
           {
-            scaleY: 1.5,
-            y: -40,
+            scaleY: 1.4,
+            y: -25,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top bottom',
-              end: 'top 15%',
+              end: 'top 20%',
               scrub: 1.2,
             },
           }
@@ -96,13 +96,13 @@ export const About = () => {
       ref={sectionRef}
       id="about"
       aria-labelledby="about-heading"
-      className="relative z-20 flex h-fit flex-col items-center justify-center gap-12 sm:gap-16 lg:gap-20 bg-[#18181c] text-[#f4f4f1] px-5 py-20 sm:px-10 sm:pb-36 sm:pt-28"
+      className="relative z-20 flex h-fit flex-col items-center justify-center gap-12 sm:gap-16 lg:gap-20 bg-[#18181c] text-[#f4f4f1] px-4 py-20 sm:px-10 sm:pb-36 sm:pt-28 overflow-x-clip max-w-full"
     >
       {/* Giant curved dark entry oval (exact iqmal.dev - hidden below fold on load, stretches up on scroll) */}
       <div
         ref={ovalRef}
         aria-hidden="true"
-        className="absolute left-1/2 -top-16 sm:-top-20 h-[140px] sm:h-[180px] w-[160vw] sm:w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
+        className="absolute left-1/2 -top-14 sm:-top-20 h-[120px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
       />
 
       <h2 id="about-heading" className="sr-only">
@@ -115,9 +115,9 @@ export const About = () => {
       </p>
 
       {/* Big Statement Typography with scrub line reveals */}
-      <div className="relative z-20 max-w-5xl text-center font-sans text-[clamp(1.45rem,4.2vw,3.2rem)] leading-[1.28] tracking-[-0.03em] text-white/70">
+      <div className="relative z-20 w-full max-w-5xl px-3 sm:px-6 text-center font-sans text-[clamp(1.2rem,3.8vw,3.2rem)] leading-[1.32] tracking-[-0.03em] text-white/75">
         <div className="overflow-hidden py-1">
-          <p className="line will-change-transform">
+          <p className="line will-change-transform break-words">
             <span>Saya merancang </span>
             <span className="font-semibold text-white">
               solusi jaringan &amp; perangkat keras IoT
@@ -125,7 +125,7 @@ export const About = () => {
           </p>
         </div>
         <div className="overflow-hidden py-1">
-          <p className="line will-change-transform">
+          <p className="line will-change-transform break-words">
             <span>dengan </span>
             <span className="font-semibold text-white">eksekusi disiplin</span>
             <span>, </span>
@@ -135,7 +135,7 @@ export const About = () => {
           </p>
         </div>
         <div className="overflow-hidden py-1">
-          <p className="line will-change-transform">
+          <p className="line will-change-transform break-words">
             <span>—membantu tim mewujudkan sistem teknis yang efisien dan siap pakai.</span>
           </p>
         </div>
