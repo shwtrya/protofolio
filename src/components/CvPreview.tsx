@@ -44,7 +44,7 @@ export const CvPreview = ({
           title="Curriculum Vitae"
           subtitle="Shawava Tritya · Teknik Komputer & Jaringan (SMKN 1 Cileungsi)"
           toolbar={
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#111114]/10 bg-[#f0f0ed] px-6 py-3 sm:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#111114]/10 bg-[#f0f0ed] px-5 py-3 sm:px-8">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -52,7 +52,7 @@ export const CvPreview = ({
                   className="inline-flex items-center gap-1.5 rounded-full border border-[#111114]/15 bg-white px-3.5 py-1.5 font-mono text-[11px] font-semibold text-[#111114] shadow-sm hover:bg-[#111114] hover:text-white transition-all cursor-pointer"
                 >
                   <ZoomIn size={13} />
-                  <span>{isZoomed ? 'Perkecil Ukuran' : 'Perbesar Tampilan'}</span>
+                  <span>{isZoomed ? 'Ukuran Normal' : 'Perbesar Tampilan'}</span>
                 </button>
 
                 <a
@@ -90,8 +90,8 @@ export const CvPreview = ({
           }
         >
           <div className="flex flex-col gap-6">
-            {/* Quick Summary Bento Pill */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Quick Summary Bento Pill - Desktop Only */}
+            <div className="hidden sm:grid sm:grid-cols-3 gap-3">
               <div className="rounded-xl border border-[#111114]/10 bg-white/80 p-3.5">
                 <span className="block font-mono text-[10px] uppercase tracking-wider text-[#111114]/50">
                   Pendidikan
@@ -109,7 +109,7 @@ export const CvPreview = ({
                   Pengalaman
                 </span>
                 <span className="font-semibold text-xs sm:text-sm text-[#111114]">
-                  3+ Peran Praktik & Industri
+                  3+ Peran Praktik &amp; Industri
                 </span>
                 <span className="block text-[11px] text-[#111114]/65 font-mono mt-0.5">
                   PT Rekadaya · PT Serin · Wova
@@ -129,20 +129,22 @@ export const CvPreview = ({
               </div>
             </div>
 
-            {/* Resume Image View Container */}
+            {/* Resume Image View Container with Scroll Pan */}
             <div
-              className={`relative overflow-hidden rounded-2xl border border-[#111114]/15 bg-white shadow-md transition-all duration-300 ${
-                isZoomed ? 'scale-105 my-4' : ''
+              className={`relative overflow-x-auto overflow-y-hidden rounded-2xl border border-[#111114]/15 bg-white shadow-md transition-all duration-300 ${
+                isZoomed ? 'p-2 my-2' : ''
               }`}
             >
-              <img
-                src={CV_PREVIEW}
-                alt="Curriculum Vitae Shawava Tritya Lengkap"
-                width={1191}
-                height={1685}
-                className="h-auto w-full object-contain"
-                loading="eager"
-              />
+              <div className={`${isZoomed ? 'min-w-[800px]' : 'w-full'}`}>
+                <img
+                  src={CV_PREVIEW}
+                  alt="Curriculum Vitae Shawava Tritya Lengkap"
+                  width={1191}
+                  height={1685}
+                  className="h-auto w-full object-contain"
+                  loading="eager"
+                />
+              </div>
             </div>
 
             {/* Note & Direct Download */}

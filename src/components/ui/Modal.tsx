@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -63,21 +64,22 @@ export const Modal = ({
 
   if (!isOpen) return null;
 
-  return (
+  // Render via React Portal to document.body to completely escape GSAP / parent transform stacking contexts
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/80 backdrop-blur-sm p-0 sm:items-center sm:p-6 md:p-8"
+      className="fixed inset-0 z-[99999] flex items-end justify-center bg-black/85 backdrop-blur-md p-0 sm:items-center sm:p-6 md:p-8"
       onClick={onClose}
     >
       <div
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
-        className={`relative flex max-h-[94vh] sm:max-h-[92vh] w-full ${maxWidth} flex-col overflow-hidden rounded-t-[28px] sm:rounded-[24px] border border-[#111114]/20 bg-[#f7f7f4] shadow-2xl text-[#111114] animate-in fade-in zoom-in-95 duration-200`}
+        className={`relative flex max-h-[96vh] sm:max-h-[92vh] w-full ${maxWidth} flex-col overflow-hidden rounded-t-[28px] sm:rounded-[24px] border border-[#111114]/20 bg-[#f7f7f4] shadow-2xl text-[#111114]`}
       >
         {/* Modal Header */}
         {(title || subtitle) && (
-          <div className="flex items-start justify-between gap-4 border-b border-[#111114]/10 bg-[#ededeb] px-6 py-4 sm:px-8 sm:py-5">
+          <div className="flex items-start justify-between gap-4 border-b border-[#111114]/12 bg-[#eaeae7] px-6 py-4 sm:px-8 sm:py-5">
             <div className="min-w-0 flex-1">
               {typeof title === 'string' ? (
                 <h2 className="font-serif text-2xl sm:text-3xl text-[#111114] tracking-tight">
@@ -87,7 +89,7 @@ export const Modal = ({
                 title
               )}
               {subtitle && (
-                <div className="mt-1 font-mono text-xs text-[#111114]/65">
+                <div className="mt-1 font-mono text-xs text-[#111114]/70">
                   {subtitle}
                 </div>
               )}
@@ -96,26 +98,27 @@ export const Modal = ({
               ref={closeRef}
               type="button"
               onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#111114]/5 text-[#111114]/70 hover:bg-[#111114] hover:text-white transition-all cursor-pointer"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#111114]/8 text-[#111114]/80 hover:bg-[#111114] hover:text-white transition-all cursor-pointer shrink-0 shadow-sm"
               aria-label="Tutup jendela modal"
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
         )}
 
-        {/* Optional Toolbar (e.g. Tabs) */}
+        {/* Optional Toolbar (Tabs / Actions) */}
         {toolbar}
 
         {/* Modal Scrollable Body */}
         <div
           data-lenis-prevent="true"
-          className="flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7"
+          className="flex-1 overflow-y-auto px-5 py-5 sm:px-8 sm:py-7"
         >
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
