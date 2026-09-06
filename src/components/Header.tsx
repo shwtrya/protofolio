@@ -7,19 +7,41 @@ import CvPreview from './CvPreview';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleNavClick = useCallback(
     (href: string) => {
       setOpen(false);
-      // Small timeout to allow drawer closing animation
       setTimeout(() => {
         scrollToSection(href, location.pathname, navigate);
       }, 100);
     },
     [location.pathname, navigate]
   );
+
+  // Active section scroll spy for desktop nav
+  useEffect(() => {
+    const sectionIds = ['home', 'about', 'experience', 'projects', 'certificates', 'contact'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-25% 0px -40% 0px', threshold: 0 }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -48,7 +70,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-40 flex items-center justify-between px-6 py-5 sm:px-10 sm:py-6 lg:px-16 pointer-events-none transition-all">
+      <header className="fixed top-0 left-0 w-full z-40 flex items-center justify-between px-6 py-4 sm:px-10 sm:py-5 lg:px-16 pointer-events-none transition-all">
         {/* Brand / Logo */}
         <a
           href="#home"
@@ -67,17 +89,53 @@ export const Header = () => {
           </span>
         </a>
 
-        {/* Menu Toggle Button */}
-        <button
-          type="button"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? 'Tutup menu' : 'Buka menu'}
-          aria-expanded={open}
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-4 py-2 sm:px-5 sm:py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer"
+        {/* Desktop Quick Nav Pill (center) */}
+        <nav
+          aria-label="Navigasi Utama Desktop"
+          className="pointer-events-auto hidden md:flex items-center gap-1 rounded-full border border-[#111114]/15 bg-white/80 p-1.5 shadow-md backdrop-blur-md transition-all duration-300 hover:border-[#111114]/30"
         >
-          <span>{open ? 'Close' : 'Menu'}</span>
-          {open ? <X size={15} /> : <Plus size={15} />}
-        </button>
+          {navItems.map((item) => {
+            const isActive = activeSection === item.href.replace('#', '');
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.href);
+                }}
+                className={`relative rounded-full px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider transition-all duration-300 ${
+                  isActive
+                    ? 'bg-[#111114] text-white shadow-sm'
+                    : 'text-[#111114]/70 hover:text-[#111114] hover:bg-[#111114]/5'
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Right Action Group */}
+        <div className="pointer-events-auto flex items-center gap-3">
+          <CvPreview
+            className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-[#111114]/15 bg-white/85 px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#111114] shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-white hover:border-[#111114]/30 cursor-pointer"
+            label="Resume"
+            showIcon={true}
+          />
+
+          {/* Menu Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? 'Tutup menu' : 'Buka menu'}
+            aria-expanded={open}
+            className="inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-4 py-2 sm:px-5 sm:py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer"
+          >
+            <span>{open ? 'Close' : 'Menu'}</span>
+            {open ? <X size={15} /> : <Plus size={15} />}
+          </button>
+        </div>
       </header>
 
       {/* Fullscreen / Drawer Menu Backdrop */}

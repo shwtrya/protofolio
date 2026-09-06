@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const ScrollProgress = () => {
+export const ScrollProgress = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const ScrollProgress = () => {
 
   return (
     <div
-      className="fixed inset-x-0 top-0 z-[55] h-0.5 origin-left bg-accent transition-transform duration-100"
+      className="fixed inset-x-0 top-0 z-[60] h-[2.5px] origin-left bg-[#111114] transition-transform duration-75"
       style={{ transform: `scaleX(${progress / 100})` }}
       aria-hidden="true"
     />

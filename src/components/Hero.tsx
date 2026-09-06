@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail, MessageCircle, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { profile } from '../data/navigation';
@@ -7,6 +7,8 @@ import CvPreview from './CvPreview';
 
 export const Hero = () => {
   const heroRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
 
   const roles = [
     'Network & IoT Technician',
@@ -90,6 +92,42 @@ export const Hero = () => {
     { scope: heroRef }
   );
 
+  // Interactive 3D Cursor Tilt for Desktop View
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const clampedX = Math.min(Math.max(x, 0), 1);
+    const clampedY = Math.min(Math.max(y, 0), 1);
+
+    const rotX = -11 * (clampedY - 0.5);
+    const rotY = 11 * (clampedX - 0.5);
+
+    gsap.to(cardRef.current, {
+      rotateX: rotX,
+      rotateY: rotY,
+      scale: 1.015,
+      duration: 0.3,
+      ease: 'power2.out',
+      transformPerspective: 1200,
+    });
+
+    setGlare({ x: clampedX * 100, y: clampedY * 100, opacity: 1 });
+  };
+
+  const handleCardMouseLeave = () => {
+    if (!cardRef.current) return;
+    gsap.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: 0,
+      scale: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+    });
+    setGlare((prev) => ({ ...prev, opacity: 0 }));
+  };
+
   return (
     <section
       ref={heroRef}
@@ -146,10 +184,13 @@ export const Hero = () => {
           </a>
         </div>
 
-        {/* Location tag */}
-        <p className="location font-sans text-xs sm:text-sm uppercase tracking-[0.28em] text-[#111114]/60 font-medium">
-          Bogor · Indonesia
-        </p>
+        {/* Location tag with pulse indicator */}
+        <div className="location flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <p className="font-sans text-xs sm:text-sm uppercase tracking-[0.28em] text-[#111114]/60 font-medium">
+            Bogor · Indonesia
+          </p>
+        </div>
 
         {/* Main Display Headline */}
         <h1 className="greetings mt-3 font-serif text-6xl leading-[0.95] tracking-tight sm:text-8xl lg:text-9xl text-[#111114]">
@@ -169,25 +210,46 @@ export const Hero = () => {
           Lulusan SMK Negeri 1 Cileungsi (TKJ). Berpengalaman merakit prototype IoT berbasis ESP8266/Arduino, praktik instalasi ISP hingga router, serta disiplin kerja dari pengalaman magang produksi dan data entry.
         </p>
 
-        {/* Action Button */}
-        <div className="hero-resume mt-8 flex items-center gap-4">
+        {/* Action Button & Badges */}
+        <div className="hero-resume mt-8 flex flex-wrap items-center gap-4">
           <CvPreview
             className="inline-flex w-fit items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer shadow-md"
             label="Resume"
             showIcon={true}
           />
+          <a
+            href="#projects"
+            className="inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-white/70 px-6 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-[#111114] backdrop-blur-sm transition-all duration-300 hover:bg-white hover:border-[#111114]/30"
+          >
+            <Sparkles size={14} className="text-amber-600" />
+            Lihat Portofolio
+          </a>
         </div>
       </div>
 
-      {/* Right Column: 3D Profile Card (matching iqmal.dev) */}
-      <div className="relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end">
+      {/* Right Column: 3D Profile Card with Interactive Desktop Cursor Tilt */}
+      <div
+        className="relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end"
+        onMouseMove={handleCardMouseMove}
+        onMouseLeave={handleCardMouseLeave}
+      >
         <div
-          className="profile-card relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.01] sm:h-[520px] sm:max-w-[420px] lg:h-[580px] lg:max-w-[460px]"
+          ref={cardRef}
+          className="profile-card relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-shadow duration-500 will-change-transform sm:h-[520px] sm:max-w-[420px] lg:h-[580px] lg:max-w-[460px] cursor-pointer"
           style={{
             transformStyle: 'preserve-3d',
             boxShadow: '0 28px 70px rgba(17, 17, 20, 0.25)',
           }}
         >
+          {/* Dynamic Specular Glare Overlay */}
+          <div
+            className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
+            style={{
+              background: `radial-gradient(circle 380px at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18), transparent 70%)`,
+              opacity: glare.opacity,
+            }}
+          />
+
           {/* Background Gradients */}
           <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0)_34%),linear-gradient(180deg,#25252a_0%,#131418_48%,#050506_100%)]" />
           <div className="absolute inset-x-8 top-8 h-px bg-white/10" />

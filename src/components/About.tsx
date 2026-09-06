@@ -69,6 +69,24 @@ export const About = () => {
           }
         );
       }
+
+      // 3. Bento cards desktop stagger reveal
+      gsap.fromTo(
+        '.bento-stat-card',
+        { opacity: 0, y: 50, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.85,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.bento-stat-card',
+            start: 'top 85%',
+          },
+        }
+      );
     },
     { scope: sectionRef }
   );
@@ -125,13 +143,13 @@ export const About = () => {
 
       {/* Embedded Marquee Ticker with Mask (exact iqmal.dev setup) */}
       <div
-        className="relative z-10 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5"
+        className="relative z-10 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5 group cursor-pointer"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
         }}
       >
-        <div className="animate-marquee flex gap-12 sm:gap-16 font-mono text-xs uppercase tracking-[0.25em] text-white/85 font-medium select-none">
+        <div className="animate-marquee flex gap-12 sm:gap-16 font-mono text-xs uppercase tracking-[0.25em] text-white/85 font-medium select-none group-hover:[animation-play-state:paused]">
           {marqueeSkills.concat(marqueeSkills).map((skill, index) => (
             <div key={index} className="flex items-center gap-4 sm:gap-6 shrink-0">
               <span>{skill}</span>
@@ -143,8 +161,8 @@ export const About = () => {
 
       {/* Bento Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl text-left">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
-          <div className="flex items-center gap-3 text-white/40 mb-3">
+        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-emerald-400 transition-colors">
             <Award size={18} />
             <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
               Pendidikan
@@ -153,13 +171,13 @@ export const About = () => {
           <div className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
             85 / 100
           </div>
-          <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
             Nilai rata-rata Ijazah SMK Negeri 1 Cileungsi kompetensi Teknik Komputer dan Jaringan.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
-          <div className="flex items-center gap-3 text-white/40 mb-3">
+        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-amber-400 transition-colors">
             <Briefcase size={18} />
             <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
               Pengalaman
@@ -168,13 +186,13 @@ export const About = () => {
           <div className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
             3+ Peran
           </div>
-          <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
             Magang industri manufaktur di PT Rekadaya &amp; PT Serin, serta freelance data entry.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.05]">
-          <div className="flex items-center gap-3 text-white/40 mb-3">
+        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-sky-400 transition-colors">
             <Cpu size={18} />
             <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
               Kompetensi
@@ -183,7 +201,7 @@ export const About = () => {
           <div className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
             100% Praktik
           </div>
-          <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
             Fokus hands-on: perakitan prototype mikrokontroler, instalasi FTTH, &amp; router mikrotik.
           </p>
         </div>
