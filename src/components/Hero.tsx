@@ -266,12 +266,12 @@ export const Hero = () => {
           <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0)_34%),linear-gradient(180deg,#25252a_0%,#131418_48%,#050506_100%)]" />
           <div className="absolute inset-x-8 top-8 h-px bg-white/10" />
 
-          {/* Decorative Technical Schematics SVGs */}
+          {/* Decorative Technical Schematics SVGs (exact iqmal.dev overlay) */}
           <svg
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
-            className="size-8 absolute left-8 top-24 h-20 w-20 -rotate-12 text-white/10"
+            className="size-8 absolute left-8 top-24 z-20 h-20 w-20 -rotate-12 text-white/25 pointer-events-none"
           >
             <path
               d="M8.01 0.86L6.01 14.86L7.99 15.14L9.99 1.14L8.01 0.86Z"
@@ -291,7 +291,7 @@ export const Hero = () => {
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
-            className="size-8 absolute right-8 top-16 h-24 w-24 rotate-12 text-white/10"
+            className="size-8 absolute right-8 top-16 z-20 h-24 w-24 rotate-12 text-white/25 pointer-events-none"
           >
             <path
               d="M8.01 0.86L6.01 14.86L7.99 15.14L9.99 1.14L8.01 0.86Z"
