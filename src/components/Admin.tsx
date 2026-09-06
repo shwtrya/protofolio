@@ -489,14 +489,20 @@ export const Admin = () => {
                   </div>
                   <div>
                     <label className="block font-mono text-[11px] text-white/50 uppercase mb-1">
-                      Tipe (PKL / Freelance)
+                      Tipe Pekerjaan
                     </label>
-                    <input
-                      type="text"
+                    <select
                       value={exp.type}
                       onChange={(e) => handleExpChange(expIdx, 'type', e.target.value)}
-                      className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white"
-                    />
+                      className="w-full rounded-lg bg-[#222226] border border-white/10 px-3 py-2 text-sm text-white focus:border-white/30 focus:outline-none"
+                    >
+                      <option value="PKL / Industri">PKL / Industri</option>
+                      <option value="Magang">Magang</option>
+                      <option value="Freelance">Freelance</option>
+                      <option value="Administrasi">Administrasi</option>
+                      <option value="Kontrak">Kontrak</option>
+                      <option value="Full-time">Full-time</option>
+                    </select>
                   </div>
                 </div>
 
@@ -514,10 +520,11 @@ export const Admin = () => {
                   </div>
                   <div>
                     <label className="block font-mono text-[11px] text-white/50 uppercase mb-1">
-                      Periode (Sep 2024 — Des 2024)
+                      Periode
                     </label>
                     <input
                       type="text"
+                      placeholder="Sep 2024 — Des 2024"
                       value={exp.period}
                       onChange={(e) => handleExpChange(expIdx, 'period', e.target.value)}
                       className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white"
@@ -525,10 +532,11 @@ export const Admin = () => {
                   </div>
                   <div>
                     <label className="block font-mono text-[11px] text-white/50 uppercase mb-1">
-                      Durasi (4 bulan)
+                      Durasi
                     </label>
                     <input
                       type="text"
+                      placeholder="4 bulan"
                       value={exp.duration}
                       onChange={(e) => handleExpChange(expIdx, 'duration', e.target.value)}
                       className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white"
@@ -541,10 +549,10 @@ export const Admin = () => {
                     Ringkasan Tugas
                   </label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={exp.summary}
                     onChange={(e) => handleExpChange(expIdx, 'summary', e.target.value)}
-                    className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white"
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white leading-relaxed focus:border-white/30 focus:outline-none"
                   />
                 </div>
 

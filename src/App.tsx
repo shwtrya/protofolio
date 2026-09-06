@@ -39,17 +39,24 @@ function HomePage() {
   );
 }
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
-    <Router>
+    <>
       <RouteTracker />
-      <SmoothScroll />
-      <ScrollProgress />
-      <a href="#main-content" className="skip-link">
-        Lewati ke Konten Utama
-      </a>
-      <div className="flex min-h-screen flex-col bg-[#e8e8e5] text-[#111114] selection:bg-[#111114] selection:text-white overflow-x-hidden max-w-full">
-        <Header />
+      {!isAdmin && (
+        <>
+          <SmoothScroll />
+          <ScrollProgress />
+          <a href="#main-content" className="skip-link">
+            Lewati ke Konten Utama
+          </a>
+        </>
+      )}
+      <div className={`flex min-h-screen flex-col overflow-x-hidden max-w-full ${isAdmin ? 'bg-[#111114] text-[#f4f4f1]' : 'bg-[#e8e8e5] text-[#111114] selection:bg-[#111114] selection:text-white'}`}>
+        {!isAdmin && <Header />}
         <main id="main-content" className="flex-grow overflow-x-hidden max-w-full">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -83,9 +90,17 @@ function App() {
             />
           </Routes>
         </main>
-        <Footer />
-        <BackToTop />
+        {!isAdmin && <Footer />}
+        {!isAdmin && <BackToTop />}
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
