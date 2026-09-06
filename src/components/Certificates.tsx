@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Award, ExternalLink, GraduationCap, ShieldCheck, ZoomIn } from 'lucide-react';
+import { Award, Download, ExternalLink, GraduationCap, ShieldCheck, ZoomIn } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -19,21 +19,21 @@ interface Certificate {
 const certificates: Certificate[] = [
   {
     title: 'Sertifikat IT Specialist - Networking',
-    issuer: 'Certiport / IT Specialist',
+    issuer: 'Certiport / Pearson VUE',
     period: '2025',
     description:
-      'Bukti kompetensi IT Specialist bidang networking, mencakup pemahaman jaringan komputer, topologi, dan troubleshooting koneksi.',
+      'Sertifikasi kompetensi global IT Specialist bidang Networking, membuktikan penguasaan konsep jaringan TCP/IP, model OSI, subnetting, switching, routing, dan troubleshooting koneksi.',
     preview: '/proof/preview-Sertifikat_IT_Specialist_Networking_2025.webp',
-    tags: ['Networking', 'TCP/IP', 'Troubleshooting'],
+    tags: ['Networking', 'TCP/IP', 'Routing & Switching', 'Certiport Global'],
   },
   {
     title: 'Sertifikat Praktek Kerja Lapangan (PKL)',
     issuer: 'PT Rekadaya Multi Adiprima',
-    period: '2025',
+    period: '2024 — 2025',
     description:
-      'Bukti pelaksanaan PKL industri di PT Rekadaya Multi Adiprima dengan penilaian kedisiplinan, ketelitian perakitan, dan standar kualitas.',
+      'Bukti pelaksanaan PKL industri di PT Rekadaya Multi Adiprima dengan predikat sangat baik dalam kedisiplinan, ketelitian perakitan komponen felt manufaktur otomotif, dan standar quality control.',
     preview: '/proof/preview-Sertifikat_PKL_PT_Rekadaya_2025.webp',
-    tags: ['PKL Industri', 'Quality Control', 'Assembly'],
+    tags: ['PKL Industri', 'Quality Control', 'Manufacturing Assembly'],
   },
 ];
 
@@ -69,17 +69,15 @@ export const Certificates = () => {
       });
   }, []);
 
-  // Exact GSAP matchMedia scroll trigger from iqmal.dev
+  // Exact iqmal.dev scroll animations for Certificates & Activity
   useGSAP(
     () => {
       const section = sectionRef.current;
       const watermark = watermarkRef.current;
-      const counterEl = counterRef.current;
-
-      if (!section || !watermark) return;
+      const counter = counterRef.current;
+      if (!section || !watermark || !counter) return;
 
       const mm = gsap.matchMedia();
-
       return mm.add(
         {
           isAll: '(min-width: 0px)',
@@ -87,7 +85,6 @@ export const Certificates = () => {
         },
         (context) => {
           const { reduceMotion } = context.conditions ?? {};
-
           if (reduceMotion) {
             gsap.set('.contrib-cell', { scale: 1, opacity: 1 });
             return;
@@ -96,9 +93,9 @@ export const Certificates = () => {
           // Watermark scrub
           gsap.fromTo(
             watermark,
-            { y: -50, opacity: 0 },
+            { y: -60, opacity: 0 },
             {
-              y: 50,
+              y: 60,
               opacity: 1,
               ease: 'none',
               scrollTrigger: {
@@ -110,7 +107,7 @@ export const Certificates = () => {
             }
           );
 
-          // Staggered grid cell pop in
+          // Staggered contribution matrix cells pop
           gsap.fromTo(
             '.contrib-cell',
             { scale: 0, opacity: 0, transformOrigin: 'center center' },
@@ -120,29 +117,33 @@ export const Certificates = () => {
               stagger: { grid: [7, 53], from: 'start', amount: 1.2 },
               duration: 0.5,
               ease: 'back.out(1.5)',
-              scrollTrigger: { trigger: '.contrib-grid-wrapper', start: 'top 85%' },
+              scrollTrigger: {
+                trigger: '.contrib-grid-wrapper',
+                start: 'top 85%',
+              },
             }
           );
 
-          // Number counter ticker
-          if (counterEl) {
-            const countObj = { val: 0 };
-            gsap.to(countObj, {
-              val: totalContrib,
-              duration: 2,
-              ease: 'power2.out',
-              scrollTrigger: { trigger: counterEl, start: 'top 90%' },
-              onUpdate: () => {
-                if (counterEl) {
-                  counterEl.innerText = Math.floor(countObj.val).toLocaleString();
-                }
-              },
-            });
-          }
+          // Counter number roll
+          const counterObj = { val: 0 };
+          gsap.to(counterObj, {
+            val: totalContrib,
+            duration: 1.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: counter,
+              start: 'top 90%',
+            },
+            onUpdate: () => {
+              if (counter) {
+                counter.innerText = Math.floor(counterObj.val).toLocaleString();
+              }
+            },
+          });
         }
       );
     },
-    { scope: sectionRef, dependencies: [totalContrib, contributions.length] }
+    { scope: sectionRef, dependencies: [totalContrib] }
   );
 
   return (
@@ -152,7 +153,7 @@ export const Certificates = () => {
       aria-labelledby="certificates-heading"
       className="relative z-30 bg-[#e8e8e5] text-[#111114] px-6 py-20 pb-28 sm:px-10 sm:py-28 lg:px-20 overflow-hidden"
     >
-      {/* Parallax Watermark text (exact iqmal.dev) */}
+      {/* Watermark text */}
       <div
         ref={watermarkRef}
         aria-hidden="true"
@@ -166,22 +167,25 @@ export const Certificates = () => {
         <div className="mb-14 sm:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#111114]/10 pb-8">
           <div>
             <p className="font-mono text-[0.65rem] uppercase tracking-[0.3em] text-[#111114]/60">
-              04 / Verified Credentials
+              04 / Credentials &amp; Verifications
             </p>
             <h2
               id="certificates-heading"
               className="mt-3 font-serif text-4xl sm:text-6xl text-[#111114] tracking-tight"
             >
-              Sertifikasi &amp; <span className="font-editorial italic font-normal text-[#111114]/80">Edukasi.</span>
+              Sertifikasi &amp;{' '}
+              <span className="font-editorial italic font-normal text-[#111114]/80">
+                Riwayat Edukasi.
+              </span>
             </h2>
           </div>
           <p className="max-w-md text-xs sm:text-sm text-[#111114]/70 leading-relaxed">
-            Sertifikat resmi kompetensi keahlian dan riwayat pendidikan formal yang dapat dipertanggungjawabkan keabsahannya.
+            Dokumentasi sertifikat keahlian industri yang terverifikasi, riwayat kontribusi open-source, dan catatan kelulusan SMK Negeri 1 Cileungsi.
           </p>
         </div>
 
         {/* 1. GitHub Contributions Bento Card (exact iqmal.dev) */}
-        <div className="mb-16 rounded-3xl border border-[#111114]/12 bg-white/60 p-6 sm:p-10 shadow-sm backdrop-blur-sm">
+        <div className="mb-14 sm:mb-18 rounded-3xl border border-[#111114]/12 bg-white/70 p-6 sm:p-10 shadow-sm backdrop-blur-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Counter Info */}
             <div className="lg:col-span-4">
@@ -274,108 +278,157 @@ export const Certificates = () => {
           </div>
         </div>
 
-        {/* 2. Credentials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {certificates.map((cert) => (
-            <div
-              key={cert.title}
-              className="flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:border-[#111114]/30 hover:shadow-xl group"
-            >
-              {/* Preview Image with fixed 16:10 aspect ratio */}
-              <div
-                onClick={() => setActiveCert(cert)}
-                className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-neutral-200"
-              >
-                <img
-                  src={cert.preview}
-                  alt={cert.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                  }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-[#111114]/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-mono text-xs font-semibold text-[#111114] shadow-lg">
-                    <ZoomIn size={14} /> Perbesar
-                  </span>
-                </div>
-              </div>
+        {/* 2. Enlarged Official Certificates Grid (Prominent 2-Column on Desktop, Full-Width on Mobile) */}
+        <div className="mb-10 sm:mb-14">
+          <div className="mb-6 flex items-center justify-between">
+            <h3 className="font-mono text-xs uppercase tracking-[0.25em] text-[#111114]/65 font-bold">
+              Sertifikat Keahlian &amp; Uji Kompetensi
+            </h3>
+            <span className="font-mono text-xs text-[#111114]/40">
+              2 Sertifikat Resmi
+            </span>
+          </div>
 
-              {/* Content */}
-              <div className="p-6 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-[#111114]/50 mb-2">
-                    <span className="flex items-center gap-1">
-                      <ShieldCheck size={13} className="text-emerald-700" />
-                      {cert.issuer}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-stretch">
+            {certificates.map((cert) => (
+              <div
+                key={cert.title}
+                className="flex flex-col justify-between rounded-3xl border border-[#111114]/15 bg-white/75 overflow-hidden shadow-md transition-all duration-300 hover:border-[#111114]/30 hover:shadow-2xl group"
+              >
+                {/* Large Preview Image with Aspect Ratio 16/11 for Maximum Legibility */}
+                <div
+                  onClick={() => setActiveCert(cert)}
+                  className="relative aspect-[16/11] sm:aspect-[16/10] w-full cursor-pointer overflow-hidden bg-neutral-100 border-b border-[#111114]/10"
+                >
+                  <img
+                    src={cert.preview}
+                    alt={cert.title}
+                    loading="eager"
+                    className="h-full w-full object-contain p-2 sm:p-3 transition-transform duration-500 group-hover:scale-[1.03]"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+
+                  {/* Desktop Hover & Mobile Tap Action Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#111114]/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100 backdrop-blur-[2px]">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-[#111114] px-5 py-2.5 font-mono text-xs font-semibold text-white shadow-xl">
+                      <ZoomIn size={15} />
+                      <span>Perbesar Resolusi Penuh</span>
                     </span>
-                    <span>{cert.period}</span>
                   </div>
 
-                  <h3 className="font-serif text-xl text-[#111114] font-normal leading-snug">
-                    {cert.title}
-                  </h3>
-
-                  <p className="mt-3 text-xs sm:text-sm text-[#111114]/70 leading-relaxed">
-                    {cert.description}
-                  </p>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#111114]/10 flex flex-wrap gap-1.5">
-                  {cert.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-[#111114]/5 px-2.5 py-0.5 font-mono text-[10px] text-[#111114]/75"
-                    >
-                      {tag}
+                  {/* Corner Badge */}
+                  <div className="absolute top-4 right-4 z-10 pointer-events-none">
+                    <span className="rounded-full bg-[#111114]/85 px-3 py-1 font-mono text-[10px] uppercase font-semibold text-white backdrop-blur-sm shadow-sm">
+                      {cert.period}
                     </span>
-                  ))}
+                  </div>
+                </div>
+
+                {/* Content Details */}
+                <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between text-xs font-mono text-[#111114]/60 mb-2.5">
+                      <span className="flex items-center gap-1.5 font-semibold text-[#111114]/80">
+                        <ShieldCheck size={15} className="text-emerald-700" />
+                        {cert.issuer}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setActiveCert(cert)}
+                        className="inline-flex items-center gap-1 text-emerald-700 hover:underline font-mono text-xs font-semibold cursor-pointer"
+                      >
+                        <ZoomIn size={12} />
+                        <span>Detail &amp; Zoom</span>
+                      </button>
+                    </div>
+
+                    <h4 className="font-serif text-2xl sm:text-3xl text-[#111114] font-normal leading-snug">
+                      {cert.title}
+                    </h4>
+
+                    <p className="mt-3.5 text-xs sm:text-sm text-[#111114]/75 leading-relaxed">
+                      {cert.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 pt-5 border-t border-[#111114]/10 flex flex-wrap gap-2">
+                    {cert.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-[#111114]/5 px-3 py-1 font-mono text-[11px] text-[#111114]/80 font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
 
-          {/* Education Card matching aspect ratio & height */}
-          <div className="flex flex-col justify-between rounded-2xl border border-[#111114]/12 bg-white/60 overflow-hidden transition-all duration-300 hover:border-[#111114]/30 hover:shadow-xl group">
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#111114] flex flex-col items-center justify-center p-6 text-center text-white">
-              <div className="h-16 w-16 rounded-2xl bg-white/10 flex items-center justify-center mb-3">
-                <GraduationCap size={36} className="text-emerald-400" />
-              </div>
-              <span className="font-serif text-lg text-white">SMK Negeri 1 Cileungsi</span>
-              <span className="font-mono text-[11px] text-white/60 uppercase tracking-widest mt-1">
-                2022 — 2025
-              </span>
-            </div>
-
-            <div className="p-6 flex-1 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between text-xs font-mono text-[#111114]/50 mb-2">
-                  <span className="flex items-center gap-1">
-                    <Award size={13} className="text-sky-700" />
+        {/* 3. Education Bento Card (SMK Negeri 1 Cileungsi - Wide Featured Format) */}
+        <div className="rounded-3xl border border-[#111114]/15 bg-white/75 p-6 sm:p-10 shadow-md">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left School Icon & Identification */}
+            <div className="lg:col-span-4 flex flex-col items-start gap-4">
+              <div className="flex items-center gap-4">
+                <div className="h-16 w-16 rounded-2xl bg-[#111114] flex items-center justify-center text-white shadow-md">
+                  <GraduationCap size={34} className="text-emerald-400" />
+                </div>
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block">
                     Pendidikan Formal
                   </span>
-                  <span>Lulus 2025</span>
+                  <h4 className="font-serif text-2xl text-[#111114] font-bold">
+                    SMK Negeri 1 Cileungsi
+                  </h4>
+                  <span className="font-mono text-xs text-[#111114]/65">
+                    Angkatan 2022 — 2025
+                  </span>
                 </div>
-
-                <h3 className="font-serif text-xl text-[#111114] font-normal leading-snug">
-                  Teknik Komputer &amp; Jaringan
-                </h3>
-
-                <p className="mt-3 text-xs sm:text-sm text-[#111114]/70 leading-relaxed">
-                  Fokus kompetensi instalasi infrastruktur jaringan LAN/FTTH, administrasi sistem router, dan perakitan embedded system IoT. Nilai ijazah rata-rata: <strong>85 / 100</strong>.
-                </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#111114]/10 flex flex-wrap gap-1.5">
-                <span className="rounded-full bg-[#111114]/5 px-2.5 py-0.5 font-mono text-[10px] text-[#111114]/75">
-                  SMKN 1 Cileungsi
-                </span>
-                <span className="rounded-full bg-[#111114]/5 px-2.5 py-0.5 font-mono text-[10px] text-[#111114]/75">
-                  TKJ
-                </span>
-                <span className="rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 font-mono text-[10px] font-semibold">
+              <div className="flex flex-wrap gap-2 mt-2">
+                <span className="rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300/60 px-3 py-1 font-mono text-[10px] font-semibold uppercase">
                   Akreditasi A
+                </span>
+                <span className="rounded-full bg-[#111114]/5 text-[#111114]/75 px-3 py-1 font-mono text-[10px] font-semibold uppercase">
+                  Teknik Komputer &amp; Jaringan
+                </span>
+              </div>
+            </div>
+
+            {/* Right Educational Details & Competency Highlights */}
+            <div className="lg:col-span-8 lg:border-l lg:border-[#111114]/10 lg:pl-8">
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#111114]/10 pb-4 mb-4">
+                <h5 className="font-serif text-xl sm:text-2xl text-[#111114]">
+                  Kompetensi Keahlian Teknik Komputer &amp; Jaringan (TKJ)
+                </h5>
+                <div className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                  <Award size={14} />
+                  <span>Rata-Rata Nilai Ijazah: 85 / 100</span>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-[#111114]/75 leading-relaxed">
+                Menyelesaikan program vokasi 3 tahun dengan pembelajaran intensif pada konfigurasi router MikroTik, pemetaan dan penyambungan kabel fiber optik (FTTH), protokol routing LAN/WAN, administrasi jaringan komputer, dan perakitan embedded system IoT berbasis ESP8266/Arduino.
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2 font-mono text-[11px] text-[#111114]/70">
+                <span className="rounded-lg bg-neutral-100 px-2.5 py-1 border border-neutral-200/80">
+                  Perakitan Splicer FTTH
+                </span>
+                <span className="rounded-lg bg-neutral-100 px-2.5 py-1 border border-neutral-200/80">
+                  Routing MikroTik &amp; VLAN
+                </span>
+                <span className="rounded-lg bg-neutral-100 px-2.5 py-1 border border-neutral-200/80">
+                  IoT Sensor &amp; Microcontroller
+                </span>
+                <span className="rounded-lg bg-neutral-100 px-2.5 py-1 border border-neutral-200/80">
+                  Disiplin Magang Industri Manufaktur
                 </span>
               </div>
             </div>
@@ -383,39 +436,72 @@ export const Certificates = () => {
         </div>
       </div>
 
-      {/* Modal Lightbox */}
+      {/* Large Lightbox Modal for Full-Resolution Certificate Inspection */}
       {activeCert && (
-        <Modal isOpen={!!activeCert} onClose={() => setActiveCert(null)}>
-          <div className="p-6 sm:p-8">
-            <div className="flex items-center justify-between mb-4 border-b pb-4">
-              <div>
-                <h4 className="font-serif text-2xl text-[#111114] font-normal">
-                  {activeCert.title}
-                </h4>
-                <p className="font-mono text-xs text-[#111114]/60 mt-1">
-                  Penerbit: {activeCert.issuer} · {activeCert.period}
-                </p>
+        <Modal
+          isOpen={!!activeCert}
+          onClose={() => setActiveCert(null)}
+          maxWidth="max-w-5xl"
+          title={activeCert.title}
+          subtitle={`Penerbit: ${activeCert.issuer} · Tahun ${activeCert.period}`}
+          toolbar={
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#111114]/10 bg-[#f0f0ed] px-6 py-3 sm:px-8">
+              <span className="font-mono text-xs text-[#111114]/70">
+                Verifikasi Dokumen Resmi
+              </span>
+
+              <div className="flex items-center gap-2.5">
+                <a
+                  href={activeCert.preview}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#111114]/15 bg-white px-3.5 py-1.5 font-mono text-xs font-semibold text-[#111114] shadow-sm hover:bg-[#111114] hover:text-white transition-all"
+                >
+                  <ExternalLink size={13} />
+                  <span>Buka Gambar Asli</span>
+                </a>
+                <a
+                  href={activeCert.preview}
+                  download={`${activeCert.title.replace(/\s+/g, '_')}.webp`}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[#111114] px-3.5 py-1.5 font-mono text-xs font-semibold text-white shadow-sm hover:bg-[#25252a] transition-all"
+                >
+                  <Download size={13} />
+                  <span>Unduh</span>
+                </a>
               </div>
             </div>
-
-            <div className="relative overflow-hidden rounded-xl border bg-black/5 max-h-[75vh] flex items-center justify-center">
+          }
+        >
+          <div className="flex flex-col gap-6">
+            {/* Enlarged Certificate Viewport */}
+            <div className="relative overflow-hidden rounded-2xl border border-[#111114]/15 bg-neutral-100 p-2 sm:p-4 flex items-center justify-center shadow-inner">
               <img
                 src={activeCert.preview}
                 alt={activeCert.title}
-                className="max-h-[75vh] w-auto object-contain"
+                className="max-h-[70vh] w-full object-contain rounded-lg"
+                loading="eager"
               />
             </div>
 
-            <div className="mt-4 flex justify-between items-center text-xs text-[#111114]/70">
-              <span>{activeCert.description}</span>
-              <a
-                href={activeCert.preview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-mono font-semibold text-[#111114] hover:underline"
-              >
-                Buka file asli <ExternalLink size={12} />
-              </a>
+            {/* Credential Details Description */}
+            <div className="rounded-2xl border border-[#111114]/10 bg-white/70 p-5 sm:p-6 text-[#111114]">
+              <h5 className="font-mono text-xs uppercase tracking-wider text-[#111114]/60 font-semibold">
+                Keterangan Kompetensi &amp; Verifikasi
+              </h5>
+              <p className="mt-2 text-sm sm:text-base leading-relaxed text-[#111114]/85">
+                {activeCert.description}
+              </p>
+
+              <div className="mt-4 pt-4 border-t border-[#111114]/10 flex flex-wrap gap-2">
+                {activeCert.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full bg-[#111114]/5 px-3 py-1 font-mono text-xs text-[#111114]/75"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </Modal>
