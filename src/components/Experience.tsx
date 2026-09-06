@@ -1,92 +1,19 @@
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, A11y, Keyboard } from 'swiper/modules';
+import { initialExperiences, type ExperienceItem } from '../data/experience';
+import { getStoredExperiences } from '../lib/portfolioStore';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export interface ExperienceItem {
-  id: string;
-  num: string;
-  role: string;
-  company: string;
-  location: string;
-  period: string;
-  duration: string;
-  type: string;
-  summary: string;
-  highlights: string[];
-  image: string;
-  imageAlt: string;
-}
-
-export const experiences: ExperienceItem[] = [
-  {
-    id: 'rekadaya',
-    num: '01',
-    role: 'Operator Produksi',
-    company: 'PT Rekadaya Multi Adiprima',
-    location: 'Ciangsana, Bogor',
-    period: 'Sep 2024 — Des 2024',
-    duration: '4 bulan',
-    type: 'PKL / Industri',
-    summary:
-      'Menjalankan tugas lini produksi manufaktur otomotif dengan memprioritaskan ketelitian sortasi material, perakitan part felt presisi, dan standardisasi kualitas.',
-    highlights: [
-      'Sortir material & verifikasi spesifikasi komponen',
-      'Assembly double tape felt presisi & rapi',
-      'Quality check produk akhir sebelum packaging',
-      'Mencapai target harian dengan disiplin 5S',
-    ],
-    image: '/proof/preview-Sertifikat_PKL_PT_Rekadaya_2025.webp',
-    imageAlt: 'Sertifikat Praktik Kerja Lapangan PT Rekadaya Multi Adiprima',
-  },
-  {
-    id: 'serin',
-    num: '02',
-    role: 'Operator Produksi',
-    company: 'PT Serin Indonesia',
-    location: 'Bekasi, Jawa Barat',
-    period: 'Jun 2024 — Sep 2024',
-    duration: '4 bulan',
-    type: 'PKL / Industri',
-    summary:
-      'Mendukung kelancaran lini perakitan tas dan perlengkapan industri dengan mematuhi SOP, persiapan komponen, serta aplikasi pengeleman material secara rapi.',
-    highlights: [
-      'Pemasangan aksesoris silinder pada zipper tas',
-      'Aplikasi perekat & lem presisi material jahitan',
-      'Pemeriksaan kerapian visual & fungsi mekanik',
-      'Menjaga kebersihan area kerja (5S) & mesin',
-    ],
-    image: '/proof/instalasi-isp-proses.webp',
-    imageAlt: 'Praktik kerja teknis operasional dan perakitan peralatan',
-  },
-  {
-    id: 'wova',
-    num: '03',
-    role: 'Data Entry Specialist',
-    company: 'PT Wova Group Indonesia',
-    location: 'Cileungsi, Bogor',
-    period: '2023 — 2025',
-    duration: 'Freelance',
-    type: 'Administrasi',
-    summary:
-      'Menginput, merapikan, dan memverifikasi data operasional pelanggan secara teliti untuk memastikan konsistensi database digital dan kemudahan rekapitulasi.',
-    highlights: [
-      'Input data berkala & validasi cegah duplikasi',
-      'Pembersihan & standardisasi format record berulang',
-      'Penyusunan rekapitulasi data siap baca untuk tim',
-      'Pemanfaatan spreadsheet digital percepat kerja',
-    ],
-    image: '/proof/preview-cv.webp',
-    imageAlt: 'Dokumentasi rekapitulasi data administrasi dan berkas operasional',
-  },
-];
+export type { ExperienceItem };
+export const experiences = initialExperiences;
 
 interface ExperienceCardProps {
   experience: ExperienceItem;
@@ -144,12 +71,12 @@ function ExperienceCard({ experience: exp, index, className = '' }: ExperienceCa
       </div>
 
       {/* Media Column */}
-      <div className="group/media relative min-h-0 overflow-hidden border-t border-[#111114]/12 bg-black/90 md:min-h-full md:border-l md:border-t-0">
+      <div className="group/media relative min-h-[140px] sm:min-h-[200px] md:min-h-full overflow-hidden border-t border-[#111114]/12 bg-black/90 md:border-l md:border-t-0">
         <img
           src={exp.image}
           alt={exp.imageAlt}
           loading="lazy"
-          className="h-full w-full object-cover object-center grayscale contrast-105 transition-[filter,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] lg:group-hover/media:scale-105 group-hover/media:grayscale-0"
+          className="absolute inset-0 h-full w-full object-cover object-center grayscale contrast-105 transition-[filter,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] lg:group-hover/media:scale-105 group-hover/media:grayscale-0"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
         <p className="absolute right-5 top-4 font-mono text-3xl font-semibold text-white sm:right-7 sm:top-6 sm:text-4xl">
@@ -166,6 +93,7 @@ function ExperienceCard({ experience: exp, index, className = '' }: ExperienceCa
 }
 
 export const Experience = () => {
+  const [items, setItems] = useState<ExperienceItem[]>(initialExperiences);
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -174,7 +102,18 @@ export const Experience = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const swiperContainerRef = useRef<HTMLDivElement>(null);
 
-  // Exact GSAP matchMedia horizontal pinning from iqmal.dev
+  useEffect(() => {
+    let mounted = true;
+    void getStoredExperiences().then((data) => {
+      if (mounted && data && data.length > 0) {
+        setItems(data);
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   useGSAP(
     () => {
       const section = sectionRef.current;
@@ -254,6 +193,21 @@ export const Experience = () => {
           // Desktop horizontal pin & scroll
           if (!isDesktop || !viewport || !track || !progressBar) return;
 
+          gsap.fromTo(
+            header,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+              },
+            }
+          );
+
           const scrollDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
 
           const tl = gsap.timeline({
@@ -261,7 +215,7 @@ export const Experience = () => {
             scrollTrigger: {
               trigger: section,
               start: 'top top',
-              end: () => `+=${scrollDistance() + window.innerHeight}`,
+              end: () => `+=${scrollDistance() + 400}`,
               pin: true,
               scrub: 0.85,
               anticipatePin: 1,
@@ -269,22 +223,24 @@ export const Experience = () => {
             },
           });
 
-          gsap.set(header, { opacity: 0, y: 20 });
-          gsap.set(desktopCards, { opacity: 0, y: 120, scale: 0.92 });
-
-          tl.fromTo(header, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 0)
-            .fromTo(
-              desktopCards,
-              { opacity: 0, y: 120, scale: 0.92 },
-              { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.5, ease: 'power2.out' },
-              0.2
-            )
-            .to(track, { x: () => -scrollDistance(), duration: 1.2 }, 0.8)
-            .fromTo(progressBar, { scaleX: 0 }, { scaleX: 1, transformOrigin: 'left center', duration: 1.2 }, 0.8);
+          tl.to(
+            track,
+            {
+              x: () => -scrollDistance(),
+              duration: 1,
+              ease: 'none',
+            },
+            0
+          ).fromTo(
+            progressBar,
+            { scaleX: 0 },
+            { scaleX: 1, transformOrigin: 'left center', duration: 1, ease: 'none' },
+            0
+          );
         }
       );
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [items] }
   );
 
   return (
@@ -298,7 +254,7 @@ export const Experience = () => {
         Pengalaman Profesional Shawava Tritya
       </h2>
 
-      {/* Parallax Watermark Text (exact iqmal.dev) */}
+      {/* Parallax Watermark Text */}
       <div
         ref={watermarkRef}
         aria-hidden="true"
@@ -308,7 +264,7 @@ export const Experience = () => {
       </div>
 
       <div className="relative z-10 mx-auto flex h-full min-h-0 max-w-7xl flex-col">
-        {/* Header (exact iqmal.dev layout) */}
+        {/* Header */}
         <div
           ref={headerRef}
           className="mb-4 flex shrink-0 items-end justify-between gap-6 sm:mb-5 lg:mb-8"
@@ -347,7 +303,7 @@ export const Experience = () => {
               768: { slidesPerView: 1.08, spaceBetween: 28 },
             }}
           >
-            {experiences.map((exp, idx) => (
+            {items.map((exp, idx) => (
               <SwiperSlide key={exp.id} className="h-full">
                 <ExperienceCard
                   experience={exp}
@@ -370,7 +326,7 @@ export const Experience = () => {
             data-experience-track="true"
             className="experience-track mx-auto flex h-full w-max gap-4 will-change-transform sm:gap-8 motion-reduce:h-auto motion-reduce:w-full motion-reduce:flex-col motion-reduce:will-change-auto"
           >
-            {experiences.map((exp, idx) => (
+            {items.map((exp, idx) => (
               <ExperienceCard key={exp.id} experience={exp} index={idx} />
             ))}
           </div>

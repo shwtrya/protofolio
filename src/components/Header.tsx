@@ -52,11 +52,16 @@ export const Header = () => {
     { label: 'Projects', href: '#projects' },
     { label: 'Credentials', href: '#certificates' },
     { label: 'Contact', href: '#contact' },
+    { label: 'Admin', href: '/admin' },
   ];
 
   const handleNavClick = useCallback(
     (href: string) => {
       setOpen(false);
+      if (href.startsWith('/')) {
+        navigate(href);
+        return;
+      }
       if (location.pathname !== '/') {
         navigate('/');
         setTimeout(() => scrollToSection(href), 150);

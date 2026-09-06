@@ -5,12 +5,26 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import CaseStudy from './CaseStudy';
 import ProofImage from './ProofImage';
-import { projects, type PortfolioProject } from '../data/projects';
+import { projects as initialProjects, type PortfolioProject } from '../data/projects';
+import { getStoredProjects } from '../lib/portfolioStore';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const Projects = () => {
+  const [projectItems, setProjectItems] = useState<PortfolioProject[]>(initialProjects);
   const [activeProject, setActiveProject] = useState<PortfolioProject | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    void getStoredProjects().then((data) => {
+      if (mounted && data && data.length > 0) {
+        setProjectItems(data);
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const watermarkRef = useRef<HTMLDivElement>(null);
@@ -162,8 +176,8 @@ export const Projects = () => {
         </div>
 
         {/* Project Cards List */}
-        <div ref={containerRef} className="space-y-20 sm:space-y-28">
-          {projects.map((project, idx) => {
+        <div ref={containerRef} className="space-y-6 sm:space-y-8">
+          {projectItems.map((project, idx) => {
             const isEven = idx % 2 === 1;
 
             return (

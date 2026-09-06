@@ -15,6 +15,7 @@ import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Certificates from './components/Certificates';
 
+const Admin = lazy(() => import('./components/Admin'));
 const NotFound = lazy(() => import('./components/NotFound'));
 
 function RouteTracker() {
@@ -52,6 +53,20 @@ function App() {
         <main id="main-content" className="flex-grow overflow-x-hidden max-w-full">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route
+              path="/admin"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="flex min-h-[60vh] items-center justify-center">
+                      <LoadingSpinner />
+                    </div>
+                  }
+                >
+                  <Admin />
+                </Suspense>
+              }
+            />
             <Route
               path="*"
               element={
