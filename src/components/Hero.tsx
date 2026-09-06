@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import { Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -11,314 +11,374 @@ gsap.registerPlugin(ScrollTrigger);
 export const Hero = () => {
   const heroRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // 3D Tilt state
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  const [isHovered, setIsHovered] = useState(false);
 
   const roles = [
     'Teknik Komputer & Jaringan',
-    'Hardware & IoT Prototype',
-    'FTTH & Network Technician',
-    'Production Assembly & QC',
+    'IoT & Hardware Specialist',
+    'IT Support & Networking',
     'Data Entry Specialist',
   ];
 
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState(roles[0]);
-  const [isDeleting, setIsDeleting] = useState(false);
-
   // Typewriter effect
   useEffect(() => {
-    const currentRole = roles[roleIndex];
-    let timeout: NodeJS.Timeout;
+    const currentRole = roles[currentRoleIndex];
+    const typeSpeed = isDeleting ? 30 : 60;
+    const pauseTime = isDeleting ? 400 : 2000;
 
-    if (!isDeleting && displayText === currentRole) {
-      timeout = setTimeout(() => setIsDeleting(true), 2400);
-    } else if (isDeleting && displayText === '') {
-      setIsDeleting(false);
-      setRoleIndex((prev) => (prev + 1) % roles.length);
-    } else {
-      const speed = isDeleting ? 30 : 60;
-      timeout = setTimeout(() => {
-        setDisplayText((prev) =>
-          isDeleting
-            ? currentRole.substring(0, prev.length - 1)
-            : currentRole.substring(0, prev.length + 1)
-        );
-      }, speed);
-    }
+    const timer = setTimeout(() => {
+      if (!isDeleting && displayText === currentRole) {
+        setTimeout(() => setIsDeleting(true), pauseTime);
+      } else if (isDeleting && displayText === '') {
+        setIsDeleting(false);
+        setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+      } else {
+        const nextText = isDeleting
+          ? currentRole.substring(0, displayText.length - 1)
+          : currentRole.substring(0, displayText.length + 1);
+        setDisplayText(nextText);
+      }
+    }, typeSpeed);
 
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, roleIndex, roles]);
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, currentRoleIndex]);
 
-  // Entrance & Scroll Animation matching iqmal.dev
+  // Exact iqmal.dev GSAP matchMedia Entrance Animation
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      mm.add(
-        {
-          isDesktop: '(min-width: 768px)',
-          isMobile: '(max-width: 767px)',
-          reduceMotion: '(prefers-reduced-motion: reduce)',
-        },
-        (context) => {
-          const { isDesktop, reduceMotion } = context.conditions ?? {};
+      mm.add('(min-width: 1024px)', () => {
+        const tl = gsap.timeline();
+        tl.from('.hero-socials', {
+          y: -20,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+        })
+          .from(
+            '.location',
+            {
+              x: -200,
+              opacity: 0,
+              duration: 1,
+              ease: 'power3.out',
+            },
+            '-=0.6'
+          )
+          .from(
+            '.greetings',
+            {
+              x: -200,
+              opacity: 0,
+              duration: 1,
+              ease: 'power3.out',
+            },
+            '-=0.8'
+          )
+          .from(
+            '.role',
+            {
+              x: -200,
+              opacity: 0,
+              duration: 1,
+              ease: 'power3.out',
+            },
+            '-=0.8'
+          )
+          .from(
+            '.hero-resume',
+            {
+              x: -200,
+              opacity: 0,
+              duration: 1,
+              ease: 'power3.out',
+            },
+            '-=0.8'
+          )
+          .from(
+            '.profile-card',
+            {
+              x: 200,
+              opacity: 0,
+              duration: 1.2,
+              ease: 'power3.out',
+            },
+            '-=1'
+          );
+      });
 
-          if (reduceMotion) {
-            gsap.set(
-              [
-                '.hero-socials a',
-                '.location',
-                '.greetings',
-                '.profile-card',
-                '.hero-resume',
-                '.hero-scroll-indicator',
-              ],
-              { clearProps: 'all' }
-            );
-            return;
-          }
-
-          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-          if (isDesktop) {
-            tl.from('.hero-socials a', { opacity: 0, y: -20, stagger: 0.1, duration: 0.8 })
-              .from('.location', { opacity: 0, x: -160, duration: 0.7 }, '-=0.6')
-              .from('.greetings', { opacity: 0, x: 160, duration: 1.4 }, '-=0.7')
-              .from('.profile-card', { scale: 0.88, opacity: 0, duration: 1.1, rotate: 3 }, '-=1.4')
-              .from('.hero-resume', { opacity: 0, y: 10, duration: 0.6 }, '-=0.8')
-              .from('.hero-scroll-indicator', { opacity: 0, y: 15, duration: 0.9 }, '-=0.8');
-
-            // Parallax exit when scrolling down towards About
-            if (heroRef.current) {
-              gsap.to(heroRef.current, {
-                opacity: 0.35,
-                scale: 0.96,
-                y: 30,
-                ease: 'none',
-                scrollTrigger: {
-                  trigger: heroRef.current,
-                  start: 'bottom 85%',
-                  end: 'bottom top',
-                  scrub: true,
-                },
-              });
-            }
-          } else {
-            tl.from('.hero-socials a', { opacity: 0, stagger: 0.08, duration: 0.45 })
-              .from('.location', { opacity: 0, duration: 0.4 }, '-=0.25')
-              .from('.greetings', { opacity: 0, duration: 0.55 }, '-=0.2')
-              .from('.hero-resume', { opacity: 0, duration: 0.35 }, '-=0.1')
-              .from('.hero-scroll-indicator', { opacity: 0, duration: 0.35 }, '-=0.15');
-          }
-        }
-      );
+      mm.add('(max-width: 1023px)', () => {
+        const tl = gsap.timeline();
+        tl.from('.hero-socials', { y: -20, opacity: 0, duration: 0.8, ease: 'power3.out' })
+          .from('.location', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+          .from('.greetings', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+          .from('.role', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+          .from('.hero-resume', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+          .from('.profile-card', { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6');
+      });
     },
     { scope: heroRef }
   );
 
-  // Interactive 3D Cursor Tilt for Desktop View
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+  // Realtime 3D tilt calculations
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
-    const clampedX = Math.min(Math.max(x, 0), 1);
-    const clampedY = Math.min(Math.max(y, 0), 1);
-
-    const rotX = -9 * (clampedY - 0.5);
-    const rotY = 9 * (clampedX - 0.5);
-
-    gsap.to(cardRef.current, {
-      rotateX: rotX,
-      rotateY: rotY,
-      scale: 1.015,
-      duration: 0.3,
-      ease: 'power2.out',
-      transformPerspective: 1200,
-    });
-
-    setGlare({ x: clampedX * 100, y: clampedY * 100, opacity: 1 });
+    setMousePos({ x, y });
   };
 
-  const handleCardMouseLeave = () => {
-    if (!cardRef.current) return;
-    gsap.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: 0,
-      scale: 1,
-      duration: 0.8,
-      ease: 'power3.out',
-    });
-    setGlare((prev) => ({ ...prev, opacity: 0 }));
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setMousePos({ x: 0.5, y: 0.5 });
   };
+
+  const rotateY = isHovered ? (mousePos.x - 0.5) * 22 : 0;
+  const rotateX = isHovered ? (0.5 - mousePos.y) * 22 : 0;
+  const glareX = mousePos.x * 100;
+  const glareY = mousePos.y * 100;
 
   return (
     <section
       ref={heroRef}
       id="home"
-      aria-label="Beranda Shawava Tritya"
-      className="hero-section relative min-h-[calc(100vh-4rem)] grid content-start items-start gap-8 px-6 pb-16 pt-24 sm:gap-10 sm:px-10 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-20 lg:py-12 overflow-hidden bg-[#e8e8e5]"
+      aria-label="Pengenalan Shawava Tritya"
+      className="hero-section relative mb-10 grid min-h-[calc(100vh-5rem)] content-start items-start gap-8 px-6 pb-10 pt-24 sm:gap-10 sm:px-10 sm:pb-14 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-24 lg:py-10"
     >
-      {/* Radial dot grid background (exact iqmal.dev) */}
+      {/* Background Dot Grid */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(17,17,20,0.06)_1.5px,transparent_1.5px)] [background-size:32px_32px]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(17,17,20,0.05)_1.5px,transparent_1.5px)] [background-size:32px_32px]"
         style={{
           maskImage: 'radial-gradient(ellipse at center, white 40%, transparent 100%)',
           WebkitMaskImage: 'radial-gradient(ellipse at center, white 40%, transparent 100%)',
         }}
       />
 
-      {/* Left Column: Intro & Info */}
-      <div className="relative z-10 max-w-3xl">
-        {/* Socials Row */}
-        <div className="hero-socials mb-4 flex items-center gap-5 sm:mb-5">
+      {/* LEFT COLUMN: Identity & Bio */}
+      <div className="relative z-10 max-w-4xl">
+        {/* Social Icons */}
+        <div className="hero-socials mb-4 flex items-center gap-6 sm:mb-5 lg:mb-6">
           <a
             href={profile.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#111114]/50 hover:text-[#111114] transition-colors"
+            className="text-[#111114]/45 hover:text-[#111114] transition-colors duration-300"
             aria-label="GitHub"
           >
-            <Github size={19} />
+            <Github className="h-5 w-5" />
           </a>
           <a
             href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#111114]/50 hover:text-[#111114] transition-colors"
+            className="text-[#111114]/45 hover:text-[#111114] transition-colors duration-300"
             aria-label="LinkedIn"
           >
-            <Linkedin size={19} />
-          </a>
-          <a
-            href={`https://wa.me/${profile.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#111114]/50 hover:text-[#111114] transition-colors"
-            aria-label="WhatsApp"
-          >
-            <MessageCircle size={19} />
+            <Linkedin className="h-5 w-5" />
           </a>
           <a
             href={`mailto:${profile.email}`}
-            className="text-[#111114]/50 hover:text-[#111114] transition-colors"
+            className="text-[#111114]/45 hover:text-[#111114] transition-colors duration-300"
             aria-label="Email"
           >
-            <Mail size={19} />
+            <Mail className="h-5 w-5" />
+          </a>
+          <a
+            href="https://wa.me/6285883281031"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#111114]/45 hover:text-[#111114] transition-colors duration-300"
+            aria-label="WhatsApp"
+          >
+            <MessageCircle className="h-5 w-5" />
           </a>
         </div>
 
-        {/* Location tag with pulse indicator */}
-        <div className="location flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <p className="font-sans text-xs sm:text-sm uppercase tracking-[0.28em] text-[#111114]/60 font-medium">
-            Bogor · Indonesia
-          </p>
-        </div>
+        {/* Location Tag */}
+        <p className="location font-sans text-sm uppercase tracking-[0.28em] text-[#111114]/60">
+          Bogor · Indonesia
+        </p>
 
-        {/* Main Display Headline (exact iqmal.dev proportions) */}
-        <h1 className="greetings mt-3 font-serif text-5xl sm:text-7xl lg:text-[5.25rem] xl:text-[6.5rem] leading-[0.95] tracking-tight max-w-[11ch] text-[#111114]">
-          Hi, I’m <span className="font-editorial italic font-normal">Shawava.</span>
+        {/* Main Display Headline */}
+        <h1 className="greetings mt-4 min-h-[4.5rem] max-w-[11ch] font-serif text-6xl leading-none sm:mt-5 sm:min-h-[7rem] sm:text-8xl lg:min-h-[9rem] lg:text-9xl text-[#111114]">
+          Hi, I’m <span className="italic">Shawava.</span>
         </h1>
 
         {/* Dynamic Typewriter Role */}
-        <div className="mt-3 sm:mt-4 min-h-[2.25rem] sm:min-h-[2.75rem] flex items-center">
-          <span className="font-sans text-lg sm:text-2xl lg:text-3xl font-light tracking-wide text-[#111114]/80">
-            {displayText}
-          </span>
-          <span className="inline-block w-0.5 h-5 sm:h-7 bg-[#111114] ml-1.5 animate-pulse align-middle" />
+        <div className="inline-block">
+          <div
+            className="inline-block whitespace-pre-wrap tracking-tight role mt-1 block min-h-[2rem] min-w-[18ch] whitespace-nowrap text-xl font-thin leading-tight tracking-[0.06em] sm:mt-2 sm:min-h-[3.5rem] sm:text-4xl lg:mt-3 lg:min-h-[3.75rem] lg:text-5xl text-[#111114]"
+            aria-label="Spesialisasi Teknis"
+          >
+            <span className="inline text-[#111114]">{displayText}</span>
+            <span
+              className="text-type-cursor ml-1 inline-block text-[#111114] font-normal"
+              style={{ animationDuration: '0.6s' }}
+            >
+              |
+            </span>
+          </div>
         </div>
 
-        {/* Compact Description */}
-        <p className="mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-[#111114]/70">
-          Lulusan SMK Negeri 1 Cileungsi (TKJ). Berpengalaman merakit prototype IoT berbasis ESP8266/Arduino, praktik instalasi ISP hingga router, serta disiplin kerja manufaktur dan data entry.
-        </p>
-
         {/* Action Button */}
-        <div className="hero-resume mt-6 flex items-center gap-4">
+        <div className="hero-resume mt-4 flex sm:mt-5 lg:mt-6">
           <CvPreview
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer shadow-md"
+            className="inline-flex w-fit items-center rounded-full border border-[#111114]/15 bg-[#111114] px-5 py-3 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:bg-transparent hover:text-[#111114] cursor-pointer shadow-sm"
             label="Resume"
             showIcon={true}
           />
         </div>
       </div>
 
-      {/* Right Column: 3D Profile Card (proportional desktop scale) */}
+      {/* RIGHT COLUMN: 3D Interactive Tilt Profile Card */}
       <div className="profile-card relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end">
         <div
           ref={cardRef}
-          onMouseMove={handleCardMouseMove}
-          onMouseLeave={handleCardMouseLeave}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           data-profile-card="true"
-          className="relative h-[420px] w-full max-w-[340px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] will-change-transform sm:h-[480px] sm:max-w-[400px] lg:h-[540px] lg:max-w-[440px] transition-transform duration-300 ease-out"
+          className="relative h-[480px] w-full max-w-[390px] overflow-hidden rounded-[2rem] border border-white/18 bg-[#0b0b0d] will-change-transform sm:h-[560px] sm:max-w-[450px] lg:h-[640px] lg:max-w-[520px]"
           style={{
             transformStyle: 'preserve-3d',
-            boxShadow: '0 24px 60px rgba(17, 17, 20, 0.22)',
+            transform: isHovered
+              ? `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+              : 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+            transition: isHovered
+              ? 'transform 0.1s cubic-bezier(0.1, 0.4, 0.2, 1)'
+              : 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            boxShadow: isHovered
+              ? '0 35px 80px rgba(17, 17, 20, 0.3)'
+              : '0 28px 70px rgba(17, 17, 20, 0.18)',
           }}
         >
-          {/* Dynamic Specular Glare Overlay */}
-          <div
-            className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
-            style={{
-              background: `radial-gradient(circle 360px at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18), transparent 70%)`,
-              opacity: glare.opacity,
-            }}
-          />
-
-          {/* Background Gradients */}
+          {/* Card background layers */}
           <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0)_34%),linear-gradient(180deg,#25252a_0%,#131418_48%,#050506_100%)]" />
           <div className="absolute inset-x-8 top-8 h-px bg-white/10" />
 
-          {/* Background Code SVG Glyphs */}
+          {/* Decorative Technical Schematics SVGs */}
           <svg
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
-            className="absolute left-6 top-20 h-16 w-16 -rotate-12 text-white/10"
+            className="size-8 absolute left-8 top-24 h-20 w-20 -rotate-12 text-white/10"
           >
-            <path d="M8 1L6 15L8 15.2L10 1.2L8 1Z" fill="currentColor" />
-            <path d="M12.5 11.5L11.1 10.1L13.2 8L11.1 5.9L12.5 4.5L16 8L12.5 11.5Z" fill="currentColor" />
-            <path d="M2.8 8L4.9 10.1L3.5 11.5L0 8L3.5 4.5L4.9 5.9L2.8 8Z" fill="currentColor" />
+            <path
+              d="M8.01 0.86L6.01 14.86L7.99 15.14L9.99 1.14L8.01 0.86Z"
+              fill="currentColor"
+            />
+            <path
+              d="M12.5 11.5L11.08 10.08L13.17 8L11.08 5.91L12.5 4.5L16 8L12.5 11.5Z"
+              fill="currentColor"
+            />
+            <path
+              d="M2.83 8L4.91 10.08L3.5 11.5L0 8L3.5 4.5L4.91 5.91L2.83 8Z"
+              fill="currentColor"
+            />
           </svg>
 
-          {/* Profile Photo */}
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+            className="size-8 absolute right-8 top-16 h-24 w-24 rotate-12 text-white/10"
+          >
+            <path
+              d="M8.01 0.86L6.01 14.86L7.99 15.14L9.99 1.14L8.01 0.86Z"
+              fill="currentColor"
+            />
+            <path
+              d="M12.5 11.5L11.08 10.08L13.17 8L11.08 5.91L12.5 4.5L16 8L12.5 11.5Z"
+              fill="currentColor"
+            />
+            <path
+              d="M2.83 8L4.91 10.08L3.5 11.5L0 8L3.5 4.5L4.91 5.91L2.83 8Z"
+              fill="currentColor"
+            />
+          </svg>
+
+          {/* Photo */}
           <img
             src="/profile.webp"
-            alt="Foto Shawava Tritya"
-            width={600}
-            height={600}
+            alt="Shawava Tritya"
+            width={520}
+            height={640}
             loading="eager"
-            className="absolute inset-0 h-full w-full object-cover object-top rounded-[2rem] grayscale contrast-105 hover:grayscale-0 transition-[filter] duration-700 ease-out"
+            className="relative z-10 h-full w-full object-cover object-[50%_25%] rounded-[2rem] grayscale contrast-105 transition-all duration-700 hover:grayscale-0"
+            style={{
+              position: 'absolute',
+              height: '100%',
+              width: '100%',
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+            }}
           />
 
-          {/* Bottom Dark Vignette Fade */}
-          <div className="absolute inset-x-0 bottom-0 z-20 h-40 rounded-b-[2rem] bg-gradient-to-t from-[#050506] via-[#050506]/85 to-transparent" />
+          {/* Gradient fade at bottom */}
+          <div className="absolute inset-x-0 bottom-0 z-20 h-40 rounded-b-[2rem] bg-gradient-to-t from-[#050506] via-[#050506]/80 to-transparent" />
 
-          {/* Floating Glass Status Pill */}
-          <div className="absolute inset-x-4 bottom-4 z-30 flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/[0.08] px-4 py-3 backdrop-blur-md">
+          {/* Specular Glare */}
+          {isHovered && (
+            <div
+              className="pointer-events-none absolute inset-0 z-20 rounded-[2rem] transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(circle 350px at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 70%)`,
+                mixBlendMode: 'overlay',
+              }}
+            />
+          )}
+
+          {/* Floating Availability Badge */}
+          <div className="absolute inset-x-5 bottom-5 z-30 flex items-center justify-between gap-4 rounded-2xl border border-white/12 bg-white/[0.075] px-5 py-4 text-white shadow-[0_16px_40px_rgba(0,0,0,0.24)] backdrop-blur-md">
             <div>
-              <span className="block font-mono text-xs font-semibold text-white/90">
-                @shwtrya
-              </span>
-              <span className="flex items-center gap-1.5 text-[0.72rem] text-white/70">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Available for work!
-              </span>
+              <p className="text-sm font-semibold leading-none text-white">@shwtrya</p>
+              <p className="mt-2 text-sm leading-none text-white/60">Available for work!</p>
             </div>
-            <span className="font-mono text-[10px] uppercase tracking-wider text-white/40">
-              Bogor, ID
-            </span>
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.8)] animate-pulse" />
           </div>
         </div>
       </div>
 
       {/* Scroll Down Indicator matching iqmal.dev */}
-      <div className="hero-scroll-indicator absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none opacity-50">
-        <div className="w-5 h-7 border border-[#111114]/35 rounded-full flex justify-center p-1">
-          <div className="w-1 h-2 bg-[#111114] rounded-full animate-bounce" style={{ animationDuration: '1.8s' }} />
+      <div className="hero-scroll-indicator absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none opacity-45">
+        <div className="w-5 h-8 border border-[#111114]/50 rounded-full flex justify-center p-1">
+          <div
+            className="w-1 h-2 bg-[#111114] rounded-full animate-bounce"
+            style={{ animationDuration: '1.8s' }}
+          />
         </div>
-        <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#111114]/60">Scroll Down</span>
+        <div className="flex flex-col items-center gap-1">
+          <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#111114]/65">
+            Scroll Down
+          </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-2.5 w-2.5 animate-bounce text-[#111114]/50"
+            style={{ animationDuration: '1.5s' }}
+          >
+            <path d="M12 5v14M19 12l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
     </section>
   );

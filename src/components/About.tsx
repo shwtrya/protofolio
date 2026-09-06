@@ -25,7 +25,7 @@ export const About = () => {
     'Quality Control',
   ];
 
-  // Scroll animations for About (dramatic pulled-up dark background curve)
+  // Scroll animations for About matching iqmal.dev
   useGSAP(
     () => {
       // 1. Text lines scrub reveal
@@ -33,7 +33,7 @@ export const About = () => {
         .timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 50%',
+            start: 'top 60%',
             end: 'bottom 90%',
             scrub: 1.4,
           },
@@ -51,20 +51,20 @@ export const About = () => {
           '-=0.1'
         );
 
-      // 2. Giant curved oval dynamic stretch - background pulled up over Hero
+      // 2. Giant curved oval dynamic stretch - pulls up as user scrolls to about
       if (ovalRef.current && sectionRef.current) {
         gsap.fromTo(
           ovalRef.current,
-          { scaleY: 0.15, y: 150 },
+          { scaleY: 0.6, y: 50 },
           {
-            scaleY: 1.85,
+            scaleY: 1.5,
             y: -50,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top bottom',
-              end: 'top 15%',
-              scrub: 1.2,
+              end: 'top 20%',
+              scrub: 1,
             },
           }
         );
@@ -96,13 +96,13 @@ export const About = () => {
       ref={sectionRef}
       id="about"
       aria-labelledby="about-heading"
-      className="relative z-20 -mt-16 sm:-mt-24 flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-16 sm:pb-36 sm:pt-24"
+      className="relative z-20 flex h-fit flex-col items-center justify-center gap-16 sm:gap-20 bg-[#18181c] text-[#f4f4f1] px-6 pb-32 pt-20 sm:pb-36 sm:pt-28"
     >
-      {/* Giant curved dark entry oval (pulled up over hero like a rising curtain) */}
+      {/* Giant curved dark entry oval (exact iqmal.dev - hidden below fold on load, stretches up on scroll) */}
       <div
         ref={ovalRef}
         aria-hidden="true"
-        className="absolute left-1/2 -top-28 sm:-top-44 h-[220px] sm:h-[320px] w-[140vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
+        className="absolute left-1/2 -top-24 sm:-top-28 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
       />
 
       <h2 id="about-heading" className="sr-only">
