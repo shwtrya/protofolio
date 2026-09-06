@@ -51,20 +51,20 @@ export const About = () => {
           '-=0.1'
         );
 
-      // 2. Giant curved oval dynamic stretch - pulls up as user scrolls to about
+      // 2. Giant curved oval dynamic stretch - starts deep below fold and pulls up as user scrolls
       if (ovalRef.current && sectionRef.current) {
         gsap.fromTo(
           ovalRef.current,
-          { scaleY: 0.6, y: 50 },
+          { scaleY: 0.2, y: 160 },
           {
-            scaleY: 1.5,
+            scaleY: 1.6,
             y: -50,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top bottom',
-              end: 'top 20%',
-              scrub: 1,
+              end: 'top 15%',
+              scrub: 1.2,
             },
           }
         );
@@ -102,7 +102,7 @@ export const About = () => {
       <div
         ref={ovalRef}
         aria-hidden="true"
-        className="absolute left-1/2 -top-24 sm:-top-28 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
+        className="absolute left-1/2 -top-16 sm:-top-20 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
       />
 
       <h2 id="about-heading" className="sr-only">

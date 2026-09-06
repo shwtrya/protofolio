@@ -143,8 +143,8 @@ export const Hero = () => {
     setMousePos({ x: 0.5, y: 0.5 });
   };
 
-  const rotateY = isHovered ? (mousePos.x - 0.5) * 22 : 0;
-  const rotateX = isHovered ? (0.5 - mousePos.y) * 22 : 0;
+  const rotateY = isHovered ? (mousePos.x - 0.5) * 20 : 0;
+  const rotateX = isHovered ? (0.5 - mousePos.y) * 20 : 0;
   const glareX = mousePos.x * 100;
   const glareY = mousePos.y * 100;
 
@@ -153,7 +153,7 @@ export const Hero = () => {
       ref={heroRef}
       id="home"
       aria-label="Pengenalan Shawava Tritya"
-      className="hero-section relative mb-10 grid min-h-[calc(100vh-5rem)] content-start items-start gap-8 px-6 pb-10 pt-24 sm:gap-10 sm:px-10 sm:pb-14 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-24 lg:py-10"
+      className="hero-section relative grid min-h-screen lg:h-screen lg:min-h-[720px] lg:max-h-[960px] content-start items-start gap-8 px-6 pb-12 pt-24 sm:gap-10 sm:px-10 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-24 lg:py-0 overflow-hidden"
     >
       {/* Background Dot Grid */}
       <div
@@ -210,14 +210,14 @@ export const Hero = () => {
         </p>
 
         {/* Main Display Headline */}
-        <h1 className="greetings mt-4 min-h-[4.5rem] max-w-[11ch] font-serif text-6xl leading-none sm:mt-5 sm:min-h-[7rem] sm:text-8xl lg:min-h-[9rem] lg:text-9xl text-[#111114]">
+        <h1 className="greetings mt-4 min-h-[4.5rem] max-w-[11ch] font-serif text-6xl leading-none sm:mt-5 sm:min-h-[7rem] sm:text-8xl lg:min-h-[8.5rem] lg:text-[5.5rem] xl:text-9xl text-[#111114]">
           Hi, I’m <span className="italic">Shawava.</span>
         </h1>
 
         {/* Dynamic Typewriter Role */}
         <div className="inline-block">
           <div
-            className="inline-block whitespace-pre-wrap tracking-tight role mt-1 block min-h-[2rem] min-w-[18ch] whitespace-nowrap text-xl font-thin leading-tight tracking-[0.06em] sm:mt-2 sm:min-h-[3.5rem] sm:text-4xl lg:mt-3 lg:min-h-[3.75rem] lg:text-5xl text-[#111114]"
+            className="inline-block whitespace-pre-wrap tracking-tight role mt-1 block min-h-[2rem] min-w-[18ch] whitespace-nowrap text-xl font-thin leading-tight tracking-[0.06em] sm:mt-2 sm:min-h-[3rem] sm:text-3xl lg:mt-3 lg:min-h-[3.5rem] lg:text-4xl xl:text-5xl text-[#111114]"
             aria-label="Spesialisasi Teknis"
           >
             <span className="inline text-[#111114]">{displayText}</span>
@@ -248,7 +248,7 @@ export const Hero = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           data-profile-card="true"
-          className="relative h-[480px] w-full max-w-[390px] overflow-hidden rounded-[2rem] border border-white/18 bg-[#0b0b0d] will-change-transform sm:h-[560px] sm:max-w-[450px] lg:h-[640px] lg:max-w-[520px]"
+          className="relative h-[440px] w-full max-w-[360px] overflow-hidden rounded-[2rem] border border-white/18 bg-[#0b0b0d] will-change-transform sm:h-[500px] sm:max-w-[420px] lg:h-[560px] lg:max-w-[460px] xl:h-[600px] xl:max-w-[490px]"
           style={{
             transformStyle: 'preserve-3d',
             transform: isHovered
@@ -352,7 +352,7 @@ export const Hero = () => {
       </div>
 
       {/* Scroll Down Indicator matching iqmal.dev */}
-      <div className="hero-scroll-indicator absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none opacity-45">
+      <div className="hero-scroll-indicator absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none opacity-45">
         <div className="w-5 h-8 border border-[#111114]/50 rounded-full flex justify-center p-1">
           <div
             className="w-1 h-2 bg-[#111114] rounded-full animate-bounce"
