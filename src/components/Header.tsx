@@ -73,7 +73,7 @@ export const Header = () => {
       <header
         role="banner"
         aria-label="Navigasi Utama"
-        className={`fixed top-0 left-0 w-full z-40 px-6 sm:px-10 lg:px-24 py-5 sm:py-6 lg:py-8 flex items-center justify-between pointer-events-none transition-transform duration-500 will-change-transform ${
+        className={`fixed top-0 left-0 w-full z-40 px-4 sm:px-10 lg:px-24 py-4 sm:py-6 lg:py-8 flex items-center justify-between pointer-events-none transition-transform duration-500 will-change-transform ${
           hidden && !open ? '-translate-y-[120%]' : 'translate-y-0'
         }`}
       >

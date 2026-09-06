@@ -218,7 +218,12 @@ export const Certificates = () => {
             {/* Right Heatmap preview */}
             <div data-lenis-prevent="true" className="lg:col-span-8 overflow-x-auto pb-2">
               <div className="flex items-center justify-between mb-3 text-xs font-mono text-[#111114]/60">
-                <span>@shwtrya</span>
+                <span className="flex items-center gap-2">
+                  <span>@shwtrya</span>
+                  <span className="sm:hidden text-[10px] text-[#111114]/40 font-sans">
+                    (geser horizontal →)
+                  </span>
+                </span>
                 <a
                   href="https://github.com/shwtrya"
                   target="_blank"

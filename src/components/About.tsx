@@ -33,9 +33,9 @@ export const About = () => {
         .timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 60%',
+            start: 'top 65%',
             end: 'bottom 90%',
-            scrub: 1.4,
+            scrub: 1.2,
           },
         })
         .fromTo(
@@ -44,8 +44,8 @@ export const About = () => {
           {
             opacity: 1,
             yPercent: 0,
-            duration: 2.5,
-            stagger: { each: 0.4, ease: 'power2.out' },
+            duration: 2,
+            stagger: { each: 0.35, ease: 'power2.out' },
             ease: 'power3.out',
           },
           '-=0.1'
@@ -55,10 +55,10 @@ export const About = () => {
       if (ovalRef.current && sectionRef.current) {
         gsap.fromTo(
           ovalRef.current,
-          { scaleY: 0.2, y: 160 },
+          { scaleY: 0.2, y: 150 },
           {
-            scaleY: 1.6,
-            y: -50,
+            scaleY: 1.5,
+            y: -40,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
@@ -73,13 +73,13 @@ export const About = () => {
       // 3. Bento cards desktop stagger reveal
       gsap.fromTo(
         '.bento-stat-card',
-        { opacity: 0, y: 50, scale: 0.95 },
+        { opacity: 0, y: 40, scale: 0.96 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.85,
-          stagger: 0.15,
+          duration: 0.8,
+          stagger: 0.12,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: '.bento-stat-card',
@@ -96,13 +96,13 @@ export const About = () => {
       ref={sectionRef}
       id="about"
       aria-labelledby="about-heading"
-      className="relative z-20 flex h-fit flex-col items-center justify-center gap-16 sm:gap-20 bg-[#18181c] text-[#f4f4f1] px-6 pb-32 pt-20 sm:pb-36 sm:pt-28"
+      className="relative z-20 flex h-fit flex-col items-center justify-center gap-12 sm:gap-16 lg:gap-20 bg-[#18181c] text-[#f4f4f1] px-5 py-20 sm:px-10 sm:pb-36 sm:pt-28"
     >
       {/* Giant curved dark entry oval (exact iqmal.dev - hidden below fold on load, stretches up on scroll) */}
       <div
         ref={ovalRef}
         aria-hidden="true"
-        className="absolute left-1/2 -top-16 sm:-top-20 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
+        className="absolute left-1/2 -top-16 sm:-top-20 h-[140px] sm:h-[180px] w-[160vw] sm:w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
       />
 
       <h2 id="about-heading" className="sr-only">
@@ -110,12 +110,12 @@ export const About = () => {
       </h2>
 
       {/* Kicker */}
-      <p className="relative z-20 font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
+      <p className="relative z-20 font-mono text-[0.62rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
         About &amp; Overview
       </p>
 
       {/* Big Statement Typography with scrub line reveals */}
-      <div className="relative z-20 max-w-5xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.25] tracking-[-0.035em] text-white/70">
+      <div className="relative z-20 max-w-5xl text-center font-sans text-[clamp(1.45rem,4.2vw,3.2rem)] leading-[1.28] tracking-[-0.03em] text-white/70">
         <div className="overflow-hidden py-1">
           <p className="line will-change-transform">
             <span>Saya merancang </span>
@@ -143,32 +143,32 @@ export const About = () => {
 
       {/* Embedded Marquee Ticker with Mask (exact iqmal.dev setup) */}
       <div
-        className="relative z-20 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5 group cursor-pointer"
+        className="relative z-20 w-full max-w-7xl overflow-hidden border-y border-white/10 py-4 sm:py-5 group cursor-pointer"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
         }}
       >
-        <div className="animate-marquee flex gap-12 sm:gap-16 font-mono text-xs uppercase tracking-[0.25em] text-white/85 font-medium select-none group-hover:[animation-play-state:paused]">
+        <div className="animate-marquee flex gap-10 sm:gap-16 font-mono text-xs uppercase tracking-[0.22em] text-white/85 font-medium select-none group-hover:[animation-play-state:paused]">
           {marqueeSkills.concat(marqueeSkills).map((skill, index) => (
-            <div key={index} className="flex items-center gap-4 sm:gap-6 shrink-0">
+            <div key={index} className="flex items-center gap-3 sm:gap-6 shrink-0">
               <span>{skill}</span>
-              <span className="text-white/30 text-sm">✦</span>
+              <span className="text-white/30 text-xs sm:text-sm">✦</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Bento Stats Row */}
-      <div className="relative z-20 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl text-left">
-        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-emerald-400 transition-colors">
-            <Award size={18} />
-            <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
+      <div className="relative z-20 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-7xl text-left">
+        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-2.5 text-white/40 mb-2.5 sm:mb-3 group-hover:text-emerald-400 transition-colors">
+            <Award size={16} />
+            <span className="font-mono text-[0.62rem] sm:text-[0.65rem] tracking-[0.2em] uppercase">
               Pendidikan
             </span>
           </div>
-          <div className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
+          <div className="font-editorial text-3xl sm:text-4xl lg:text-5xl font-bold text-white italic">
             85 / 100
           </div>
           <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
@@ -176,14 +176,14 @@ export const About = () => {
           </p>
         </div>
 
-        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-amber-400 transition-colors">
-            <Briefcase size={18} />
-            <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
+        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-2.5 text-white/40 mb-2.5 sm:mb-3 group-hover:text-amber-400 transition-colors">
+            <Briefcase size={16} />
+            <span className="font-mono text-[0.62rem] sm:text-[0.65rem] tracking-[0.2em] uppercase">
               Pengalaman
             </span>
           </div>
-          <div className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
+          <div className="font-editorial text-3xl sm:text-4xl lg:text-5xl font-bold text-white italic">
             3+ Peran
           </div>
           <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
@@ -191,14 +191,14 @@ export const About = () => {
           </p>
         </div>
 
-        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-sky-400 transition-colors">
-            <Cpu size={18} />
-            <span className="font-mono text-[0.65rem] tracking-[0.2em] uppercase">
+        <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+          <div className="flex items-center gap-2.5 text-white/40 mb-2.5 sm:mb-3 group-hover:text-sky-400 transition-colors">
+            <Cpu size={16} />
+            <span className="font-mono text-[0.62rem] sm:text-[0.65rem] tracking-[0.2em] uppercase">
               Kompetensi
             </span>
           </div>
-          <div className="font-editorial text-4xl sm:text-5xl font-bold text-white italic">
+          <div className="font-editorial text-3xl sm:text-4xl lg:text-5xl font-bold text-white italic">
             100% Praktik
           </div>
           <p className="mt-2 text-xs sm:text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">

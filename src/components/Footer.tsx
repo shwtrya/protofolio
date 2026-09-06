@@ -66,8 +66,8 @@ export const Footer = () => {
             .timeline({
               scrollTrigger: {
                 trigger: section,
-                start: 'top bottom',
-                end: 'bottom bottom',
+                start: 'top 85%',
+                end: 'bottom 95%',
                 scrub: 0.85,
                 invalidateOnRefresh: true,
               },
@@ -78,8 +78,8 @@ export const Footer = () => {
               { yPercent: 0, opacity: 1, stagger: 0.15, duration: 1.2, ease: 'power2.out' },
               0
             )
-            .fromTo(email, { y: 60, opacity: 0 }, { y: 0, opacity: 1, ease: 'power1.out', duration: 1 }, 0.4)
-            .fromTo(bottom, { y: 40, opacity: 0 }, { y: 0, opacity: 1, ease: 'power1.out', duration: 0.8 }, 0.65);
+            .fromTo(email, { y: 40, opacity: 0 }, { y: 0, opacity: 1, ease: 'power1.out', duration: 1 }, 0.3)
+            .fromTo(bottom, { y: 30, opacity: 0 }, { y: 0, opacity: 1, ease: 'power1.out', duration: 0.8 }, 0.5);
         }
       );
     },
