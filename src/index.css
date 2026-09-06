@@ -199,6 +199,7 @@ html.lenis, html.lenis body {
   display: block;
   position: relative;
   overflow: visible;
+  touch-action: pan-y;
 }
 
 .experience-swiper .swiper-wrapper {

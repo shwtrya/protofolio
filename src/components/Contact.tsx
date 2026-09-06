@@ -348,12 +348,12 @@ const Contact = () => {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-secondary"
+                    className="btn btn-secondary min-h-[44px] flex items-center justify-center"
                   >
                     <Phone size={15} />
                     Chat WhatsApp
                   </a>
-                  <button type="submit" disabled={sending} className="btn btn-primary">
+                  <button type="submit" disabled={sending} className="btn btn-primary min-h-[44px] flex items-center justify-center">
                     <Send size={15} />
                     {sending ? 'Mengirim…' : 'Kirim Pesan'}
                   </button>

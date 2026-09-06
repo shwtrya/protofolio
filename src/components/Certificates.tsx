@@ -216,12 +216,12 @@ export const Certificates = () => {
             </div>
 
             {/* Right Heatmap preview */}
-            <div data-lenis-prevent="true" className="lg:col-span-8 overflow-x-auto pb-2">
+            <div data-lenis-prevent="true" className="lg:col-span-8 overflow-x-auto pb-2 [scrollbar-width:thin]">
               <div className="flex items-center justify-between mb-3 text-xs font-mono text-[#111114]/60">
                 <span className="flex items-center gap-2">
                   <span>@shwtrya</span>
-                  <span className="sm:hidden text-[10px] text-[#111114]/40 font-sans">
-                    (geser horizontal →)
+                  <span className="lg:hidden inline-flex items-center gap-1 rounded bg-[#111114]/5 px-2 py-0.5 text-[10px] text-emerald-800 font-sans font-medium">
+                    ← geser untuk riwayat penuh →
                   </span>
                 </span>
                 <a

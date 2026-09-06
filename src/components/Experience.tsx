@@ -248,7 +248,7 @@ export const Experience = () => {
       ref={sectionRef}
       id="experience"
       aria-labelledby="experience-heading"
-      className="relative z-20 h-svh overflow-hidden bg-[#18181c] text-[#f4f4f1] px-4 py-5 sm:px-8 sm:py-7 lg:px-24 lg:py-10 motion-reduce:h-auto motion-reduce:min-h-svh motion-reduce:overflow-visible"
+      className="relative z-20 min-h-svh h-auto lg:h-svh overflow-hidden bg-[#18181c] text-[#f4f4f1] px-4 py-8 sm:px-8 sm:py-10 lg:px-24 lg:py-10 motion-reduce:h-auto motion-reduce:min-h-svh motion-reduce:overflow-visible"
     >
       <h2 id="experience-heading" className="sr-only">
         Pengalaman Profesional Shawava Tritya

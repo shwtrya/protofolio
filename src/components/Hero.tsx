@@ -341,10 +341,10 @@ export const Hero = () => {
           )}
 
           {/* Floating Availability Badge */}
-          <div className="absolute inset-x-4 sm:inset-x-5 bottom-4 sm:bottom-5 z-30 flex items-center justify-between gap-4 rounded-2xl border border-white/12 bg-white/[0.08] px-4 py-3 sm:px-5 sm:py-4 text-white shadow-[0_16px_40px_rgba(0,0,0,0.24)] backdrop-blur-md">
+          <div className="absolute inset-x-4 sm:inset-x-5 bottom-4 sm:bottom-5 z-30 flex items-center justify-between gap-4 rounded-2xl border border-white/20 bg-black/60 px-4 py-3 sm:px-5 sm:py-4 text-white shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-md">
             <div>
               <p className="text-xs sm:text-sm font-semibold leading-none text-white">@shwtrya</p>
-              <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-none text-white/60">
+              <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-none text-white/80">
                 Available for work!
               </p>
             </div>
