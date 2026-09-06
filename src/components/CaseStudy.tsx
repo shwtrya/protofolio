@@ -7,13 +7,11 @@ import {
   HelpCircle,
   Lightbulb,
   Workflow,
-  ExternalLink,
   MessageCircle,
 } from 'lucide-react';
 import Modal from './ui/Modal';
 import ProofImage from './ProofImage';
 import type { PortfolioProject } from '../data/projects';
-import { profile } from '../data/navigation';
 
 interface CaseStudyProps {
   isOpen: boolean;
@@ -35,7 +33,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
 
   const ctaLabel =
     project.status === 'documentation_on_request'
-      ? 'Minta Dokumentasi / Bahas Proyek Ini'
+      ? 'Bahas Dokumentasi Proyek Ini'
       : 'Minta Demo / Diskusi Teknis';
 
   return (
@@ -44,11 +42,11 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
       onClose={onClose}
       maxWidth="max-w-5xl"
       title={
-        <div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block">
+        <div className="flex flex-col gap-1 min-w-0">
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-semibold">
             Project Case Study
           </span>
-          <h2 className="font-sans text-lg sm:text-2xl font-bold text-[#111114] tracking-tight leading-snug mt-0.5">
+          <h2 className="font-sans text-lg sm:text-2xl font-bold text-[#111114] tracking-tight leading-snug mt-0.5 break-words">
             {cs.title}
           </h2>
         </div>
@@ -65,9 +63,9 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
         </span>
       }
       toolbar={
-        <div className="border-b border-[#111114]/10 bg-[#ededeb] px-4 py-2.5 sm:px-8">
-          {/* Segmented Pill Tabs */}
-          <div className="flex items-center rounded-full bg-[#111114]/8 p-1 border border-[#111114]/10 w-full sm:w-auto">
+        <div className="border-b border-[#111114]/10 bg-[#ededeb] px-3 py-2 sm:px-8 overflow-x-auto">
+          {/* Segmented Pill Tabs with no overflow */}
+          <div className="inline-flex min-w-full sm:min-w-0 items-center justify-between sm:justify-start gap-1 rounded-full bg-[#111114]/8 p-1 border border-[#111114]/10">
             {tabs.map((t) => {
               const Icon = t.icon;
               const active = tab === t.id;
@@ -78,7 +76,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
                   type="button"
                   aria-selected={active}
                   onClick={() => setTab(t.id)}
-                  className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`flex-1 sm:flex-initial shrink-0 inline-flex items-center justify-center gap-1 sm:gap-1.5 rounded-full px-2.5 sm:px-4 py-1.5 font-mono text-[11px] sm:text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                     active
                       ? 'bg-[#111114] text-white shadow-sm'
                       : 'text-[#111114]/70 hover:text-[#111114]'
@@ -95,9 +93,9 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
     >
       {/* 1. RINGKASAN */}
       {tab === 'overview' && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 w-full min-w-0 break-words">
           {/* Overview Statement */}
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-7 shadow-sm">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-7 shadow-sm w-full min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block mb-2">
               Ikhtisar Proyek
             </span>
@@ -107,8 +105,8 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
           </section>
 
           {/* Problem & Solution side-by-side cards */}
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div className="rounded-2xl border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6 shadow-sm">
+          <div className="grid gap-5 sm:grid-cols-2 w-full min-w-0">
+            <div className="rounded-2xl border border-amber-200/80 bg-amber-50/40 p-5 sm:p-6 shadow-sm w-full min-w-0">
               <div className="flex items-center gap-2 text-amber-900 font-mono text-xs font-bold uppercase tracking-wider mb-2.5">
                 <HelpCircle size={16} />
                 <span>Masalah / Konteks</span>
@@ -118,7 +116,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/40 p-5 sm:p-6 shadow-sm">
+            <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/40 p-5 sm:p-6 shadow-sm w-full min-w-0">
               <div className="flex items-center gap-2 text-emerald-900 font-mono text-xs font-bold uppercase tracking-wider mb-2.5">
                 <Lightbulb size={16} />
                 <span>Solusi Yang Dibuat</span>
@@ -130,7 +128,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
           </div>
 
           {/* Tools & Components grid */}
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <div className="flex items-center gap-2 text-[#111114] font-mono text-xs font-bold uppercase tracking-wider mb-3">
               <Cpu size={16} />
               <span>Modul, Komponen &amp; Tools Teknis</span>
@@ -151,8 +149,8 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
 
       {/* 2. PROSES & ALUR */}
       {tab === 'process' && (
-        <div className="flex flex-col gap-6">
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+        <div className="flex flex-col gap-6 w-full min-w-0 break-words">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block mb-1">
               Peran &amp; Tanggung Jawab
             </span>
@@ -161,7 +159,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
             </p>
           </section>
 
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block mb-3">
               Aktivitas Teknis Yang Dikerjakan
             </span>
@@ -181,15 +179,15 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
           </section>
 
           {/* Timeline / Step by Step */}
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block mb-4">
               Tahapan Pengerjaan &amp; Alur Kerja
             </span>
-            <ol className="flex flex-col gap-5 border-l-2 border-[#111114]/15 pl-5 sm:pl-6 ml-2">
+            <ol className="flex flex-col gap-5 border-l-2 border-[#111114]/15 pl-5 sm:pl-7">
               {cs.timeline.map((step, i) => (
                 <li key={step.phase} className="relative">
                   <span
-                    className="absolute -left-[29px] sm:-left-[33px] top-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-[#111114] font-mono text-[10px] font-bold text-white shadow-sm"
+                    className="absolute -left-[29px] sm:-left-[37px] top-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-[#111114] font-mono text-[9px] font-bold text-white shadow-sm"
                     aria-hidden="true"
                   >
                     {i + 1}
@@ -207,10 +205,10 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
         </div>
       )}
 
-      {/* 3. HASIL & BUKTI */}
+      {/* 3. HASIL & BUKTI (Strict boundary to prevent layout breakout) */}
       {tab === 'results' && (
-        <div className="flex flex-col gap-6">
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+        <div className="flex flex-col gap-6 w-full min-w-0 max-w-full break-words overflow-hidden">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <div className="flex items-center gap-2 text-emerald-800 font-mono text-xs font-bold uppercase tracking-wider mb-2">
               <CheckCircle2 size={16} />
               <span>Hasil Yang Dicapai</span>
@@ -220,36 +218,36 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
             </p>
           </section>
 
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block mb-3">
               Pembelajaran Teknis &amp; Evaluasi
             </span>
-            <ul className="grid gap-2.5">
+            <ul className="grid gap-2.5 w-full min-w-0">
               {cs.learnings.map((l, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-2.5 rounded-xl border border-[#111114]/8 bg-[#fbfbf9] p-3.5 text-xs sm:text-sm text-[#111114]/85 leading-relaxed"
+                  className="flex items-start gap-2.5 rounded-xl border border-[#111114]/8 bg-[#fbfbf9] p-3.5 text-xs sm:text-sm text-[#111114]/85 leading-relaxed w-full min-w-0"
                 >
-                  <span className="mt-0.5 text-emerald-700 font-bold">✦</span>
-                  <span>{l}</span>
+                  <span className="mt-0.5 text-emerald-700 font-bold shrink-0">✦</span>
+                  <span className="break-words min-w-0">{l}</span>
                 </li>
               ))}
             </ul>
           </section>
 
           {/* Proof gallery */}
-          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm">
+          <section className="rounded-2xl border border-[#111114]/12 bg-white p-5 sm:p-6 shadow-sm w-full min-w-0">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#111114]/50 font-bold block mb-4">
               Dokumentasi Foto, Video &amp; Demo
             </span>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 w-full min-w-0">
               {project.proofAssets.map((asset) => (
                 <figure
                   key={asset.label}
-                  className="overflow-hidden rounded-xl border border-[#111114]/15 bg-neutral-50 shadow-sm"
+                  className="overflow-hidden rounded-xl border border-[#111114]/15 bg-neutral-50 shadow-sm w-full min-w-0 flex flex-col"
                 >
                   {asset.type === 'video' ? (
-                    <div className="relative bg-black aspect-video flex items-center justify-center">
+                    <div className="relative bg-black aspect-video w-full flex items-center justify-center overflow-hidden">
                       <video
                         controls
                         preload="metadata"
@@ -260,7 +258,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
                       </video>
                     </div>
                   ) : (
-                    <div className="aspect-[16/10] overflow-hidden bg-neutral-100">
+                    <div className="aspect-[16/10] w-full overflow-hidden bg-neutral-100">
                       <ProofImage
                         src={asset.src}
                         alt={asset.alt}
@@ -271,7 +269,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
                       />
                     </div>
                   )}
-                  <figcaption className="border-t border-[#111114]/10 p-3 text-xs text-[#111114]/75 bg-white">
+                  <figcaption className="border-t border-[#111114]/10 p-3 text-xs text-[#111114]/75 bg-white break-words">
                     <span className="font-semibold text-[#111114]">{asset.label}</span>
                     {asset.type === 'video' && ' · Putar video demo operasional'}
                   </figcaption>
@@ -280,7 +278,7 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
             </div>
 
             {cs.proofNotes && (
-              <p className="mt-4 rounded-xl border border-[#111114]/8 bg-[#fbfbf9] p-3.5 text-xs text-[#111114]/70 leading-relaxed">
+              <p className="mt-4 rounded-xl border border-[#111114]/8 bg-[#fbfbf9] p-3.5 text-xs text-[#111114]/70 leading-relaxed break-words w-full">
                 {cs.proofNotes}
               </p>
             )}
@@ -289,14 +287,14 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
       )}
 
       {/* Footer Bottom Action Buttons */}
-      <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[#111114]/10 pt-5">
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[#111114]/10 pt-5">
         <a
-          href={`https://wa.me/${profile.whatsapp}?text=Halo%20Shawava,%20saya%20ingin%20membahas%20detail%20proyek%20${encodeURIComponent(
+          href={`https://wa.me/6285883281031?text=Halo%20Shawava,%20saya%20ingin%20membahas%20detail%20proyek%20${encodeURIComponent(
             project.title
           )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#111114] px-6 py-2.5 font-mono text-xs font-semibold text-white shadow-sm hover:bg-[#25252a] transition-all"
+          className="inline-flex items-center gap-2 rounded-full bg-[#111114] px-5 py-2.5 font-mono text-xs font-semibold text-white shadow-sm hover:bg-[#25252a] transition-all"
         >
           <MessageCircle size={14} />
           <span>{ctaLabel}</span>
@@ -306,9 +304,9 @@ export const CaseStudy = ({ isOpen, onClose, project }: CaseStudyProps) => {
         <button
           type="button"
           onClick={onClose}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-[#111114]/15 bg-white px-5 py-2.5 font-mono text-xs font-semibold text-[#111114] shadow-sm hover:bg-[#111114] hover:text-white transition-all cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-white px-4 py-2 font-mono text-xs font-semibold text-[#111114] shadow-sm hover:bg-[#111114] hover:text-white transition-all cursor-pointer"
         >
-          Tutup Detail Proyek
+          Tutup Detail
         </button>
       </div>
     </Modal>

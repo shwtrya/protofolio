@@ -25,7 +25,7 @@ export const About = () => {
     'Quality Control',
   ];
 
-  // Exact iqmal.dev scroll animation for About
+  // Scroll animations for About (dramatic pulled-up dark background curve)
   useGSAP(
     () => {
       // 1. Text lines scrub reveal
@@ -51,20 +51,20 @@ export const About = () => {
           '-=0.1'
         );
 
-      // 2. Giant curved oval dynamic stretch
+      // 2. Giant curved oval dynamic stretch - background pulled up over Hero
       if (ovalRef.current && sectionRef.current) {
         gsap.fromTo(
           ovalRef.current,
-          { scaleY: 0.6, y: 50 },
+          { scaleY: 0.15, y: 150 },
           {
-            scaleY: 1.4,
+            scaleY: 1.85,
             y: -50,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top bottom',
-              end: 'top 20%',
-              scrub: 1,
+              end: 'top 15%',
+              scrub: 1.2,
             },
           }
         );
@@ -96,13 +96,13 @@ export const About = () => {
       ref={sectionRef}
       id="about"
       aria-labelledby="about-heading"
-      className="relative flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-20 sm:pb-36 sm:pt-28 overflow-hidden"
+      className="relative z-20 -mt-16 sm:-mt-24 flex h-fit flex-col items-center justify-center gap-14 sm:gap-16 bg-[#18181c] text-[#f4f4f1] px-6 pb-28 pt-16 sm:pb-36 sm:pt-24"
     >
-      {/* Giant curved dark entry oval (exact iqmal.dev scroll stretch) */}
+      {/* Giant curved dark entry oval (pulled up over hero like a rising curtain) */}
       <div
         ref={ovalRef}
         aria-hidden="true"
-        className="absolute left-1/2 -top-24 sm:-top-32 h-[160px] sm:h-[180px] w-[130vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform"
+        className="absolute left-1/2 -top-28 sm:-top-44 h-[220px] sm:h-[320px] w-[140vw] -translate-x-1/2 rounded-[50%] bg-[#18181c] pointer-events-none will-change-transform z-10"
       />
 
       <h2 id="about-heading" className="sr-only">
@@ -110,12 +110,12 @@ export const About = () => {
       </h2>
 
       {/* Kicker */}
-      <p className="font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
+      <p className="relative z-20 font-mono text-[0.65rem] sm:text-[0.68rem] uppercase tracking-[0.3em] text-white/50">
         About &amp; Overview
       </p>
 
       {/* Big Statement Typography with scrub line reveals */}
-      <div className="max-w-5xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.25] tracking-[-0.035em] text-white/70">
+      <div className="relative z-20 max-w-5xl text-center font-sans text-[clamp(1.65rem,3.5vw,3.4rem)] leading-[1.25] tracking-[-0.035em] text-white/70">
         <div className="overflow-hidden py-1">
           <p className="line will-change-transform">
             <span>Saya merancang </span>
@@ -143,7 +143,7 @@ export const About = () => {
 
       {/* Embedded Marquee Ticker with Mask (exact iqmal.dev setup) */}
       <div
-        className="relative z-10 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5 group cursor-pointer"
+        className="relative z-20 w-full max-w-7xl overflow-hidden border-y border-white/10 py-5 group cursor-pointer"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
@@ -160,7 +160,7 @@ export const About = () => {
       </div>
 
       {/* Bento Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl text-left">
+      <div className="relative z-20 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl text-left">
         <div className="bento-stat-card group rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
           <div className="flex items-center gap-3 text-white/40 mb-3 group-hover:text-emerald-400 transition-colors">
             <Award size={18} />

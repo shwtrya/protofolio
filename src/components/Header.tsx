@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Plus, X } from 'lucide-react';
 import { profile } from '../data/navigation';
@@ -7,6 +7,9 @@ import CvPreview from './CvPreview';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [isOverDark, setIsOverDark] = useState(false);
+  const lastScrollY = useRef(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -19,6 +22,50 @@ export const Header = () => {
     },
     [location.pathname, navigate]
   );
+
+  // Smart hide on scroll down & reveal on scroll up (exact iqmal.dev behavior)
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentY = window.scrollY;
+          if (currentY <= 60) {
+            setHidden(false);
+          } else if (currentY > lastScrollY.current + 10) {
+            // Scrolling down
+            setHidden(true);
+          } else if (currentY < lastScrollY.current - 10) {
+            // Scrolling up
+            setHidden(false);
+          }
+          lastScrollY.current = currentY;
+
+          // Check if header is currently over a dark section (#about, #experience, #contact)
+          const darkSections = ['about', 'experience', 'contact'];
+          let overDark = false;
+          for (const id of darkSections) {
+            const el = document.getElementById(id);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              // If the top 80px of viewport touches this section
+              if (rect.top <= 70 && rect.bottom >= 30) {
+                overDark = true;
+                break;
+              }
+            }
+          }
+          setIsOverDark(overDark);
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -47,45 +94,54 @@ export const Header = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-40 flex items-center justify-between px-6 py-5 sm:px-10 sm:py-6 lg:px-16 pointer-events-none transition-all">
-        {/* Brand / Logo */}
+      {/* Staggered Menu Header matching iqmal.dev exact markup & transitions */}
+      <header
+        aria-label="Main navigation header"
+        className={`staggered-menu-header fixed top-0 left-0 w-full flex items-center justify-between px-6 py-5 sm:px-10 sm:py-6 lg:px-16 pointer-events-none z-40 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          hidden && !open ? '-translate-y-full' : 'translate-y-0'
+        }`}
+      >
+        {/* Brand / Logo (Avatar + Pill Copy matching iqmal.dev) */}
         <a
           href="#home"
           onClick={(e) => {
             e.preventDefault();
             handleNavClick('#home');
           }}
-          className="flex items-center gap-3 select-none pointer-events-auto group cursor-pointer"
+          className="sm-logo flex items-center gap-2.5 select-none pointer-events-auto group cursor-pointer"
           aria-label="Kembali ke beranda"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#111114] text-white font-editorial text-xl italic font-bold shadow-md transition-transform duration-300 group-hover:scale-105">
-            S
+          <span className="sm-logo-mark grid h-9 w-9 place-items-center rounded-full bg-[#111114] text-[#e8e8e5] font-editorial text-xl italic font-bold shadow-md transition-transform duration-300 group-hover:scale-105">
+            <span className="block -translate-x-[1px]">S</span>
           </span>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] font-semibold text-[#111114] group-hover:text-black transition-colors">
+          <span
+            className={`sm-logo-copy rounded-full px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-md shadow-sm transition-all duration-300 ${
+              isOverDark
+                ? 'border border-white/20 bg-[#18181c]/90 text-[#f4f4f1] shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
+                : 'border border-[#111114]/12 bg-[#e8e8e5]/90 text-[#111114] shadow-[0_4px_20px_rgba(17,17,20,0.06)]'
+            }`}
+          >
             Shawava / Portfolio
           </span>
         </a>
 
-        {/* Right Action Group */}
-        <div className="pointer-events-auto flex items-center gap-3">
-          <CvPreview
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#111114]/15 bg-white/85 px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#111114] shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-white hover:border-[#111114]/30 cursor-pointer"
-            label="Resume"
-            showIcon={true}
-          />
-
-          {/* Menu Toggle Button */}
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-            aria-label={open ? 'Tutup menu' : 'Buka menu'}
-            aria-expanded={open}
-            className="inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-4 py-2 sm:px-5 sm:py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-white shadow-md transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer"
-          >
-            <span>{open ? 'Close' : 'Menu'}</span>
-            {open ? <X size={15} /> : <Plus size={15} />}
-          </button>
-        </div>
+        {/* Menu Toggle Pill Button (exact iqmal.dev) */}
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+          aria-expanded={open}
+          className={`sm-toggle pointer-events-auto relative inline-flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[0.14em] backdrop-blur-md shadow-sm transition-all duration-300 hover:scale-105 cursor-pointer ${
+            isOverDark
+              ? 'border border-white/20 bg-[#18181c]/90 text-[#f4f4f1] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:bg-[#25252a]'
+              : 'border border-[#111114]/12 bg-[#e8e8e5]/90 text-[#111114] shadow-[0_4px_20px_rgba(17,17,20,0.06)] hover:bg-white'
+          }`}
+        >
+          <span>{open ? 'Close' : 'Menu'}</span>
+          <span className="relative w-3.5 h-3.5 inline-flex items-center justify-center">
+            {open ? <X size={14} /> : <Plus size={14} />}
+          </span>
+        </button>
       </header>
 
       {/* Fullscreen / Drawer Menu Backdrop */}
@@ -113,7 +169,7 @@ export const Header = () => {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="rounded-full p-2 text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+            className="rounded-full p-2 text-white/60 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             aria-label="Tutup menu"
           >
             <X size={20} />

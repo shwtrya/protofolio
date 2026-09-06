@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, MessageCircle, Sparkles } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { profile } from '../data/navigation';
 import CvPreview from './CvPreview';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const Hero = () => {
   const heroRef = useRef<HTMLElement>(null);
@@ -11,43 +14,47 @@ export const Hero = () => {
   const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
 
   const roles = [
-    'Network & IoT Technician',
-    'Hardware & Arduino Enthusiast',
+    'Teknik Komputer & Jaringan',
+    'Hardware & IoT Prototype',
+    'FTTH & Network Technician',
+    'Production Assembly & QC',
     'Data Entry Specialist',
-    'SMKN 1 Cileungsi Graduate',
   ];
 
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState(roles[0]);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Typewriter effect
   useEffect(() => {
     const currentRole = roles[roleIndex];
-    const typingSpeed = isDeleting ? 35 : 75;
+    let timeout: NodeJS.Timeout;
 
-    const timer = setTimeout(() => {
-      if (!isDeleting) {
-        setDisplayText(currentRole.substring(0, displayText.length + 1));
-        if (displayText === currentRole) {
-          setTimeout(() => setIsDeleting(true), 2400);
-        }
-      } else {
-        setDisplayText(currentRole.substring(0, displayText.length - 1));
-        if (displayText === '') {
-          setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
-        }
-      }
-    }, typingSpeed);
+    if (!isDeleting && displayText === currentRole) {
+      timeout = setTimeout(() => setIsDeleting(true), 2400);
+    } else if (isDeleting && displayText === '') {
+      setIsDeleting(false);
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    } else {
+      const speed = isDeleting ? 30 : 60;
+      timeout = setTimeout(() => {
+        setDisplayText((prev) =>
+          isDeleting
+            ? currentRole.substring(0, prev.length - 1)
+            : currentRole.substring(0, prev.length + 1)
+        );
+      }, speed);
+    }
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timeout);
   }, [displayText, isDeleting, roleIndex, roles]);
 
-  // Entrance animation matching iqmal.dev exact implementation
+  // Entrance & Scroll Animation matching iqmal.dev
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      return mm.add(
+
+      mm.add(
         {
           isDesktop: '(min-width: 768px)',
           isMobile: '(max-width: 767px)',
@@ -55,6 +62,7 @@ export const Hero = () => {
         },
         (context) => {
           const { isDesktop, reduceMotion } = context.conditions ?? {};
+
           if (reduceMotion) {
             gsap.set(
               [
@@ -74,11 +82,27 @@ export const Hero = () => {
 
           if (isDesktop) {
             tl.from('.hero-socials a', { opacity: 0, y: -20, stagger: 0.1, duration: 0.8 })
-              .from('.location', { opacity: 0, x: -200 }, '-=0.6')
-              .from('.greetings', { opacity: 0, x: 200, duration: 2 }, '-=0.8')
-              .from('.profile-card', { scale: 0.85, opacity: 0, duration: 1, rotate: 4 }, '-=1.7')
-              .from('.hero-resume', { opacity: 0, y: 10, duration: 0.6 }, '-=1.1')
-              .from('.hero-scroll-indicator', { opacity: 0, y: 15, duration: 1 }, '-=1.3');
+              .from('.location', { opacity: 0, x: -160, duration: 0.7 }, '-=0.6')
+              .from('.greetings', { opacity: 0, x: 160, duration: 1.4 }, '-=0.7')
+              .from('.profile-card', { scale: 0.88, opacity: 0, duration: 1.1, rotate: 3 }, '-=1.4')
+              .from('.hero-resume', { opacity: 0, y: 10, duration: 0.6 }, '-=0.8')
+              .from('.hero-scroll-indicator', { opacity: 0, y: 15, duration: 0.9 }, '-=0.8');
+
+            // Parallax exit when scrolling down towards About
+            if (heroRef.current) {
+              gsap.to(heroRef.current, {
+                opacity: 0.35,
+                scale: 0.96,
+                y: 30,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: heroRef.current,
+                  start: 'bottom 85%',
+                  end: 'bottom top',
+                  scrub: true,
+                },
+              });
+            }
           } else {
             tl.from('.hero-socials a', { opacity: 0, stagger: 0.08, duration: 0.45 })
               .from('.location', { opacity: 0, duration: 0.4 }, '-=0.25')
@@ -101,8 +125,8 @@ export const Hero = () => {
     const clampedX = Math.min(Math.max(x, 0), 1);
     const clampedY = Math.min(Math.max(y, 0), 1);
 
-    const rotX = -11 * (clampedY - 0.5);
-    const rotY = 11 * (clampedX - 0.5);
+    const rotX = -9 * (clampedY - 0.5);
+    const rotY = 9 * (clampedX - 0.5);
 
     gsap.to(cardRef.current, {
       rotateX: rotX,
@@ -133,7 +157,7 @@ export const Hero = () => {
       ref={heroRef}
       id="home"
       aria-label="Beranda Shawava Tritya"
-      className="hero-section relative min-h-screen grid content-start items-start gap-8 px-6 pb-20 pt-28 sm:gap-10 sm:px-10 sm:pt-32 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)] lg:content-center lg:items-center lg:gap-12 lg:px-20 lg:py-16 overflow-hidden bg-[#e8e8e5]"
+      className="hero-section relative min-h-[calc(100vh-4rem)] grid content-start items-start gap-8 px-6 pb-16 pt-24 sm:gap-10 sm:px-10 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.7fr)] lg:content-center lg:items-center lg:gap-12 lg:px-20 lg:py-12 overflow-hidden bg-[#e8e8e5]"
     >
       {/* Radial dot grid background (exact iqmal.dev) */}
       <div
@@ -145,9 +169,9 @@ export const Hero = () => {
       />
 
       {/* Left Column: Intro & Info */}
-      <div className="relative z-10 max-w-4xl">
+      <div className="relative z-10 max-w-3xl">
         {/* Socials Row */}
-        <div className="hero-socials mb-4 flex items-center gap-5 sm:mb-6">
+        <div className="hero-socials mb-4 flex items-center gap-5 sm:mb-5">
           <a
             href={profile.github}
             target="_blank"
@@ -155,7 +179,7 @@ export const Hero = () => {
             className="text-[#111114]/50 hover:text-[#111114] transition-colors"
             aria-label="GitHub"
           >
-            <Github size={20} />
+            <Github size={19} />
           </a>
           <a
             href={profile.linkedin}
@@ -164,7 +188,7 @@ export const Hero = () => {
             className="text-[#111114]/50 hover:text-[#111114] transition-colors"
             aria-label="LinkedIn"
           >
-            <Linkedin size={20} />
+            <Linkedin size={19} />
           </a>
           <a
             href={`https://wa.me/${profile.whatsapp}`}
@@ -173,14 +197,14 @@ export const Hero = () => {
             className="text-[#111114]/50 hover:text-[#111114] transition-colors"
             aria-label="WhatsApp"
           >
-            <MessageCircle size={20} />
+            <MessageCircle size={19} />
           </a>
           <a
             href={`mailto:${profile.email}`}
             className="text-[#111114]/50 hover:text-[#111114] transition-colors"
             aria-label="Email"
           >
-            <Mail size={20} />
+            <Mail size={19} />
           </a>
         </div>
 
@@ -192,60 +216,52 @@ export const Hero = () => {
           </p>
         </div>
 
-        {/* Main Display Headline */}
-        <h1 className="greetings mt-3 font-serif text-6xl leading-[0.95] tracking-tight sm:text-8xl lg:text-9xl text-[#111114]">
+        {/* Main Display Headline (exact iqmal.dev proportions) */}
+        <h1 className="greetings mt-3 font-serif text-5xl sm:text-7xl lg:text-[5.25rem] xl:text-[6.5rem] leading-[0.95] tracking-tight max-w-[11ch] text-[#111114]">
           Hi, I’m <span className="font-editorial italic font-normal">Shawava.</span>
         </h1>
 
         {/* Dynamic Typewriter Role */}
-        <div className="mt-4 sm:mt-5 min-h-[2.5rem] sm:min-h-[3rem] flex items-center">
-          <span className="font-sans text-xl sm:text-3xl lg:text-4xl font-light tracking-wide text-[#111114]/80">
+        <div className="mt-3 sm:mt-4 min-h-[2.25rem] sm:min-h-[2.75rem] flex items-center">
+          <span className="font-sans text-lg sm:text-2xl lg:text-3xl font-light tracking-wide text-[#111114]/80">
             {displayText}
           </span>
-          <span className="inline-block w-0.5 h-6 sm:h-8 bg-[#111114] ml-1.5 animate-pulse align-middle" />
+          <span className="inline-block w-0.5 h-5 sm:h-7 bg-[#111114] ml-1.5 animate-pulse align-middle" />
         </div>
 
-        {/* Description */}
-        <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-[#111114]/70">
-          Lulusan SMK Negeri 1 Cileungsi (TKJ). Berpengalaman merakit prototype IoT berbasis ESP8266/Arduino, praktik instalasi ISP hingga router, serta disiplin kerja dari pengalaman magang produksi dan data entry.
+        {/* Compact Description */}
+        <p className="mt-4 max-w-lg text-sm sm:text-base leading-relaxed text-[#111114]/70">
+          Lulusan SMK Negeri 1 Cileungsi (TKJ). Berpengalaman merakit prototype IoT berbasis ESP8266/Arduino, praktik instalasi ISP hingga router, serta disiplin kerja manufaktur dan data entry.
         </p>
 
-        {/* Action Button & Badges */}
-        <div className="hero-resume mt-8 flex flex-wrap items-center gap-4">
+        {/* Action Button */}
+        <div className="hero-resume mt-6 flex items-center gap-4">
           <CvPreview
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer shadow-md"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-[#111114]/15 bg-[#111114] px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-[#25252a] hover:scale-105 cursor-pointer shadow-md"
             label="Resume"
             showIcon={true}
           />
-          <a
-            href="#projects"
-            className="inline-flex items-center gap-2 rounded-full border border-[#111114]/15 bg-white/70 px-6 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-[#111114] backdrop-blur-sm transition-all duration-300 hover:bg-white hover:border-[#111114]/30"
-          >
-            <Sparkles size={14} className="text-amber-600" />
-            Lihat Portofolio
-          </a>
         </div>
       </div>
 
-      {/* Right Column: 3D Profile Card with Interactive Desktop Cursor Tilt */}
-      <div
-        className="relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end"
-        onMouseMove={handleCardMouseMove}
-        onMouseLeave={handleCardMouseLeave}
-      >
+      {/* Right Column: 3D Profile Card (proportional desktop scale) */}
+      <div className="profile-card relative z-10 flex w-full justify-center [perspective:1200px] lg:justify-end">
         <div
           ref={cardRef}
-          className="profile-card relative h-[460px] w-full max-w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] shadow-2xl transition-shadow duration-500 will-change-transform sm:h-[520px] sm:max-w-[420px] lg:h-[580px] lg:max-w-[460px] cursor-pointer"
+          onMouseMove={handleCardMouseMove}
+          onMouseLeave={handleCardMouseLeave}
+          data-profile-card="true"
+          className="relative h-[420px] w-full max-w-[340px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#0b0b0d] will-change-transform sm:h-[480px] sm:max-w-[400px] lg:h-[540px] lg:max-w-[440px] transition-transform duration-300 ease-out"
           style={{
             transformStyle: 'preserve-3d',
-            boxShadow: '0 28px 70px rgba(17, 17, 20, 0.25)',
+            boxShadow: '0 24px 60px rgba(17, 17, 20, 0.22)',
           }}
         >
           {/* Dynamic Specular Glare Overlay */}
           <div
             className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
             style={{
-              background: `radial-gradient(circle 380px at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18), transparent 70%)`,
+              background: `radial-gradient(circle 360px at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18), transparent 70%)`,
               opacity: glare.opacity,
             }}
           />
@@ -259,17 +275,7 @@ export const Hero = () => {
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
-            className="absolute left-6 top-20 h-20 w-20 -rotate-12 text-white/10"
-          >
-            <path d="M8 1L6 15L8 15.2L10 1.2L8 1Z" fill="currentColor" />
-            <path d="M12.5 11.5L11.1 10.1L13.2 8L11.1 5.9L12.5 4.5L16 8L12.5 11.5Z" fill="currentColor" />
-            <path d="M2.8 8L4.9 10.1L3.5 11.5L0 8L3.5 4.5L4.9 5.9L2.8 8Z" fill="currentColor" />
-          </svg>
-          <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            aria-hidden="true"
-            className="absolute right-6 top-16 h-24 w-24 rotate-12 text-white/10"
+            className="absolute left-6 top-20 h-16 w-16 -rotate-12 text-white/10"
           >
             <path d="M8 1L6 15L8 15.2L10 1.2L8 1Z" fill="currentColor" />
             <path d="M12.5 11.5L11.1 10.1L13.2 8L11.1 5.9L12.5 4.5L16 8L12.5 11.5Z" fill="currentColor" />
@@ -287,10 +293,10 @@ export const Hero = () => {
           />
 
           {/* Bottom Dark Vignette Fade */}
-          <div className="absolute inset-x-0 bottom-0 z-20 h-44 rounded-b-[2rem] bg-gradient-to-t from-[#050506] via-[#050506]/85 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 z-20 h-40 rounded-b-[2rem] bg-gradient-to-t from-[#050506] via-[#050506]/85 to-transparent" />
 
           {/* Floating Glass Status Pill */}
-          <div className="absolute inset-x-5 bottom-5 z-30 flex items-center justify-between gap-4 rounded-2xl border border-white/15 bg-white/[0.08] px-5 py-3.5 backdrop-blur-md">
+          <div className="absolute inset-x-4 bottom-4 z-30 flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/[0.08] px-4 py-3 backdrop-blur-md">
             <div>
               <span className="block font-mono text-xs font-semibold text-white/90">
                 @shwtrya
@@ -307,17 +313,12 @@ export const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Down Indicator */}
-      <div className="hero-scroll-indicator col-span-full mt-4 flex justify-center lg:mt-6 pointer-events-none opacity-60">
-        <div className="flex flex-col items-center gap-1.5">
-          <div className="w-5 h-8 border border-[#111114]/50 rounded-full flex justify-center p-1">
-            <div className="w-1 h-2 bg-[#111114] rounded-full animate-bounce" />
-          </div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#111114]/70">
-            Scroll Down
-          </span>
-          <ArrowDown size={12} className="text-[#111114]/60 animate-bounce" />
+      {/* Scroll Down Indicator matching iqmal.dev */}
+      <div className="hero-scroll-indicator absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none opacity-50">
+        <div className="w-5 h-7 border border-[#111114]/35 rounded-full flex justify-center p-1">
+          <div className="w-1 h-2 bg-[#111114] rounded-full animate-bounce" style={{ animationDuration: '1.8s' }} />
         </div>
+        <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-[#111114]/60">Scroll Down</span>
       </div>
     </section>
   );

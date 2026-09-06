@@ -7,7 +7,6 @@ import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
 import BackToTop from './components/BackToTop';
 import SmoothScroll from './components/SmoothScroll';
-import CustomCursor from './components/CustomCursor';
 import LoadingSpinner from './components/LoadingSpinner';
 
 import Hero from './components/Hero';
@@ -44,7 +43,6 @@ function App() {
     <Router>
       <RouteTracker />
       <SmoothScroll />
-      <CustomCursor />
       <ScrollProgress />
       <a href="#main-content" className="skip-link">
         Lewati ke Konten Utama
