@@ -76,19 +76,19 @@ export const Modal = ({
         onClick={(e) => e.stopPropagation()}
         className={`relative flex max-h-[88dvh] sm:max-h-[90vh] w-full ${maxWidth} flex-col overflow-hidden rounded-t-[28px] sm:rounded-[24px] border border-[#111114]/20 bg-[#f7f7f4] shadow-2xl text-[#111114]`}
       >
-        {/* Modal Header with Safe-Area Comfort */}
+        {/* Modal Header with shrink-0 */}
         {(title || subtitle) && (
-          <div className="flex items-center justify-between gap-3 border-b border-[#111114]/12 bg-[#ededeb] px-5 py-3.5 sm:px-8 sm:py-4">
+          <div className="shrink-0 flex items-center justify-between gap-3 border-b border-[#111114]/12 bg-[#ededeb] px-5 py-3.5 sm:px-8 sm:py-4">
             <div className="min-w-0 flex-1">
               {typeof title === 'string' ? (
-                <h2 className="font-serif text-xl sm:text-3xl text-[#111114] tracking-tight leading-tight">
+                <h2 className="font-sans text-xl sm:text-2xl font-bold text-[#111114] tracking-tight leading-tight">
                   {title}
                 </h2>
               ) : (
                 title
               )}
               {subtitle && (
-                <div className="mt-0.5 font-mono text-[11px] sm:text-xs text-[#111114]/70 truncate">
+                <div className="mt-1 font-mono text-[11px] sm:text-xs text-[#111114]/70 truncate">
                   {subtitle}
                 </div>
               )}
@@ -105,13 +105,13 @@ export const Modal = ({
           </div>
         )}
 
-        {/* Optional Toolbar */}
-        {toolbar}
+        {/* Optional Toolbar with shrink-0 */}
+        {toolbar && <div className="shrink-0">{toolbar}</div>}
 
-        {/* Modal Scrollable Body with bottom padding to avoid clipping */}
+        {/* Modal Scrollable Body: min-h-0 prevents flexbox squishing parent */}
         <div
           data-lenis-prevent="true"
-          className="flex-1 overflow-y-auto px-4 py-5 sm:px-8 sm:py-7 pb-8 sm:pb-8"
+          className="flex-1 min-h-0 overflow-y-auto px-4 py-5 sm:px-8 sm:py-7 pb-12 sm:pb-10"
         >
           {children}
         </div>
